@@ -330,7 +330,60 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Use case: UC2 - Delete a contact in the contact list**
 
+**MSS**
+1.  Tutor enters `list` to view the current contacts and their indexes.
+2.  TAConnect shows the list of contacts with index numbers.
+3.  Tutor enters `delete INDEX` to remove the intended contact.
+4.  TAConnect validates that the `INDEX` refers to a contact in the displayed list.
+5.  TAConnect removes the contact from the contact list, saves the updated data, and confirms the deletion.
+
+    Use case ends.
+
+**Extensions**
+
+3a. Tutor enters an `INDEX` that is not a positive integer.
+  * 3a1. TAConnect shows an error message describing the valid index format.
+  * 3a2. Tutor re-enters the command with a valid `INDEX`.
+
+    Use case resumes from step 3.
+
+4a. The specified `INDEX` does not correspond to any contact currently displayed.
+  * 4a1. TAConnect informs the tutor that the index is invalid.
+
+    Use case resumes from step 3.
+
+5a. Storage operation fails due to an I/O error.
+  * 5a1. TAConnect displays an error message indicating that the data could not be saved.
+
+    Use case ends.
+
 **Use case: UC3 - Search contacts in the list by name**
+
+**MSS**
+1.  Tutor enters `find KEYWORD` to locate a contact.
+2.  TAConnect parses the command and checks that at least one keyword is provided.
+3.  TAConnect filters the contact list to contacts whose names contain the keyword(s).
+4.  TAConnect displays the filtered list to the tutor.
+5.  Tutor uses the displayed contact details to reach out to the intended person.
+
+    Use case ends.
+
+**Extensions**
+
+2a. Tutor omits the keyword or enters only whitespace.
+  * 2a1. TAConnect shows an error message indicating that at least one keyword is required.
+
+    Use case resumes from step 1.
+
+3a. No contact matches the supplied keyword(s).
+  * 3a1. TAConnect shows a message indicating that no contacts were found.
+
+    Use case ends.
+
+5a. Tutor wishes to refine the search.
+  * 5a1. Tutor enters another `find` command with different keyword(s).
+
+    Use case resumes from step 1.
 
 **Use case: UC4 - List all contacts in the course**
 
