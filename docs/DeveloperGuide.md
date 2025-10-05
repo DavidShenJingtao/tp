@@ -349,6 +349,35 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Use case: UC5 - List all student contacts in a specific session**
 
+**MSS**
+
+1. Tutor enters `list s/SESSION` to list student contacts for a specific session.
+2. TAConnect parses the command input and validates that the session identifier is present and correctly formatted.
+3. TAConnect filters the contact list to entries with tag `student` that match the specified session.
+4. TAConnect displays the filtered list of student contacts for the specified session.
+
+    Use case ends.
+
+**Extensions**
+
+2a. TAConnect detects an invalid command syntax or missing/incorrect session format.
+  * 2a1. TAConnect shows an error message specifying the issue and the correct format.
+  * 2a2. Tutor re-enters the command.
+
+    Steps 2a1-2a2 are repeated until the data entered are correct.
+
+    Use case resumes from step 3.
+
+3a. No matching student contacts exist for the specified session.
+  * 3a1. TAConnect shows a message indicating no student contacts were found for that session.
+
+    Use case ends.
+
+4a. Storage operation fails due to a data retrieval or I/O error.
+  * 4a1. TAConnect displays an error message indicating that data could not be accessed.
+
+    Use case ends.
+
 ### Non-Functional Requirements
 
 **Performance requirements**
