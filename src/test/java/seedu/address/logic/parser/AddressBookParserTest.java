@@ -22,9 +22,12 @@ import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.ListSessionCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Session;
+import seedu.address.model.person.SessionMatchPredicate;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
@@ -86,6 +89,14 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_listSession() throws Exception {
+        List<Session> sessions = Arrays.asList(new Session("S1"), new Session("G30"), new Session("H15"));
+        ListSessionCommand command = (ListSessionCommand) parser.parseCommand(
+                ListSessionCommand.COMMAND_WORD + " S1 G30 H15");
+        assertEquals(new ListSessionCommand(new SessionMatchPredicate(sessions)), command);
     }
 
     @Test
