@@ -51,6 +51,32 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             if (token.isBlank()) {
                 continue;
             }
+            // Support ranges like 2-5
+            if (token.contains("-")) {
+                String[] parts = token.split("-");
+                if (parts.length != 2 || parts[0].isBlank() || parts[1].isBlank()) {
+                    throw new ParseException(
+                            String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+                }
+                Index start;
+                Index end;
+                try {
+                    start = ParserUtil.parseIndex(parts[0]);
+                    end = ParserUtil.parseIndex(parts[1]);
+                } catch (ParseException pe) {
+                    throw new ParseException(
+                            String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE), pe);
+                }
+                if (start.getOneBased() > end.getOneBased()) {
+                    throw new ParseException(
+                            String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+                }
+                for (int i = start.getOneBased(); i <= end.getOneBased(); i++) {
+                    selectors.add(Selector.fromIndex(Index.fromOneBased(i)));
+                }
+                continue;
+            }
+
             try {
                 Index index = ParserUtil.parseIndex(token);
                 selectors.add(Selector.fromIndex(index));

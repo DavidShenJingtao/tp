@@ -39,6 +39,48 @@ public class DeleteCommandParserTest {
     }
 
     @Test
+    public void parse_validRange_returnsDeleteCommand() {
+        assertParseSuccess(parser, " 1-2", new DeleteCommand(List.of(
+                Selector.fromIndex(INDEX_FIRST_PERSON), Selector.fromIndex(INDEX_SECOND_PERSON))));
+        assertParseSuccess(parser, " 3-4", new DeleteCommand(List.of(
+                Selector.fromIndex(seedu.address.commons.core.index.Index.fromOneBased(3)),
+                Selector.fromIndex(seedu.address.commons.core.index.Index.fromOneBased(4)))));
+    }
+
+    @Test
+    public void parse_overlappingRanges_returnsDeleteCommand() {
+        assertParseSuccess(parser, " 1-3 2-4", new DeleteCommand(List.of(
+                Selector.fromIndex(seedu.address.commons.core.index.Index.fromOneBased(1)),
+                Selector.fromIndex(seedu.address.commons.core.index.Index.fromOneBased(2)),
+                Selector.fromIndex(seedu.address.commons.core.index.Index.fromOneBased(3)),
+                Selector.fromIndex(seedu.address.commons.core.index.Index.fromOneBased(2)),
+                Selector.fromIndex(seedu.address.commons.core.index.Index.fromOneBased(3)),
+                Selector.fromIndex(seedu.address.commons.core.index.Index.fromOneBased(4)))));
+    }
+
+    @Test
+    public void parse_mixedRangeAndNames_returnsDeleteCommand() {
+        Person alice = TypicalPersons.ALICE;
+        assertParseSuccess(parser, " 1-2 n/" + alice.getName(), new DeleteCommand(List.of(
+                Selector.fromIndex(INDEX_FIRST_PERSON),
+                Selector.fromIndex(INDEX_SECOND_PERSON),
+                Selector.fromName(alice.getName()))));
+    }
+
+    @Test
+    public void parse_invalidRanges_throwsParseException() {
+        String expected = String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE);
+        // inverted
+        assertParseFailure(parser, " 5-2", expected);
+        // zero start
+        assertParseFailure(parser, " 0-3", expected);
+        // malformed
+        assertParseFailure(parser, " 1-", expected);
+        assertParseFailure(parser, " -3", expected);
+        assertParseFailure(parser, " 1-2-3", expected);
+    }
+
+    @Test
     public void parse_validNameArg_returnsDeleteCommand() {
         Person alice = TypicalPersons.ALICE;
         String input = " n/" + alice.getName();
