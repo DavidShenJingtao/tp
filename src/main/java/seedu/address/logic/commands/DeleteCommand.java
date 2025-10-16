@@ -70,6 +70,8 @@ public class DeleteCommand extends Command {
 
         Set<Person> uniquePersonsToDelete = new LinkedHashSet<>(personsToDelete);
         uniquePersonsToDelete.forEach(model::deletePerson);
+        // record for undo
+        DeleteUndoBuffer.pushBatch(new ArrayList<>(uniquePersonsToDelete));
         return new CommandResult(buildSuccessMessage(uniquePersonsToDelete));
     }
 

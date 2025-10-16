@@ -1,8 +1,10 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_EMPTY_FIND_KEYWORD;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_FIND_KEYWORD;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.regex.Pattern;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -13,6 +15,8 @@ import seedu.address.model.person.NameContainsKeywordsPredicate;
  */
 public class FindCommandParser implements Parser<FindCommand> {
 
+    private static final Pattern VALID_KEYWORD_PATTERN = Pattern.compile("[\\p{Alnum} .'-]+");
+
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand
      * and returns a FindCommand object for execution.
@@ -21,13 +25,16 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
         if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(MESSAGE_EMPTY_FIND_KEYWORD);
         }
 
-        String[] nameKeywords = trimmedArgs.split("\\s+");
+        String normalisedKeyword = trimmedArgs.replaceAll("\\s+", " ");
 
-        return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
+        if (!VALID_KEYWORD_PATTERN.matcher(normalisedKeyword).matches()) {
+            throw new ParseException(MESSAGE_INVALID_FIND_KEYWORD);
+        }
+
+        return new FindCommand(new NameContainsKeywordsPredicate(Collections.singletonList(normalisedKeyword)));
     }
 
 }

@@ -129,12 +129,14 @@ Examples:
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Deleting a person : `delete`
+Aliases: `del`, `rm`
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`
+Format: `delete INDEX [MORE_INDEXES|RANGE] [n/NAME] [n/MORE_NAMES]`
 
-* Deletes each person at the specified `INDEX` values or with the exact `NAME` provided.
+* Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive),
+  or with the exact `NAME` provided.
 * The indexes refer to the numbers shown in the displayed person list.
 * Every index **must be a positive integer** 1, 2, 3, …​
 * Names are case-sensitive and must match the contact name exactly, including spaces.
@@ -142,9 +144,22 @@ Format: `delete INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `list` followed by `delete 1 3` deletes both the 1st and 3rd persons in the currently displayed list.
+* `delete 2-5` deletes the 2nd to 5th persons shown in the current list (inclusive).
+* `delete 1 3-4` deletes the 1st, 3rd, and 4th persons.
 * `delete n/Alice Tan` deletes the contact whose name is exactly `Alice Tan`.
 * `list` followed by `delete 1 n/Alice Tan` deletes the 1st person in the list and the contact named `Alice Tan`.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* Aliases: `del 2`, `rm n/Alice Tan` behave the same as `delete`.
+
+### Undo last delete : `undo`
+
+Undoes the most recent delete operation performed in the current session. This is not persisted across app restarts.
+
+Format: `undo [delete|del|rm]`
+
+Examples:
+* `delete 1 3-4` followed by `undo` restores the deleted contacts.
+* `del n/Alice Tan` followed by `undo del` restores `Alice Tan` if no other deletes were performed after it.
 
 ### Clearing all entries : `clear`
 
@@ -197,7 +212,7 @@ Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n/Alice Tan`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`

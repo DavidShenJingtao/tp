@@ -18,6 +18,11 @@ public class Messages {
     public static final String MESSAGE_PERSONS_LISTED_OVERVIEW = "%1$d persons listed!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_EMPTY_FIND_KEYWORD = "Keyword to find cannot be empty.";
+    public static final String MESSAGE_INVALID_FIND_KEYWORD =
+            "Keyword to find is invalid! Make sure it contains only letters, digits, whitespace or - . '";
+    public static final String MESSAGE_FIND_NO_MATCH = "Oops, no one's name contains %1$s";
+    public static final String MESSAGE_FIND_PERSONS_FOUND_OVERVIEW = "%1$d person%2$s found";
 
     /**
      * Returns an error message indicating the duplicate prefixes.
@@ -36,14 +41,18 @@ public class Messages {
      */
     public static String format(Person person) {
         final StringBuilder builder = new StringBuilder();
-        builder.append(person.getName())
+        builder.append("Tag: ")
+                .append(person.getType())
+                .append("; Name: ")
+                .append(person.getName())
                 .append("; Phone: ")
                 .append(person.getPhone())
                 .append("; Email: ")
-                .append(person.getEmail())
-                .append("; Type: ")
-                .append(person.getType());
-        //to be added
+                .append(person.getEmail());
+        person.getTelegramUsername()
+                .ifPresent(telegram -> builder.append("; Telegram: ").append(telegram));
+        person.getSession()
+                .ifPresent(session -> builder.append("; Session: ").append(session));
 
         return builder.toString();
     }

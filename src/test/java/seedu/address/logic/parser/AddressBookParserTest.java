@@ -8,8 +8,8 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -57,6 +57,20 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_deleteAlias_del() throws Exception {
+        DeleteCommand command = (DeleteCommand) parser.parseCommand(
+                "del " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new DeleteCommand(List.of(DeleteCommand.Selector.fromIndex(INDEX_FIRST_PERSON))), command);
+    }
+
+    @Test
+    public void parseCommand_deleteAlias_rm() throws Exception {
+        DeleteCommand command = (DeleteCommand) parser.parseCommand(
+                "rm " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new DeleteCommand(List.of(DeleteCommand.Selector.fromIndex(INDEX_FIRST_PERSON))), command);
+    }
+
+    @Test
     public void parseCommand_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
@@ -73,10 +87,10 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_find() throws Exception {
-        List<String> keywords = Arrays.asList("foo", "bar", "baz");
+        String keyword = "foo bar baz";
         FindCommand command = (FindCommand) parser.parseCommand(
-                FindCommand.COMMAND_WORD + " " + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(keywords)), command);
+                FindCommand.COMMAND_WORD + " " + keyword);
+        assertEquals(new FindCommand(new NameContainsKeywordsPredicate(Collections.singletonList(keyword))), command);
     }
 
     @Test
@@ -89,6 +103,14 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+    }
+
+    @Test
+    public void parseCommand_undoDelete_variants() throws Exception {
+        assertTrue(parser.parseCommand("undo delete") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+        assertTrue(parser.parseCommand("undo del") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+        assertTrue(parser.parseCommand("undo rm") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+        assertTrue(parser.parseCommand("undo") instanceof seedu.address.logic.commands.UndoDeleteCommand);
     }
 
     @Test
