@@ -42,20 +42,21 @@ public class NameContainsKeywordsPredicateTest {
     @Test
     public void test_nameContainsKeywords_returnsTrue() {
         // One keyword
-        NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Collections.singletonList("Alice"));
+        NameContainsKeywordsPredicate predicate =
+                new NameContainsKeywordsPredicate(Collections.singletonList("Ali"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
         // Multiple keywords
-        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob"));
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("ice", "Bob"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
-
-        // Only one matching keyword
-        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Bob", "Carol"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Carol").build()));
 
         // Mixed-case keywords
-        predicate = new NameContainsKeywordsPredicate(Arrays.asList("aLIce", "bOB"));
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("aLI", "bOB"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+
+        // Leading and trailing spaces in keyword
+        predicate = new NameContainsKeywordsPredicate(Collections.singletonList("  Pauline  "));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Pauline").build()));
     }
 
     @Test
@@ -72,6 +73,14 @@ public class NameContainsKeywordsPredicateTest {
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("12345", "alice@email.com", "staff"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice").withPhone("12345")
                 .withEmail("alice@email.com").withType("staff").build()));
+
+        // Only whitespace keywords
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("   "));
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
+
+        // Remaining keywords after filtering whitespace do not match
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("   ", "Paul"));
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice").build()));
     }
 
     @Test
