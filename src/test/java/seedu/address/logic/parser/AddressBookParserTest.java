@@ -57,6 +57,20 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_deleteAlias_del() throws Exception {
+        DeleteCommand command = (DeleteCommand) parser.parseCommand(
+                "del " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new DeleteCommand(List.of(DeleteCommand.Selector.fromIndex(INDEX_FIRST_PERSON))), command);
+    }
+
+    @Test
+    public void parseCommand_deleteAlias_rm() throws Exception {
+        DeleteCommand command = (DeleteCommand) parser.parseCommand(
+                "rm " + INDEX_FIRST_PERSON.getOneBased());
+        assertEquals(new DeleteCommand(List.of(DeleteCommand.Selector.fromIndex(INDEX_FIRST_PERSON))), command);
+    }
+
+    @Test
     public void parseCommand_edit() throws Exception {
         Person person = new PersonBuilder().build();
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(person).build();
