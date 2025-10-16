@@ -129,6 +129,7 @@ Examples:
   ![result for 'find alex david'](images/findAlexDavidResult.png)
 
 ### Deleting a person : `delete`
+Aliases: `del`, `rm`
 
 Deletes the specified person from the address book.
 
@@ -145,6 +146,7 @@ Examples:
 * `delete n/Alice Tan` deletes the contact whose name is exactly `Alice Tan`.
 * `list` followed by `delete 1 n/Alice Tan` deletes the 1st person in the list and the contact named `Alice Tan`.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* Aliases: `del 2`, `rm n/Alice Tan` behave the same as `delete`.
 
 ### Clearing all entries : `clear`
 
@@ -197,7 +199,7 @@ Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear** | `clear`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
+**Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n/Alice Tan`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
