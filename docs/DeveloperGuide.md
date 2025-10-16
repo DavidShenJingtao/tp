@@ -100,7 +100,7 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command. Aliases such as `del` and `rm` are routed to the same `DeleteCommandParser` as `delete`.
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
 1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
 1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
@@ -404,10 +404,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor enters `list s/SESSION` to list student contacts for a specific session.
-2. TAConnect parses the command input and validates that the session identifier is present and correctly formatted.
-3. TAConnect filters the contact list to entries with tag `student` that match the specified session.
-4. TAConnect displays the filtered list of student contacts for the specified session.
+1. Tutor enters `listsession` command with one or more session identifiers.
+2. TAConnect parses the command input and validates that the session identifiers are correctly formatted.
+3. TAConnect filters the contact list to show all contacts belonging to the specified sessions.
+4. TAConnect displays the filtered list of contacts for the specified sessions.
 
     Use case ends.
 
@@ -421,8 +421,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case resumes from step 3.
 
-3a. No matching student contacts exist for the specified session.
-  * 3a1. TAConnect shows a message indicating no student contacts were found for that session.
+3a. No matching contacts exist for the specified session.
+  * 3a1. TAConnect shows a message indicating no contacts were found for that session.
 
     Use case ends.
 
