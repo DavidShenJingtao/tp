@@ -106,6 +106,14 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_undoDelete_variants() throws Exception {
+        assertTrue(parser.parseCommand("undo delete") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+        assertTrue(parser.parseCommand("undo del") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+        assertTrue(parser.parseCommand("undo rm") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+        assertTrue(parser.parseCommand("undo") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+    }
+
+    @Test
     public void parseCommand_listSession() throws Exception {
         List<Session> sessions = Arrays.asList(new Session("S1"), new Session("G30"), new Session("H15"));
         ListSessionCommand command = (ListSessionCommand) parser.parseCommand(

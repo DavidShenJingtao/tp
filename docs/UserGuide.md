@@ -151,6 +151,16 @@ Examples:
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * Aliases: `del 2`, `rm n/Alice Tan` behave the same as `delete`.
 
+### Undo last delete : `undo`
+
+Undoes the most recent delete operation performed in the current session. This is not persisted across app restarts.
+
+Format: `undo [delete|del|rm]`
+
+Examples:
+* `delete 1 3-4` followed by `undo` restores the deleted contacts.
+* `del n/Alice Tan` followed by `undo del` restores `Alice Tan` if no other deletes were performed after it.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
