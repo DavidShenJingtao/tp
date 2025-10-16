@@ -58,4 +58,14 @@ public class UndoDeleteCommand extends Command {
         String msg = restored.stream().map(Messages::format).collect(Collectors.joining("\n"));
         return new CommandResult(String.format(MESSAGE_UNDO_DELETE_MULTIPLE_PERSON_SUCCESS, msg));
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this || other instanceof UndoDeleteCommand;
+    }
+
+    @Override
+    public int hashCode() {
+        return UndoDeleteCommand.class.hashCode();
+    }
 }

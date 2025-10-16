@@ -75,4 +75,25 @@ public class UndoDeleteCommandTest {
                 Messages.format(first) + "\n" + Messages.format(second));
         assertCommandSuccess(undo, model, expectedUndoMsg, expectedAfterUndo);
     }
+
+    @Test
+    public void execute_undoWhenDuplicatesExist_noRestoration() {
+        // perform a delete to populate undo buffer
+        Person first = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        DeleteCommand delete = new DeleteCommand(List.of(Selector.fromIndex(INDEX_FIRST_PERSON)));
+
+        String deleteMessage = String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(first));
+        Model afterDelete = new ModelManager(model.getAddressBook(), new UserPrefs());
+        afterDelete.deletePerson(first);
+        assertCommandSuccess(delete, model, deleteMessage, afterDelete);
+
+        // re-add the same person to create duplicates relative to the undo buffer
+        model.addPerson(first);
+
+        // expected model is the same as current model
+        Model expected = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        UndoDeleteCommand undo = new UndoDeleteCommand();
+        assertCommandSuccess(undo, model, "No contacts restored (duplicates already exist)", expected);
+    }
 }
