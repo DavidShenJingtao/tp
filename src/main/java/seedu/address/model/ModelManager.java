@@ -4,9 +4,11 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
@@ -126,6 +128,14 @@ public class ModelManager implements Model {
     public void updateFilteredPersonList(Predicate<Person> predicate) {
         requireNonNull(predicate);
         filteredPersons.setPredicate(predicate);
+        //sortFilteredPersonList(new PersonTypeComparator());
+    }
+
+    @Override
+    public void sortFilteredPersonList(Comparator<Person> comparator) {
+        requireNonNull(comparator);
+        FXCollections.sort(addressBook.getPersonList(), comparator);
+        //Collections.sort(list, comparator);
     }
 
     @Override
