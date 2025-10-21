@@ -9,12 +9,16 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SESSION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 
+import java.util.Optional;
+
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Session;
 import seedu.address.model.person.Type;
+
 
 /**
  * Parses input arguments and creates a new EditCommand object
@@ -57,17 +61,26 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setType(ParserUtil.parseType(argMultimap.getValue(PREFIX_TYPE).get()));
         }
         if (argMultimap.getValue(PREFIX_TELEGRAM).isPresent()) {
-            editPersonDescriptor.setTelegramUsername(ParserUtil.parseTelegramUsername(
-                                                    argMultimap.getValue(PREFIX_TELEGRAM).get()));
+            String telegramInput = argMultimap.getValue(PREFIX_TELEGRAM).get();
+
+            if (telegramInput.isEmpty()) {
+                editPersonDescriptor.setTelegramUsername(Optional.empty());
+            } else {
+                editPersonDescriptor.setTelegramUsername(Optional.of(ParserUtil.parseTelegramUsername(telegramInput)));
+            }
         }
         if (argMultimap.getValue(PREFIX_SESSION).isPresent()) {
-            editPersonDescriptor.setSession(ParserUtil.parseSession(argMultimap.getValue(PREFIX_SESSION).get()));
+            String session = argMultimap.getValue(PREFIX_SESSION).get();
+            editPersonDescriptor.setSession(Optional.of(ParserUtil.parseSession(session)));
         }
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
-        validateTypeSession(editPersonDescriptor);
+        if ((editPersonDescriptor.getType() != null && editPersonDescriptor.getType().isPresent())
+                || (editPersonDescriptor.getSession() != null && editPersonDescriptor.getSession().isPresent())) {
+            validateTypeSession(editPersonDescriptor);
+        }
 
         return new EditCommand(index, editPersonDescriptor);
     }
@@ -78,14 +91,14 @@ public class EditCommandParser implements Parser<EditCommand> {
      */
     public void validateTypeSession(EditPersonDescriptor editPersonDescriptor) throws ParseException {
         if (editPersonDescriptor.getType().isPresent()) {
-            Type type = editPersonDescriptor.getType().get();
-            boolean hasSession = editPersonDescriptor.getSession().isPresent();
+            Type editedType = editPersonDescriptor.getType().get();
+            Optional<Session> editedSession = editPersonDescriptor.getSession();
 
-            if ((type.isStudent() || type.isTa()) && !hasSession) {
+            if ((editedType.isStudent() || editedType.isTa()) && editedSession.isEmpty()) {
                 throw new ParseException(Person.MESSAGE_STUDENT_TA);
             }
 
-            if ((type.isInstructor() || type.isStaff()) && hasSession) {
+            if ((editedType.isInstructor() || editedType.isStaff()) && editedSession.isPresent()) {
                 throw new ParseException(Person.MESSAGE_INSTRUCTOR_STAFF);
             }
         }

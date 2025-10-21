@@ -79,6 +79,17 @@ public class EditCommand extends Command {
         Person personToEdit = lastShownList.get(index.getZeroBased());
         Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
 
+        // Recheck constraints before applying
+        Type type = editedPerson.getType();
+        Optional<Session> session = editedPerson.getSession();
+
+        if ((type.isStudent() || type.isTa()) && session.isEmpty()) {
+            throw new CommandException(Person.MESSAGE_STUDENT_TA);
+        }
+        if ((type.isInstructor() || type.isStaff()) && session.isPresent()) {
+            throw new CommandException(Person.MESSAGE_INSTRUCTOR_STAFF);
+        }
+
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
@@ -92,18 +103,28 @@ public class EditCommand extends Command {
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
      */
-    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
+    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor)
+            throws CommandException {
         assert personToEdit != null;
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Type updatedType = editPersonDescriptor.getType().orElse(personToEdit.getType());
-        TelegramUsername updatedTelegram = editPersonDescriptor.getTelegramUsername().orElse(
-                personToEdit.getTelegramUsername().orElse(null));
+        TelegramUsername updatedTelegram = editPersonDescriptor.getTelegramUsername()
+                .orElse(personToEdit.getTelegramUsername().orElse(null));
         Session updatedSession = editPersonDescriptor.getSession().orElse(personToEdit.getSession().orElse(null));
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedType, updatedTelegram, updatedSession);
+        // validate type/session relationship
+        if ((updatedType.isStudent() || updatedType.isTa()) && updatedSession == null) {
+            throw new CommandException(Person.MESSAGE_STUDENT_TA);
+        }
+        if ((updatedType.isInstructor() || updatedType.isStaff()) && updatedSession != null) {
+            throw new CommandException(Person.MESSAGE_INSTRUCTOR_STAFF);
+        }
+
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedType,
+                updatedTelegram, updatedSession);
     }
 
     @Override
@@ -139,8 +160,8 @@ public class EditCommand extends Command {
         private Phone phone;
         private Email email;
         private Type type;
-        private TelegramUsername telegramUsername;
-        private Session session;
+        private Optional<TelegramUsername> telegramUsername = Optional.empty();
+        private Optional<Session> session = Optional.empty();
 
         public EditPersonDescriptor() {}
 
@@ -161,7 +182,9 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, type, telegramUsername, session);
+            return CollectionUtil.isAnyNonNull(name, phone, email, type)
+                    || (telegramUsername != null && telegramUsername.isPresent())
+                    || (session != null && session.isPresent());
         }
 
         public void setName(Name name) {
@@ -196,20 +219,20 @@ public class EditCommand extends Command {
             return Optional.ofNullable(type);
         }
 
-        public void setTelegramUsername(TelegramUsername telegramUsername) {
-            this.telegramUsername = telegramUsername;
+        public void setTelegramUsername(Optional<TelegramUsername> telegramUsername) {
+            this.telegramUsername = telegramUsername != null ? telegramUsername : Optional.empty();
         }
 
         public Optional<TelegramUsername> getTelegramUsername() {
-            return Optional.ofNullable(telegramUsername);
+            return telegramUsername;
         }
 
-        public void setSession(Session session) {
+        public void setSession(Optional<Session> session) {
             this.session = session;
         }
 
         public Optional<Session> getSession() {
-            return Optional.ofNullable(session);
+            return session;
         }
 
         @Override
@@ -239,8 +262,8 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("email", email)
                     .add("type", type)
-                    .add("telegramUsername", telegramUsername)
-                    .add("session", session)
+                    .add("telegramUsername", telegramUsername.orElse(null))
+                    .add("session", session.orElse(null))
                     .toString();
         }
     }

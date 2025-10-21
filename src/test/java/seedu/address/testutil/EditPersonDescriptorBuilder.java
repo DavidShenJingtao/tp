@@ -1,5 +1,6 @@
 package seedu.address.testutil;
 
+import java.util.Optional;
 
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Email;
@@ -34,8 +35,8 @@ public class EditPersonDescriptorBuilder {
         descriptor.setPhone(person.getPhone());
         descriptor.setEmail(person.getEmail());
         descriptor.setType(person.getType());
-        person.getTelegramUsername().ifPresent(descriptor::setTelegramUsername);
-        person.getSession().ifPresent(descriptor::setSession);
+        descriptor.setTelegramUsername(person.getTelegramUsername());
+        descriptor.setSession(person.getSession());
     }
 
     /**
@@ -74,7 +75,11 @@ public class EditPersonDescriptorBuilder {
      * Sets the {@code TelegramUsername} of the {@code EditPersonDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withTelegram(String telegramUsername) {
-        descriptor.setTelegramUsername(new TelegramUsername(telegramUsername));
+        if (telegramUsername == null) {
+            descriptor.setTelegramUsername(Optional.empty());
+        } else {
+            descriptor.setTelegramUsername(Optional.of(new TelegramUsername(telegramUsername)));
+        }
         return this;
     }
 
@@ -82,7 +87,11 @@ public class EditPersonDescriptorBuilder {
      * Sets the {@code Session} of the {@code EditPersonDescriptor} that we are building.
      */
     public EditPersonDescriptorBuilder withSession(String session) {
-        descriptor.setSession(new Session(session));
+        if (session == null) {
+            descriptor.setSession(Optional.empty());
+        } else {
+            descriptor.setSession(Optional.of(new Session(session)));
+        }
         return this;
     }
 
