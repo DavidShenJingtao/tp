@@ -1,6 +1,8 @@
 package seedu.address.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
@@ -25,8 +27,10 @@ import org.junit.jupiter.api.io.TempDir;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.logic.undo.UndoHistory;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
@@ -36,6 +40,7 @@ import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
 import seedu.address.testutil.PersonBuilder;
+import seedu.address.testutil.PersonUtil;
 
 public class LogicManagerTest {
     private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy IO exception");
@@ -54,6 +59,7 @@ public class LogicManagerTest {
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
         StorageManager storage = new StorageManager(addressBookStorage, userPrefsStorage);
         logic = new LogicManager(model, storage);
+        UndoHistory.clear();
     }
 
     @Test
@@ -72,6 +78,43 @@ public class LogicManagerTest {
     public void execute_validCommand_success() throws Exception {
         String listCommand = ListCommand.COMMAND_WORD;
         assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, model);
+    }
+
+    @Test
+    public void execute_listCommand_doesNotRecordUndoHistory() throws Exception {
+        UndoHistory.clear();
+        logic.execute(ListCommand.COMMAND_WORD);
+        assertFalse(UndoHistory.canUndo());
+    }
+
+    @Test
+    public void execute_addThenUndo_success() throws Exception {
+        UndoHistory.clear();
+        Person person = new PersonBuilder().build();
+        String addCommand = PersonUtil.getAddCommand(person);
+
+        logic.execute(addCommand);
+        assertTrue(UndoHistory.canUndo());
+
+        CommandResult undoResult = logic.execute(UndoCommand.COMMAND_WORD);
+        assertEquals(String.format(UndoCommand.MESSAGE_SUCCESS, AddCommand.COMMAND_WORD.toLowerCase()),
+                undoResult.getFeedbackToUser());
+        assertEquals(new ModelManager(), model);
+    }
+
+    @Test
+    public void execute_deleteAliasThenUndo_reportsAlias() throws Exception {
+        UndoHistory.clear();
+        Person person = new PersonBuilder().build();
+        logic.execute(PersonUtil.getAddCommand(person));
+
+        Model expectedAfterAdd = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        logic.execute("del 1");
+
+        CommandResult undoResult = logic.execute(UndoCommand.COMMAND_WORD);
+        assertEquals(String.format(UndoCommand.MESSAGE_SUCCESS, "del"), undoResult.getFeedbackToUser());
+        assertEquals(expectedAfterAdd, model);
     }
 
     @Test

@@ -19,6 +19,8 @@ import static seedu.address.logic.commands.CommandTestUtil.SESSION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.SESSION_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.TELEGRAM_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TELEGRAM_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.TYPE_DESC_INSTRUCTOR;
+import static seedu.address.logic.commands.CommandTestUtil.TYPE_DESC_STAFF;
 import static seedu.address.logic.commands.CommandTestUtil.TYPE_DESC_STUDENT;
 import static seedu.address.logic.commands.CommandTestUtil.TYPE_DESC_TA;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
@@ -81,6 +83,14 @@ public class AddCommandParserTest {
 
         // multiple addresses
         assertParseFailure(parser, TYPE_DESC_STUDENT + validExpectedPersonString,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TYPE));
+
+        // multiple instructor types
+        assertParseFailure(parser, TYPE_DESC_INSTRUCTOR + validExpectedPersonString,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TYPE));
+
+        // multiple staff types
+        assertParseFailure(parser, TYPE_DESC_STAFF + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TYPE));
 
         // multiple telegram usernames

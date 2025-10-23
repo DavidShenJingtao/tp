@@ -23,6 +23,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListSessionCommand;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
@@ -103,11 +104,14 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_undoDelete_variants() throws Exception {
-        assertTrue(parser.parseCommand("undo delete") instanceof seedu.address.logic.commands.UndoDeleteCommand);
-        assertTrue(parser.parseCommand("undo del") instanceof seedu.address.logic.commands.UndoDeleteCommand);
-        assertTrue(parser.parseCommand("undo rm") instanceof seedu.address.logic.commands.UndoDeleteCommand);
-        assertTrue(parser.parseCommand("undo") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+    public void parseCommand_undo_success() throws Exception {
+        assertTrue(parser.parseCommand("undo") instanceof UndoCommand);
+    }
+
+    @Test
+    public void parseCommand_undoWithArguments_throwsParseException() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE);
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("undo something"));
     }
 
     @Test

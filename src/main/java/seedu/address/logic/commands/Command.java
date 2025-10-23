@@ -8,6 +8,8 @@ import seedu.address.model.Model;
  */
 public abstract class Command {
 
+    private String undoLabel;
+
     /**
      * Executes the command and returns the result message.
      *
@@ -16,5 +18,27 @@ public abstract class Command {
      * @throws CommandException If an error occurs during command execution.
      */
     public abstract CommandResult execute(Model model) throws CommandException;
+
+    /**
+     * Returns {@code true} if this command mutates the underlying address book.
+     * Commands should override this when they modify stored data so that undo history can be recorded.
+     */
+    public boolean isStateChanging() {
+        return false;
+    }
+
+    /**
+     * Sets the label used when reporting that this command has been undone.
+     */
+    public void setUndoLabel(String undoLabel) {
+        this.undoLabel = undoLabel;
+    }
+
+    /**
+     * Returns the label used when reporting that this command has been undone.
+     */
+    public String getUndoLabel() {
+        return undoLabel;
+    }
 
 }
