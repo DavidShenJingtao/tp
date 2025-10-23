@@ -61,20 +61,9 @@ public class AddCommandParser implements Parser<AddCommand> {
             session = ParserUtil.parseSession(argMultimap.getValue(PREFIX_SESSION).get());
         }
 
-        if (type.isInstructor() || type.isStaff()) {
-            if (session != null) {
-                throw new ParseException(Person.MESSAGE_INSTRUCTOR_STAFF);
-            }
-        } else if (session == null) {
-            throw new ParseException(Person.MESSAGE_STUDENT_TA);
-        }
+        Person person = new Person(name, phone, email, type, telegramUsername, session);
 
-        try {
-            Person person = new Person(name, phone, email, type, telegramUsername, session);
-            return new AddCommand(person);
-        } catch (IllegalArgumentException illegalArgumentException) {
-            throw new ParseException(illegalArgumentException.getMessage(), illegalArgumentException);
-        }
+        return new AddCommand(person);
     }
 
     /**
