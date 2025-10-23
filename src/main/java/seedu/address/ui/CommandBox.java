@@ -1,6 +1,5 @@
 package seedu.address.ui;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -11,7 +10,10 @@ import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
- * The UI component that is responsible for receiving user command inputs.
+ * The UI component responsible for receiving user command inputs.
+ * UI stays thin and delegates logic to testable helpers:
+ * - CommandInputHandler (what to do on Enter)
+ * - HistoryNavigator (↑/↓ history and buffer)
  */
 public class CommandBox extends UiPart<Region> {
 
@@ -19,8 +21,8 @@ public class CommandBox extends UiPart<Region> {
     private static final String FXML = "CommandBox.fxml";
 
     private final CommandExecutor commandExecutor;
-    private final CommandHistory history = new CommandHistory();
-    private HistorySnapshot snapshot = history.snapshot("");
+    private final CommandInputHandler inputHandler;
+    private final HistoryNavigator history = new HistoryNavigator();
 
     @FXML
     private TextField commandTextField;
@@ -31,8 +33,14 @@ public class CommandBox extends UiPart<Region> {
     public CommandBox(CommandExecutor commandExecutor) {
         super(FXML);
         this.commandExecutor = commandExecutor;
-        // calls #setStyleToDefault() whenever there is a change to the text of the command box.
-        commandTextField.textProperty().addListener((unused1, unused2, unused3) -> setStyleToDefault());
+        this.inputHandler = new CommandInputHandler(commandExecutor::execute);
+
+        // Reset style whenever text changes, and update current buffer for history
+        commandTextField.textProperty().addListener((obs, oldV, newV) -> {
+            setStyleToDefault();
+            history.setBuffer(newV);
+        });
+
         // Listen for ↑ / ↓ key presses to navigate history
         commandTextField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             if (event.getCode() == KeyCode.UP) {
@@ -43,89 +51,61 @@ public class CommandBox extends UiPart<Region> {
                 event.consume();
             }
         });
-
-        // Keep snapshot buffer updated when typing
-        commandTextField.textProperty().addListener((obs, oldV, newV) -> {
-            if (snapshot != null) {
-                snapshot.setCurrentBuffer(newV);
-            }
-        });
-
     }
 
-    /**
-     * Handles the Enter button pressed event.
-     */
+    /** Handles Enter press from FXML (onAction of the TextField). */
     @FXML
     private void handleCommandEntered() {
-        String commandText = commandTextField.getText();
-        if (commandText.equals("")) {
+        final String commandText = commandTextField.getText();
+        if (commandText == null || commandText.isEmpty()) {
             return;
         }
 
-        try {
-            commandExecutor.execute(commandText);
+        CommandInputHandler.Outcome outcome = inputHandler.onEnter(commandText);
+        switch (outcome) {
+        case CLEAR_INPUT:
             history.add(commandText); // record successful command
-            snapshot = history.snapshot("");
-            commandTextField.setText("");
-        } catch (CommandException | ParseException e) {
-            history.add(commandText); // optionally record failed command too
+            commandTextField.clear();
+            break;
+        case KEEP_INPUT:
+            history.add(commandText); // optionally record failed ones too
             setStyleToIndicateCommandFailure();
+            break;
+        default:
+            // no-op
         }
     }
 
-    /**
-     * Sets the command box style to use the default style.
-     */
+    /** Sets the command box style back to default. */
     private void setStyleToDefault() {
         commandTextField.getStyleClass().remove(ERROR_STYLE_CLASS);
     }
 
-    /**
-     * Sets the command box style to indicate a failed command.
-     */
+    /** Sets the command box style to indicate a failed command. */
     private void setStyleToIndicateCommandFailure() {
-        ObservableList<String> styleClass = commandTextField.getStyleClass();
-
-        if (styleClass.contains(ERROR_STYLE_CLASS)) {
-            return;
+        var styleClass = commandTextField.getStyleClass();
+        if (!styleClass.contains(ERROR_STYLE_CLASS)) {
+            styleClass.add(ERROR_STYLE_CLASS);
         }
-
-        styleClass.add(ERROR_STYLE_CLASS);
     }
 
-    /**
-     * Handles the UP arrow key press event.
-     * Displays the previous command from the command history in the command box,
-     * if available.
-     */
+    /** Navigate up the history; places text and moves caret to end. */
     private void handleHistoryUp() {
-        if (snapshot == null) {
-            return;
-        }
-        String prev = snapshot.previous();
+        String prev = history.up();
         commandTextField.setText(prev);
         commandTextField.positionCaret(prev.length());
     }
 
-    /**
-     * Handles the DOWN arrow key press event.
-     * Displays the next command from the command history, or restores the
-     * current unfinished input if the user has reached the end of the history.
-     */
+    /** Navigate down the history or restore buffer; places text and moves caret to end. */
     private void handleHistoryDown() {
-        if (snapshot == null) {
-            return;
-        }
-        String next = snapshot.next();
+        String next = history.down();
         commandTextField.setText(next);
         commandTextField.positionCaret(next.length());
     }
 
+    // ==== Public types unchanged (keeps compatibility with the rest of the app) ====
 
-    /**
-     * Represents a function that can execute commands.
-     */
+    /** Represents a function that can execute commands. */
     @FunctionalInterface
     public interface CommandExecutor {
         /**
@@ -135,5 +115,4 @@ public class CommandBox extends UiPart<Region> {
          */
         CommandResult execute(String commandText) throws CommandException, ParseException;
     }
-
 }
