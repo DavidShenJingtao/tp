@@ -48,7 +48,6 @@ public class JsonSerializableAddressBookTest {
                 dataFromFile::toModelType);
     }
 
-
     @Test
     public void toModelType_exceedMaxPersonCount_throwsIllegalValueException() throws Exception {
         JsonSerializableAddressBook dataFromFile = JsonUtil.readJsonFile(EXCEED_MAX_PERSON_COUNT_FILE,

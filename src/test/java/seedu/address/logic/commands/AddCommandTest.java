@@ -4,10 +4,12 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.commons.exceptions.DataLoadingException;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
@@ -23,9 +26,17 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
+
+
+    private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "AddCommandTest");
+    private static final Path AT_MAX_PERSON_COUNT_FILE =
+                                 TEST_DATA_FOLDER.resolve("atMaxPersonCountAddressBook.json");
+    private static final Path AT_MAX_SESSION_COUNT_FILE =
+                                 TEST_DATA_FOLDER.resolve("atMaxSessionCountAddressBook.json");
 
     @Test
     public void constructor_nullPerson_throwsNullPointerException() {
@@ -51,6 +62,40 @@ public class AddCommandTest {
         ModelStub modelStub = new ModelStubWithPerson(validPerson);
 
         assertThrows(CommandException.class, AddCommand.MESSAGE_DUPLICATE_PERSON, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_exceedMaxPerson_throwsCommandException() {
+        Person validPerson = new PersonBuilder().build();
+        AddCommand addCommand = new AddCommand(validPerson);
+        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(AT_MAX_PERSON_COUNT_FILE);
+        AddressBook addressBook = new AddressBook();
+        try {
+            addressBook = (AddressBook) addressBookStorage.readAddressBook().get();
+        } catch (DataLoadingException e) {
+            fail();
+        }
+        ModelStub modelStub = new ModelStubWithSuppliedAddressBook(addressBook);
+
+        assertThrows(CommandException.class,
+                         AddCommand.MESSAGE_MAX_PERSON_COUNT_REACHED, () -> addCommand.execute(modelStub));
+    }
+
+    @Test
+    public void execute_exceedMaxSession_throwsCommandException() {
+        Person validPerson = new PersonBuilder().build();
+        AddCommand addCommand = new AddCommand(validPerson);
+        JsonAddressBookStorage addressBookStorage = new JsonAddressBookStorage(AT_MAX_SESSION_COUNT_FILE);
+        AddressBook addressBook = new AddressBook();
+        try {
+            addressBook = (AddressBook) addressBookStorage.readAddressBook().get();
+        } catch (DataLoadingException e) {
+            fail();
+        }
+        ModelStub modelStub = new ModelStubWithSuppliedAddressBook(addressBook);
+
+        assertThrows(CommandException.class,
+                         AddCommand.MESSAGE_MAX_SESSION_COUNT_REACHED, () -> addCommand.execute(modelStub));
     }
 
     @Test
@@ -206,6 +251,23 @@ public class AddCommandTest {
         @Override
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
+        }
+    }
+
+    /**
+     * A Model stub that contains supplied address book.
+     */
+    private class ModelStubWithSuppliedAddressBook extends ModelStub {
+        private final AddressBook addressBook;
+
+        ModelStubWithSuppliedAddressBook(AddressBook addressBook) {
+            this.addressBook = addressBook;
+        }
+
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            return this.addressBook;
         }
     }
 }
