@@ -18,3 +18,10 @@
 .tooltip-text {
     -fx-text-fill: white;
 }
+.export-button {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+}
+.export-button:hover {
+    -fx-background-color: #43a047;
+}
