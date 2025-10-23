@@ -17,4 +17,12 @@ public abstract class Command {
      */
     public abstract CommandResult execute(Model model) throws CommandException;
 
+    /**
+     * Returns {@code true} if this command mutates the underlying address book.
+     * Commands should override this when they modify stored data so that undo history can be recorded.
+     */
+    public boolean isStateChanging() {
+        return false;
+    }
+
 }

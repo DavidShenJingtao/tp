@@ -16,6 +16,7 @@ import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.undo.UndoHistory;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
@@ -72,7 +73,16 @@ public class CommandTestUtil {
     public static void assertCommandSuccess(Command command, Model actualModel, CommandResult expectedCommandResult,
             Model expectedModel) {
         try {
+            AddressBook previousState = null;
+            if (command.isStateChanging()) {
+                previousState = new AddressBook(actualModel.getAddressBook());
+            }
+
             CommandResult result = command.execute(actualModel);
+
+            if (command.isStateChanging() && previousState != null) {
+                UndoHistory.recordState(previousState);
+            }
             assertEquals(expectedCommandResult, result);
             assertEquals(expectedModel, actualModel);
         } catch (CommandException ce) {
