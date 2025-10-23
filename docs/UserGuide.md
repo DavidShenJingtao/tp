@@ -151,15 +151,15 @@ Examples:
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * Aliases: `del 2`, `rm n/Alice Tan` behave the same as `delete`.
 
-### Undo last delete : `undo`
+### Undo last change : `undo`
 
-Undoes the most recent delete operation performed in the current session. This is not persisted across app restarts.
+Undoes the most recent command that modified the contact list (e.g., `add`, `delete`, `clear`). History is kept only for the current session; closing the app clears the undo stack.
 
-Format: `undo [delete|del|rm]`
+Format: `undo`
 
 Examples:
-* `delete 1 3-4` followed by `undo` restores the deleted contacts.
-* `del n/Alice Tan` followed by `undo del` restores `Alice Tan` if no other deletes were performed after it.
+* `add n/John Doe ...` followed by `undo` removes the newly added contact.
+* `delete 1 3-4` followed by `undo` restores the contacts removed by that delete.
 
 ### Clearing all entries : `clear`
 
