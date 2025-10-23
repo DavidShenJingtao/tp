@@ -1,9 +1,14 @@
 package seedu.address.ui;
 
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.logging.Logger;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -15,14 +20,18 @@ import seedu.address.commons.core.LogsCenter;
  */
 public class HelpWindow extends UiPart<Stage> {
 
-    public static final String USERGUIDE_URL = "https://se-education.org/addressbook-level3/UserGuide.html";
-    public static final String HELP_MESSAGE = "Refer to the user guide: " + USERGUIDE_URL;
+    public static final String USERGUIDE_URL =
+            "https://ay2526s1-cs2103t-f15a-1.github.io/tp/UserGuide.html#quick-start";
+    public static final String HELP_MESSAGE = "Refer to the user guide:";
 
     private static final Logger logger = LogsCenter.getLogger(HelpWindow.class);
     private static final String FXML = "HelpWindow.fxml";
 
     @FXML
     private Button copyButton;
+
+    @FXML
+    private Hyperlink helpLink;
 
     @FXML
     private Label helpMessage;
@@ -35,6 +44,7 @@ public class HelpWindow extends UiPart<Stage> {
     public HelpWindow(Stage root) {
         super(FXML, root);
         helpMessage.setText(HELP_MESSAGE);
+        helpLink.setText(USERGUIDE_URL);
     }
 
     /**
@@ -98,5 +108,22 @@ public class HelpWindow extends UiPart<Stage> {
         final ClipboardContent url = new ClipboardContent();
         url.putString(USERGUIDE_URL);
         clipboard.setContent(url);
+    }
+
+    /**
+     * Opens the user guide in the system default browser.
+     */
+    @FXML
+    private void openUserGuide() {
+        if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            logger.warning("Opening URLs in the default browser is not supported on this platform.");
+            return;
+        }
+
+        try {
+            Desktop.getDesktop().browse(new URI(USERGUIDE_URL));
+        } catch (IOException | URISyntaxException exception) {
+            logger.warning("Failed to open user guide: " + exception.getMessage());
+        }
     }
 }
