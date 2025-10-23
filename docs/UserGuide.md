@@ -93,6 +93,19 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
+### Exporting the displayed contacts : `export`
+
+Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
+
+Format: `export [FILE_PATH]`
+
+* If no path is provided, TAConnect creates a new file named `contacts-YYYYMMDD-HHMMSS.csv` inside the `exports/` folder (relative to where you launched the app).
+* If `FILE_PATH` points to an existing directory (or ends with `/` or `\`), the CSV is written into that directory with the timestamped name shown above.
+* If `FILE_PATH` points to a new file, the `.csv` extension is added automatically when missing.
+* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset.
+
+You can trigger the export either by typing the command or by clicking the `Export CSV` button beside the command box. The result display shows the location of the generated file.
+
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
@@ -216,4 +229,5 @@ Action | Format, Examples
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
+**Export** | `export [FILE_PATH]`<br> e.g., `export`, `export exports/tutorial-group.csv`
 **Help** | `help`
