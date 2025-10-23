@@ -37,6 +37,8 @@ public class CommandTestUtil {
     public static final String VALID_TELEGRAM_BOB = "@bobchoo";
     public static final String VALID_TYPE_STUDENT = "student";
     public static final String VALID_TYPE_TA = "ta";
+    public static final String VALID_TYPE_INSTRUCTOR = "instructor";
+    public static final String VALID_TYPE_STAFF = "staff";
     public static final String VALID_SESSION_AMY = "G1";
     public static final String VALID_SESSION_BOB = "G2";
 
@@ -51,6 +53,8 @@ public class CommandTestUtil {
     public static final String TELEGRAM_DESC_BOB = " " + PREFIX_TELEGRAM + VALID_TELEGRAM_BOB;
     public static final String TYPE_DESC_STUDENT = " " + PREFIX_TYPE + VALID_TYPE_STUDENT;
     public static final String TYPE_DESC_TA = " " + PREFIX_TYPE + VALID_TYPE_TA;
+    public static final String TYPE_DESC_INSTRUCTOR = " " + PREFIX_TYPE + VALID_TYPE_INSTRUCTOR;
+    public static final String TYPE_DESC_STAFF = " " + PREFIX_TYPE + VALID_TYPE_STAFF;
     public static final String SESSION_DESC_AMY = " " + PREFIX_SESSION + VALID_SESSION_AMY;
     public static final String SESSION_DESC_BOB = " " + PREFIX_SESSION + VALID_SESSION_BOB;
 
