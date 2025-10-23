@@ -26,7 +26,8 @@ public class Session {
     }
 
     /**
-     * Returns true if a given string is a valid session number.
+     * Returns true if a given string is a valid session number (e.g., G1, F17).
+     * Sessions with leading zero is no longer accepted
      */
     public static boolean isValidSession(String test) {
         return test.matches(VALIDATION_REGEX);
