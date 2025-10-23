@@ -40,6 +40,7 @@ task coverage(type: JacocoReport) {
     }
 }
 
+
 dependencies {
     String jUnitVersion = '5.4.0'
     String javaFxVersion = '17.0.7'
@@ -63,6 +64,12 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: jUnitVersion
 
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jUnitVersion
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
+    testRuntimeOnly  'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+
+    // headless JavaFX backend for tests
+    testImplementation "org.testfx:openjfx-monocle:jdk-11+26"
 }
 
 shadowJar {
