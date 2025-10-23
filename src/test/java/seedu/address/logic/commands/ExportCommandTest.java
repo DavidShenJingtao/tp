@@ -65,6 +65,30 @@ public class ExportCommandTest {
     }
 
     @Test
+    public void execute_defaultDirectory_createsTimestampedFile() throws Exception {
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 3, 3, 15, 45, 30);
+        Path expectedDirectory = Paths.get("exports");
+        Path expectedFile = expectedDirectory.resolve("contacts-20240303-154530.csv");
+        Files.deleteIfExists(expectedFile);
+
+        ExportCommand exportCommand = new ExportCommand(null, false, () -> fixedTime);
+        CommandResult result = exportCommand.execute(model);
+
+        assertTrue(Files.exists(expectedFile));
+        assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, 2, expectedFile.toAbsolutePath()),
+                result.getFeedbackToUser());
+
+        Files.deleteIfExists(expectedFile);
+        if (Files.exists(expectedDirectory)) {
+            try (var stream = Files.list(expectedDirectory)) {
+                if (!stream.findAny().isPresent()) {
+                    Files.delete(expectedDirectory);
+                }
+            }
+        }
+    }
+
+    @Test
     public void execute_directoryProvided_createsTimestampedFile() throws Exception {
         Path directory = tempDir.resolve("exports");
         LocalDateTime fixedTime = LocalDateTime.of(2024, 2, 1, 9, 30, 15);
@@ -76,6 +100,17 @@ public class ExportCommandTest {
         assertTrue(Files.exists(expectedFile));
         assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, 2, expectedFile.toAbsolutePath()),
                 result.getFeedbackToUser());
+    }
+
+    @Test
+    public void execute_targetFileAlreadyExists_throwsCommandException() throws Exception {
+        Path targetFile = tempDir.resolve("duplicate.csv");
+        Files.createFile(targetFile);
+        ExportCommand exportCommand = new ExportCommand(targetFile, false, () -> LocalDateTime.now());
+
+        CommandException thrown = assertThrows(CommandException.class, () -> exportCommand.execute(model));
+        assertEquals(String.format(ExportCommand.MESSAGE_IO_ERROR,
+                "File already exists: " + targetFile.toAbsolutePath()), thrown.getMessage());
     }
 
     @Test
