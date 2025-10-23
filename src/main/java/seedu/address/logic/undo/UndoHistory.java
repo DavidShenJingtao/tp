@@ -24,6 +24,7 @@ public final class UndoHistory {
         }
     }
 
+    private static final int MAX_HISTORY_SIZE = 50;
     private static final Deque<UndoEntry> history = new ArrayDeque<>();
 
     private UndoHistory() {
@@ -36,6 +37,9 @@ public final class UndoHistory {
         requireNonNull(state);
         requireNonNull(commandLabel);
         history.push(new UndoEntry(new AddressBook(state), commandLabel));
+        if (history.size() > MAX_HISTORY_SIZE) {
+            history.removeLast();
+        }
     }
 
     /**
