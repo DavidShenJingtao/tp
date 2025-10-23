@@ -2,7 +2,9 @@ package seedu.address.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+import java.awt.GraphicsEnvironment;
 import java.lang.reflect.Method;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +35,9 @@ public class CommandBoxTest {
 
     @BeforeAll
     static void initJavaFx() {
+        // Skip tests in headless CI environments
+        assumeTrue(!GraphicsEnvironment.isHeadless(), "Skipping JavaFX tests in headless environment");
+
         try {
             Platform.startup(() -> { });
         } catch (IllegalStateException ignored) {
