@@ -41,7 +41,7 @@ public class Messages {
      */
     public static String format(Person person) {
         final StringBuilder builder = new StringBuilder();
-        builder.append("Tag: ")
+        builder.append("Type: ")
                 .append(person.getType())
                 .append("; Name: ")
                 .append(person.getName())
