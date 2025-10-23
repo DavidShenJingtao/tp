@@ -8,11 +8,15 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SESSION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 
+import java.util.Optional;
+
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.ReadOnlyPersonAndSessionCounter;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Session;
 
 /**
  * Adds a person to the address book.
@@ -40,6 +44,14 @@ public class AddCommand extends Command {
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the contact list";
 
+    public static final short MAX_PERSON_COUNT = 2500;
+    public static final short MAX_SESSION_COUNT = 250;
+
+    public static final String MESSAGE_MAX_PERSON_COUNT_REACHED = "The contact list has reached the maximum "
+                                                                      + MAX_PERSON_COUNT + " person limit";
+    public static final String MESSAGE_MAX_SESSION_COUNT_REACHED = "The contact list has reached the maximum "
+                                                                       + MAX_SESSION_COUNT + " session limit";
+
     private final Person toAdd;
 
     /**
@@ -50,9 +62,27 @@ public class AddCommand extends Command {
         toAdd = person;
     }
 
+    /**
+     * Check model's current capacity and throw an exception if adding a person
+     * would exceed capacity.
+     */
+    public void checkCapacity(Model model, Person person) throws CommandException {
+        ReadOnlyPersonAndSessionCounter counter = model.getAddressBook().getCounter();
+
+        if (counter.getPersonCountIfPersonAdded() > MAX_PERSON_COUNT) {
+            throw new CommandException(MESSAGE_MAX_PERSON_COUNT_REACHED);
+        }
+
+        Optional<Session> s = person.getSession();
+        if (s.isPresent() && counter.getUniqueSessionCountIfSessionAdded(s.get()) > MAX_SESSION_COUNT) {
+            throw new CommandException(MESSAGE_MAX_SESSION_COUNT_REACHED);
+        }
+    }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+        checkCapacity(model, toAdd);
 
         if (model.hasPerson(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
