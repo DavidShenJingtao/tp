@@ -7,10 +7,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,38 +19,35 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 
 /**
- * Minimal, headless-friendly tests for CommandBox that avoid Stage/Scene.
- * We start the JavaFX toolkit once and interact with the private TextField
- * and handler via reflection. Designed to pass on CI with Monocle.
+ * Minimal headless tests for CommandBox that work reliably on CI.
+ * Uses direct JavaFX toolkit bootstrap and reflection to avoid Stage/Scene.
  */
 public class CommandBoxTest {
 
+    private static volatile boolean fxStarted = false;
     private CommandBox commandBox;
 
-    // Simple recording executor flags + state
+    // Simple recording executor state
     private final List<String> received = new ArrayList<>();
     private boolean failWithCommandException;
     private boolean failWithParseException;
 
-    // ---------- JavaFX toolkit bootstrap (no Stage/Scene) ----------
-
-    @BeforeAll
-    static void initFx() throws Exception {
-        // Start JavaFX toolkit once; Monocle headless settings are supplied in Gradle
-        CountDownLatch latch = new CountDownLatch(1);
+    private static synchronized void ensureFxToolkitStarted() {
+        if (fxStarted) {
+            return;
+        }
         try {
-            Platform.startup(latch::countDown);
+            Platform.startup(() -> { });
         } catch (IllegalStateException alreadyStarted) {
-            // toolkit already up
-            latch.countDown();
+            // Toolkit already started by another test class.
         }
-        if (!latch.await(5, TimeUnit.SECONDS)) {
-            throw new IllegalStateException("Timed out starting JavaFX platform");
-        }
+        fxStarted = true;
     }
 
     @BeforeEach
     void setUp() {
+        ensureFxToolkitStarted();
+
         failWithCommandException = false;
         failWithParseException = false;
         received.clear();
@@ -69,12 +66,9 @@ public class CommandBoxTest {
             commandBox = new CommandBox(executor);
         });
 
-        // sanity
         Region root = commandBox.getRoot();
         assertNotNull(root);
     }
-
-    // ---------- Tests ----------
 
     @Test
     void execute_success_recordsAndClears() {
@@ -84,8 +78,6 @@ public class CommandBoxTest {
 
         assertEquals(1, received.size());
         assertEquals("help", received.get(0));
-
-        // On success the input is cleared in AB3-style CommandBox
         assertEquals("", getTextSafely(tf));
     }
 
@@ -99,12 +91,10 @@ public class CommandBoxTest {
 
         assertEquals(1, received.size());
         assertEquals("badcmd", received.get(0));
-
-        // On failure most implementations keep the input for correction
         assertEquals("badcmd", getTextSafely(tf));
     }
 
-    // ---------- Reflection helpers ----------
+    // -------- Reflection helpers --------
 
     private TextField getTextField() {
         return runOnFxAndGet(() -> {
@@ -134,7 +124,7 @@ public class CommandBoxTest {
         return runOnFxAndGet(tf::getText);
     }
 
-    // ---------- FX thread utilities ----------
+    // -------- FX thread utilities --------
 
     private static void runFxAndWait(Runnable r) {
         if (Platform.isFxApplicationThread()) {
@@ -159,7 +149,7 @@ public class CommandBoxTest {
         }
     }
 
-    private static <T> T runOnFxAndGet(java.util.concurrent.Callable<T> c) {
+    private static <T> T runOnFxAndGet(Callable<T> c) {
         if (Platform.isFxApplicationThread()) {
             try {
                 return c.call();
