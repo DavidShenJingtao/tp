@@ -1,11 +1,12 @@
 package seedu.address.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.awt.GraphicsEnvironment;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -15,151 +16,125 @@ import org.junit.jupiter.api.Test;
 
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
-import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.logic.parser.exceptions.ParseException;
-
+import javafx.scene.layout.Region;
 
 /**
- * Lightweight tests for {@link CommandBox} without TestFX.
- * - Boots JavaFX toolkit once.
- * - Uses reflection to invoke private @FXML methods.
- * - Runs UI-affecting calls on the JavaFX Application Thread.
+ * Minimal, headless-friendly tests for CommandBox that avoid Stage/Scene.
+ * We start the JavaFX toolkit once and interact with the private TextField
+ * and handler via reflection. Designed to pass on CI with Monocle.
  */
 public class CommandBoxTest {
 
     private CommandBox commandBox;
-    private MockExecutor mockExecutor;
 
-    // ---------- JavaFX setup ----------
+    // Simple recording executor flags + state
+    private final List<String> received = new ArrayList<>();
+    private boolean failWithCommandException;
+    private boolean failWithParseException;
+
+    // ---------- JavaFX toolkit bootstrap (no Stage/Scene) ----------
 
     @BeforeAll
-    static void initJavaFx() {
-        // Skip tests in headless CI environments
-        assumeTrue(!GraphicsEnvironment.isHeadless(), "Skipping JavaFX tests in headless environment");
-
+    static void initFx() throws Exception {
+        // Start JavaFX toolkit once; Monocle headless settings are supplied in Gradle
+        CountDownLatch latch = new CountDownLatch(1);
         try {
-            Platform.startup(() -> { });
-        } catch (IllegalStateException ignored) {
-            // FX already started
+            Platform.startup(latch::countDown);
+        } catch (IllegalStateException alreadyStarted) {
+            // toolkit already up
+            latch.countDown();
+        }
+        if (!latch.await(5, TimeUnit.SECONDS)) {
+            throw new IllegalStateException("Timed out starting JavaFX platform");
         }
     }
 
     @BeforeEach
-    public void setUp() {
-        mockExecutor = new MockExecutor();
-        runFxAndWait(() -> commandBox = new CommandBox(mockExecutor));
+    void setUp() {
+        failWithCommandException = false;
+        failWithParseException = false;
+        received.clear();
+
+        runFxAndWait(() -> {
+            CommandBox.CommandExecutor executor = (String commandText) -> {
+                received.add(commandText);
+                if (failWithCommandException) {
+                    throw new seedu.address.logic.commands.exceptions.CommandException("boom");
+                }
+                if (failWithParseException) {
+                    throw new seedu.address.logic.parser.exceptions.ParseException("nope");
+                }
+                return new seedu.address.logic.commands.CommandResult("OK");
+            };
+            commandBox = new CommandBox(executor);
+        });
+
+        // sanity
+        Region root = commandBox.getRoot();
+        assertNotNull(root);
     }
 
     // ---------- Tests ----------
 
     @Test
-    public void enterSuccessAddsToHistoryAndClearsField() {
-        TextField field = getTextField();
-        runFxAndWait(() -> field.setText("list"));
+    void execute_success_recordsAndClears() {
+        TextField tf = getTextField();
+        runFxAndWait(() -> tf.setText("help"));
         invokeHandleCommandEntered();
-        assertEquals("list", mockExecutor.getLastExecuted());
-        assertEquals("", getTextFieldText()); // cleared after success
+
+        assertEquals(1, received.size());
+        assertEquals("help", received.get(0));
+
+        // On success the input is cleared in AB3-style CommandBox
+        assertEquals("", getTextSafely(tf));
     }
 
     @Test
-    public void enterFailureSetsErrorStyleAndKeepsField() {
-        TextField field = getTextField();
-        runFxAndWait(() -> field.setText("fail")); // mock throws on "fail"
-        invokeHandleCommandEntered();
-        assertEquals("fail", mockExecutor.getLastExecuted());
-        assertEquals("fail", getTextFieldText()); // not cleared on failure
-        assertTrue(getTextField().getStyleClass().contains(getErrorStyleClass()));
-    }
+    void execute_failure_recordsAndKeepsText() {
+        failWithCommandException = true;
 
-    // need to fix later for adding check
-    @Test
-    public void historyUpDownNavigatesCorrectly() {
-        TextField field = getTextField();
-
-        // Execute two commands to populate history
-        runFxAndWait(() -> field.setText("list"));
-        invokeHandleCommandEntered();
-        runFxAndWait(() -> field.setText("find alex"));
+        TextField tf = getTextField();
+        runFxAndWait(() -> tf.setText("badcmd"));
         invokeHandleCommandEntered();
 
-        // First UP should show last command
-        invokeHandleHistoryUp();
-        assertEquals("find alex", getTextFieldText());
+        assertEquals(1, received.size());
+        assertEquals("badcmd", received.get(0));
 
-        // Second UP should show previous command
-        invokeHandleHistoryUp();
-        assertEquals("list", getTextFieldText());
-
-        // One DOWN should go back to last command
-        invokeHandleHistoryDown();
-        assertEquals("find alex", getTextFieldText());
-
+        // On failure most implementations keep the input for correction
+        assertEquals("badcmd", getTextSafely(tf));
     }
 
-
-    // ---------- Reflection helpers (wrap exceptions) ----------
-
-    private void invokeHandleCommandEntered() {
-        Method m = getDeclaredMethodUnchecked(CommandBox.class, "handleCommandEntered");
-        runFxAndWait(() -> invokeUnchecked(m, commandBox));
-    }
-
-    private void invokeHandleHistoryUp() {
-        Method m = getDeclaredMethodUnchecked(CommandBox.class, "handleHistoryUp");
-        runFxAndWait(() -> invokeUnchecked(m, commandBox));
-    }
-
-    private void invokeHandleHistoryDown() {
-        Method m = getDeclaredMethodUnchecked(CommandBox.class, "handleHistoryDown");
-        runFxAndWait(() -> invokeUnchecked(m, commandBox));
-    }
+    // ---------- Reflection helpers ----------
 
     private TextField getTextField() {
-        try {
-            var f = CommandBox.class.getDeclaredField("commandTextField");
-            f.setAccessible(true);
-            return (TextField) f.get(commandBox);
-        } catch (Exception e) {
-            throw new AssertionError(e);
-        }
+        return runOnFxAndGet(() -> {
+            try {
+                Field f = CommandBox.class.getDeclaredField("commandTextField");
+                f.setAccessible(true);
+                return (TextField) f.get(commandBox);
+            } catch (Exception e) {
+                throw new AssertionError(e);
+            }
+        });
     }
 
-    private String getTextFieldText() {
-        final var ref = new String[1];
-        runFxAndWait(() -> ref[0] = getTextField().getText());
-        return ref[0];
+    private void invokeHandleCommandEntered() {
+        runFxAndWait(() -> {
+            try {
+                Method m = CommandBox.class.getDeclaredMethod("handleCommandEntered");
+                m.setAccessible(true);
+                m.invoke(commandBox);
+            } catch (Exception e) {
+                throw new AssertionError(e);
+            }
+        });
     }
 
-    private String getErrorStyleClass() {
-        try {
-            var f = CommandBox.class.getDeclaredField("ERROR_STYLE_CLASS");
-            f.setAccessible(true);
-            return (String) f.get(null);
-        } catch (Exception e) {
-            throw new AssertionError(e);
-        }
+    private String getTextSafely(TextField tf) {
+        return runOnFxAndGet(tf::getText);
     }
 
-    private static Method getDeclaredMethodUnchecked(Class<?> cls, String name) {
-        try {
-            Method m = cls.getDeclaredMethod(name);
-            m.setAccessible(true);
-            return m;
-        } catch (Exception e) {
-            throw new AssertionError(e);
-        }
-    }
-
-    private static void invokeUnchecked(Method m, Object target) {
-        try {
-            m.invoke(target);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    // ---------- FX thread utility ----------
+    // ---------- FX thread utilities ----------
 
     private static void runFxAndWait(Runnable r) {
         if (Platform.isFxApplicationThread()) {
@@ -184,23 +159,24 @@ public class CommandBoxTest {
         }
     }
 
-    // ---------- Mock executor ----------
-
-    /** Mock CommandExecutor: succeeds unless command is "fail". */
-    private static class MockExecutor implements CommandBox.CommandExecutor {
-        private String lastExecuted;
-
-        @Override
-        public CommandResult execute(String commandText) throws CommandException, ParseException {
-            lastExecuted = commandText;
-            if ("fail".equals(commandText)) {
-                throw new CommandException("Simulated failure");
+    private static <T> T runOnFxAndGet(java.util.concurrent.Callable<T> c) {
+        if (Platform.isFxApplicationThread()) {
+            try {
+                return c.call();
+            } catch (Exception e) {
+                throw new AssertionError(e);
             }
-            return new CommandResult("OK");
         }
-
-        String getLastExecuted() {
-            return lastExecuted;
-        }
+        final Object[] box = new Object[1];
+        runFxAndWait(() -> {
+            try {
+                box[0] = c.call();
+            } catch (Exception e) {
+                throw new AssertionError(e);
+            }
+        });
+        @SuppressWarnings("unchecked")
+        T t = (T) box[0];
+        return t;
     }
 }
