@@ -20,7 +20,7 @@ import javafx.scene.layout.Region;
 
 /**
  * Minimal headless tests for CommandBox that work reliably on CI.
- * Uses direct JavaFX toolkit bootstrap and reflection to avoid Stage/Scene.
+ * Uses direct JavaFX toolkit bootstrap (guarded) and reflection.
  */
 public class CommandBoxTest {
 
@@ -32,17 +32,43 @@ public class CommandBoxTest {
     private boolean failWithCommandException;
     private boolean failWithParseException;
 
+    /**
+     * Start JavaFX toolkit in a CI-safe way:
+     *  1) Try Platform.runLater() to detect if toolkit is up.
+     *  2) If not, call Platform.startup(); swallow IllegalStateException (already started)
+     *     and the sporadic NullPointerException seen on some CI runners.
+     */
     private static synchronized void ensureFxToolkitStarted() {
         if (fxStarted) {
             return;
         }
+        // Probe: if toolkit is already started, runLater will succeed.
+        try {
+            Platform.runLater(() -> { });
+            fxStarted = true;
+            return;
+        } catch (IllegalStateException notStarted) {
+            // fall through to startup
+        }
+
         try {
             Platform.startup(() -> { });
-        } catch (IllegalStateException alreadyStarted) {
-            // Toolkit already started by another test class.
+        } catch (IllegalStateException already) {
+            // already started by something else
+        } catch (NullPointerException sporadic) {
+            // seen on some CI runners during Glass init; ignore and verify via runLater below
         }
-        fxStarted = true;
+
+        // Verify we can now post to FX thread; if not, fail early.
+        try {
+            Platform.runLater(() -> { });
+            fxStarted = true;
+        } catch (IllegalStateException stillNotStarted) {
+            throw new IllegalStateException("JavaFX toolkit failed to start on CI", stillNotStarted);
+        }
     }
+
+
 
     @BeforeEach
     void setUp() {
@@ -52,19 +78,26 @@ public class CommandBoxTest {
         failWithParseException = false;
         received.clear();
 
-        runFxAndWait(() -> {
-            CommandBox.CommandExecutor executor = (String commandText) -> {
-                received.add(commandText);
-                if (failWithCommandException) {
-                    throw new seedu.address.logic.commands.exceptions.CommandException("boom");
-                }
-                if (failWithParseException) {
-                    throw new seedu.address.logic.parser.exceptions.ParseException("nope");
-                }
-                return new seedu.address.logic.commands.CommandResult("OK");
-            };
-            commandBox = new CommandBox(executor);
+        // Build CommandBox on the FX thread and block until complete.
+        final CountDownLatch latch = new CountDownLatch(1);
+        Platform.runLater(() -> {
+            try {
+                CommandBox.CommandExecutor executor = (String commandText) -> {
+                    received.add(commandText);
+                    if (failWithCommandException) {
+                        throw new seedu.address.logic.commands.exceptions.CommandException("boom");
+                    }
+                    if (failWithParseException) {
+                        throw new seedu.address.logic.parser.exceptions.ParseException("nope");
+                    }
+                    return new seedu.address.logic.commands.CommandResult("OK");
+                };
+                commandBox = new CommandBox(executor);
+            } finally {
+                latch.countDown();
+            }
         });
+        await(latch, "Timed out creating CommandBox");
 
         Region root = commandBox.getRoot();
         assertNotNull(root);
@@ -126,6 +159,17 @@ public class CommandBoxTest {
 
     // -------- FX thread utilities --------
 
+    private static void await(CountDownLatch latch, String msg) {
+        try {
+            if (!latch.await(5, TimeUnit.SECONDS)) {
+                throw new AssertionError(msg);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError(e);
+        }
+    }
+
     private static void runFxAndWait(Runnable r) {
         if (Platform.isFxApplicationThread()) {
             r.run();
@@ -139,14 +183,7 @@ public class CommandBoxTest {
                 latch.countDown();
             }
         });
-        try {
-            if (!latch.await(5, TimeUnit.SECONDS)) {
-                throw new AssertionError("Timed out waiting for FX task");
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new AssertionError(e);
-        }
+        await(latch, "Timed out waiting for FX task");
     }
 
     private static <T> T runOnFxAndGet(Callable<T> c) {
