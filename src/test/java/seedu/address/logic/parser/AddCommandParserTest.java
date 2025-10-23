@@ -19,7 +19,9 @@ import static seedu.address.logic.commands.CommandTestUtil.SESSION_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.SESSION_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.TELEGRAM_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TELEGRAM_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.TYPE_DESC_INSTRUCTOR;
 import static seedu.address.logic.commands.CommandTestUtil.TYPE_DESC_STUDENT;
+import static seedu.address.logic.commands.CommandTestUtil.TYPE_DESC_STAFF;
 import static seedu.address.logic.commands.CommandTestUtil.TYPE_DESC_TA;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
@@ -204,5 +206,29 @@ public class AddCommandParserTest {
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
                 + TYPE_DESC_TA + TELEGRAM_DESC_BOB + SESSION_DESC_BOB,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_studentWithoutSession_failure() {
+        assertParseFailure(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + TYPE_DESC_STUDENT,
+                Person.MESSAGE_STUDENT_TA);
+    }
+
+    @Test
+    public void parse_taWithoutSession_failure() {
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + TYPE_DESC_TA,
+                Person.MESSAGE_STUDENT_TA);
+    }
+
+    @Test
+    public void parse_instructorWithSession_failure() {
+        assertParseFailure(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + TYPE_DESC_INSTRUCTOR
+                + SESSION_DESC_AMY, Person.MESSAGE_INSTRUCTOR_STAFF);
+    }
+
+    @Test
+    public void parse_staffWithSession_failure() {
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + TYPE_DESC_STAFF
+                + SESSION_DESC_BOB, Person.MESSAGE_INSTRUCTOR_STAFF);
     }
 }

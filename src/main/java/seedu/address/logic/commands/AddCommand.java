@@ -27,15 +27,16 @@ public class AddCommand extends Command {
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
             + PREFIX_TYPE + "TYPE "
-            + PREFIX_TELEGRAM + "TELEGRAM "
-            + PREFIX_SESSION + "SESSION "
+            + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
+            + "[" + PREFIX_SESSION + "SESSION] "
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_PHONE + "98765432 "
             + PREFIX_EMAIL + "johnd@example.com "
             + PREFIX_TYPE + "student "
             + PREFIX_TELEGRAM + "@ABC12 "
-            + PREFIX_SESSION + "G1";
+            + PREFIX_SESSION + "G1 "
+            + "\nNote: Students and TAs must include a session, while instructors and staff must omit it.";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the contact list";
