@@ -69,4 +69,8 @@ shadowJar {
     archiveFileName = 'TAConnect-v1.3-all.jar'
 }
 
+run {
+    enableAssertions = true
+}
+
 defaultTasks 'clean', 'test'
