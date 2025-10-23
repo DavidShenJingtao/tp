@@ -32,6 +32,7 @@ public class SessionTest {
         assertFalse(Session.isValidSession("GG17")); // too many letters
         assertFalse(Session.isValidSession("G173")); // more than 2 digits
         assertFalse(Session.isValidSession("G1A")); // letter after digit
+        assertFalse(Session.isValidSession("G01"));
 
         // valid sessions
         assertTrue(Session.isValidSession("G1")); // single digit

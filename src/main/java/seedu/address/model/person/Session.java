@@ -9,10 +9,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Session {
 
-
     public static final String MESSAGE_CONSTRAINTS =
-            "Sessions should start with a capital letter followed by 1–2 digits (e.g., G17, F7).";
-    public static final String VALIDATION_REGEX = "[A-Z]\\d{1,2}";
+            "Sessions should start with a capital letter followed by 1–2 digits (1–99), without leading zeros (e.g., G1, F17).";
+    public static final String VALIDATION_REGEX = "[A-Z](?:[1-9][0-9]?)";
     public final String value;
 
     /**
