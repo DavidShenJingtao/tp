@@ -7,6 +7,7 @@ import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -17,10 +18,12 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ExitCommand;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListSessionCommand;
+import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
@@ -74,6 +77,13 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_export() throws Exception {
+        assertEquals(new ExportCommand(), parser.parseCommand(ExportCommand.COMMAND_WORD));
+        assertEquals(new ExportCommand(Paths.get("reports.csv")),
+                parser.parseCommand(ExportCommand.COMMAND_WORD + " reports"));
+    }
+
+    @Test
     public void parseCommand_find() throws Exception {
         String keyword = "foo bar baz";
         FindCommand command = (FindCommand) parser.parseCommand(
@@ -94,11 +104,14 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_undoDelete_variants() throws Exception {
-        assertTrue(parser.parseCommand("undo delete") instanceof seedu.address.logic.commands.UndoDeleteCommand);
-        assertTrue(parser.parseCommand("undo del") instanceof seedu.address.logic.commands.UndoDeleteCommand);
-        assertTrue(parser.parseCommand("undo rm") instanceof seedu.address.logic.commands.UndoDeleteCommand);
-        assertTrue(parser.parseCommand("undo") instanceof seedu.address.logic.commands.UndoDeleteCommand);
+    public void parseCommand_undo_success() throws Exception {
+        assertTrue(parser.parseCommand("undo") instanceof UndoCommand);
+    }
+
+    @Test
+    public void parseCommand_undoWithArguments_throwsParseException() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE);
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("undo something"));
     }
 
     @Test

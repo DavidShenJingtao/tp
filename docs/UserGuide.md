@@ -93,6 +93,19 @@ Shows a list of all persons in the address book.
 
 Format: `list`
 
+### Exporting the displayed contacts : `export`
+
+Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
+
+Format: `export [FILE_PATH]`
+
+* If no path is provided, TAConnect creates a new file named `contacts-YYYYMMDD-HHMMSS.csv` inside the `exports/` folder (relative to where you launched the app).
+* If `FILE_PATH` points to an existing directory (or ends with `/` or `\`), the CSV is written into that directory with the timestamped name shown above.
+* If `FILE_PATH` points to a new file, the `.csv` extension is added automatically when missing.
+* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset.
+
+You can trigger the export either by typing the command or by clicking the `Export CSV` button beside the command box. The result display shows the location of the generated file.
+
 ### Editing a person : `edit`
 
 Edits an existing person in the address book.
@@ -151,15 +164,15 @@ Examples:
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * Aliases: `del 2`, `rm n/Alice Tan` behave the same as `delete`.
 
-### Undo last delete : `undo`
+### Undo last change : `undo`
 
-Undoes the most recent delete operation performed in the current session. This is not persisted across app restarts.
+Undoes the most recent command that modified the contact list (e.g., `add`, `delete`, `clear`). History is kept only for the current session; closing the app clears the undo stack.
 
-Format: `undo [delete|del|rm]`
+Format: `undo`
 
 Examples:
-* `delete 1 3-4` followed by `undo` restores the deleted contacts.
-* `del n/Alice Tan` followed by `undo del` restores `Alice Tan` if no other deletes were performed after it.
+* `add n/John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
+* `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
 
 ### Clearing all entries : `clear`
 
@@ -216,4 +229,5 @@ Action | Format, Examples
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
+**Export** | `export [FILE_PATH]`<br> e.g., `export`, `export exports/tutorial-group.csv`
 **Help** | `help`

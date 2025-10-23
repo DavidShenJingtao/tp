@@ -16,6 +16,7 @@ import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.undo.UndoHistory;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
@@ -36,6 +37,8 @@ public class CommandTestUtil {
     public static final String VALID_TELEGRAM_BOB = "@bobchoo";
     public static final String VALID_TYPE_STUDENT = "student";
     public static final String VALID_TYPE_TA = "ta";
+    public static final String VALID_TYPE_INSTRUCTOR = "instructor";
+    public static final String VALID_TYPE_STAFF = "staff";
     public static final String VALID_SESSION_AMY = "G1";
     public static final String VALID_SESSION_BOB = "G2";
 
@@ -50,6 +53,8 @@ public class CommandTestUtil {
     public static final String TELEGRAM_DESC_BOB = " " + PREFIX_TELEGRAM + VALID_TELEGRAM_BOB;
     public static final String TYPE_DESC_STUDENT = " " + PREFIX_TYPE + VALID_TYPE_STUDENT;
     public static final String TYPE_DESC_TA = " " + PREFIX_TYPE + VALID_TYPE_TA;
+    public static final String TYPE_DESC_INSTRUCTOR = " " + PREFIX_TYPE + VALID_TYPE_INSTRUCTOR;
+    public static final String TYPE_DESC_STAFF = " " + PREFIX_TYPE + VALID_TYPE_STAFF;
     public static final String SESSION_DESC_AMY = " " + PREFIX_SESSION + VALID_SESSION_AMY;
     public static final String SESSION_DESC_BOB = " " + PREFIX_SESSION + VALID_SESSION_BOB;
 
@@ -72,7 +77,16 @@ public class CommandTestUtil {
     public static void assertCommandSuccess(Command command, Model actualModel, CommandResult expectedCommandResult,
             Model expectedModel) {
         try {
+            AddressBook previousState = null;
+            if (command.isStateChanging()) {
+                previousState = new AddressBook(actualModel.getAddressBook());
+            }
+
             CommandResult result = command.execute(actualModel);
+
+            if (command.isStateChanging() && previousState != null) {
+                UndoHistory.recordState(previousState, determineUndoLabel(command));
+            }
             assertEquals(expectedCommandResult, result);
             assertEquals(expectedModel, actualModel);
         } catch (CommandException ce) {
@@ -118,6 +132,19 @@ public class CommandTestUtil {
         model.updateFilteredPersonList(new NameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
 
         assertEquals(1, model.getFilteredPersonList().size());
+    }
+
+    private static String determineUndoLabel(Command command) {
+        String label = command.getUndoLabel();
+        if (label != null && !label.isBlank()) {
+            return label;
+        }
+
+        String simpleName = command.getClass().getSimpleName();
+        if (simpleName.endsWith("Command")) {
+            simpleName = simpleName.substring(0, simpleName.length() - "Command".length());
+        }
+        return simpleName.toLowerCase();
     }
 
 }

@@ -4,16 +4,21 @@ import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -120,7 +125,17 @@ public class MainWindow extends UiPart<Stage> {
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
         CommandBox commandBox = new CommandBox(this::executeCommand);
-        commandBoxPlaceholder.getChildren().add(commandBox.getRoot());
+        Region commandRoot = commandBox.getRoot();
+        commandRoot.setMaxWidth(Double.MAX_VALUE);
+
+        Button exportButton = new Button("Export CSV");
+        exportButton.setOnAction(event -> handleExport());
+        exportButton.getStyleClass().add("export-button");
+
+        HBox commandRow = new HBox(10, commandRoot, exportButton);
+        HBox.setHgrow(commandRoot, Priority.ALWAYS);
+
+        commandBoxPlaceholder.getChildren().add(commandRow);
     }
 
     /**
@@ -144,6 +159,17 @@ public class MainWindow extends UiPart<Stage> {
             helpWindow.show();
         } else {
             helpWindow.focus();
+        }
+    }
+
+    /**
+     * Triggers the export of the currently displayed contacts.
+     */
+    private void handleExport() {
+        try {
+            executeCommand(ExportCommand.COMMAND_WORD);
+        } catch (CommandException | ParseException commandException) {
+            logger.warning("Failed to export contacts: " + commandException.getMessage());
         }
     }
 
