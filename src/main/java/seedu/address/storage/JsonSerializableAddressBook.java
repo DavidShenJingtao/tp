@@ -2,6 +2,7 @@ package seedu.address.storage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -9,9 +10,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.logic.commands.AddCommand;
 import seedu.address.model.AddressBook;
+import seedu.address.model.PersonAndSessionCounter;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.Session;
+
 
 /**
  * An Immutable AddressBook that is serializable to JSON format.
@@ -20,6 +25,11 @@ import seedu.address.model.person.Person;
 class JsonSerializableAddressBook {
 
     public static final String MESSAGE_DUPLICATE_PERSON = "Persons list contains duplicate person(s).";
+    public static final String MESSAGE_MAX_PERSON_COUNT_REACHED = "Persons list contains more than maximum "
+                                                                      + AddCommand.MAX_PERSON_COUNT + " person limit.";
+    public static final String MESSAGE_MAX_SESSION_COUNT_REACHED =
+                                   "Persons list contains more than maximum "
+                                   + AddCommand.MAX_SESSION_COUNT + " session limit.";
 
     private final List<JsonAdaptedPerson> persons = new ArrayList<>();
 
@@ -51,6 +61,14 @@ class JsonSerializableAddressBook {
             Person person = jsonAdaptedPerson.toModelType();
             if (addressBook.hasPerson(person)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
+            }
+            PersonAndSessionCounter counter = addressBook.getCounter();
+            if (counter.getPersonCountIfPersonAdded() > AddCommand.MAX_PERSON_COUNT) {
+                throw new IllegalValueException(MESSAGE_MAX_PERSON_COUNT_REACHED);
+            }
+            Optional<Session> s = person.getSession();
+            if (s.isPresent() && counter.getUniqueSessionCountIfSessionAdded(s.get()) > AddCommand.MAX_SESSION_COUNT) {
+                throw new IllegalValueException(MESSAGE_MAX_SESSION_COUNT_REACHED);
             }
             addressBook.addPerson(person);
         }

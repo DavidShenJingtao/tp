@@ -164,16 +164,24 @@ public class AddCommandTest {
      */
     private class ModelStubWithPerson extends ModelStub {
         private final Person person;
+        private final AddressBook addressBook;
 
         ModelStubWithPerson(Person person) {
             requireNonNull(person);
             this.person = person;
+            this.addressBook = new AddressBook();
+            addressBook.addPerson(person);
         }
 
         @Override
         public boolean hasPerson(Person person) {
             requireNonNull(person);
             return this.person.isSamePerson(person);
+        }
+
+        @Override
+        public ReadOnlyAddressBook getAddressBook() {
+            return this.addressBook;
         }
     }
 
@@ -200,5 +208,4 @@ public class AddCommandTest {
             return new AddressBook();
         }
     }
-
 }

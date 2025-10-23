@@ -16,6 +16,7 @@ import seedu.address.model.person.UniquePersonList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
+    private final PersonAndSessionCounter counter;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -26,6 +27,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         persons = new UniquePersonList();
+        counter = new PersonAndSessionCounter();
     }
 
     public AddressBook() {}
@@ -46,6 +48,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void setPersons(List<Person> persons) {
         this.persons.setPersons(persons);
+        this.counter.setPersons(persons);
     }
 
     /**
@@ -73,6 +76,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void addPerson(Person p) {
         persons.add(p);
+        counter.add(p);
     }
 
     /**
@@ -92,6 +96,7 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     public void removePerson(Person key) {
         persons.remove(key);
+        counter.remove(key);
     }
 
     //// util methods
@@ -106,6 +111,11 @@ public class AddressBook implements ReadOnlyAddressBook {
     @Override
     public ObservableList<Person> getPersonList() {
         return persons.asUnmodifiableObservableList();
+    }
+
+    @Override
+    public PersonAndSessionCounter getCounter() {
+        return counter;
     }
 
     @Override

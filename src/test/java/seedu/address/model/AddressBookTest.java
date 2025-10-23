@@ -103,6 +103,11 @@ public class AddressBookTest {
         public ObservableList<Person> getPersonList() {
             return persons;
         }
+
+        @Override
+        public ReadOnlyPersonAndSessionCounter getCounter() {
+            return null;
+        }
     }
 
 }
