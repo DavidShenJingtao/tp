@@ -42,6 +42,7 @@ public class UndoCommandTest {
         Person firstPerson = model.getFilteredPersonList().get(0);
         DeleteCommand deleteCommand = new DeleteCommand(
                 List.of(DeleteCommand.Selector.fromIndex(Index.fromOneBased(1))));
+        deleteCommand.setUndoLabel(DeleteCommand.COMMAND_WORD);
 
         Model expectedAfterDelete = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
         expectedAfterDelete.deletePerson(firstPerson);
@@ -50,7 +51,9 @@ public class UndoCommandTest {
                 expectedAfterDelete);
 
         Model expectedAfterUndo = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
-        assertCommandSuccess(new UndoCommand(), model, UndoCommand.MESSAGE_SUCCESS, expectedAfterUndo);
+        assertCommandSuccess(new UndoCommand(), model,
+                String.format(UndoCommand.MESSAGE_SUCCESS, DeleteCommand.COMMAND_WORD.toLowerCase()),
+                expectedAfterUndo);
     }
 
     @Test
@@ -59,6 +62,7 @@ public class UndoCommandTest {
 
         // add new person
         AddCommand addCommand = new AddCommand(newPerson);
+        addCommand.setUndoLabel(" ");
         Model expectedAfterAdd = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
         expectedAfterAdd.addPerson(newPerson);
         assertCommandSuccess(addCommand, model,
@@ -68,6 +72,7 @@ public class UndoCommandTest {
         Person firstPerson = model.getFilteredPersonList().get(0);
         DeleteCommand deleteCommand = new DeleteCommand(
                 List.of(DeleteCommand.Selector.fromIndex(Index.fromOneBased(1))));
+        deleteCommand.setUndoLabel(DeleteCommand.COMMAND_WORD);
         Model expectedAfterDelete = new ModelManager(expectedAfterAdd.getAddressBook(), new UserPrefs());
         expectedAfterDelete.deletePerson(firstPerson);
         assertCommandSuccess(deleteCommand, model,
@@ -75,17 +80,37 @@ public class UndoCommandTest {
                 expectedAfterDelete);
 
         // undo should restore state before delete (i.e. after add)
-        assertCommandSuccess(new UndoCommand(), model, UndoCommand.MESSAGE_SUCCESS,
+        assertCommandSuccess(new UndoCommand(), model,
+                String.format(UndoCommand.MESSAGE_SUCCESS, DeleteCommand.COMMAND_WORD.toLowerCase()),
                 new ModelManager(expectedAfterAdd.getAddressBook(), new UserPrefs()));
+
+        // undo again should revert the earlier add command (fallback label "add")
+        assertCommandSuccess(new UndoCommand(), model,
+                String.format(UndoCommand.MESSAGE_SUCCESS, "add"),
+                new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs()));
     }
 
     @Test
     public void execute_afterClearCommand_success() {
         ClearCommand clearCommand = new ClearCommand();
+        clearCommand.setUndoLabel(ClearCommand.COMMAND_WORD);
         Model expectedAfterClear = new ModelManager(new AddressBook(), new UserPrefs());
         assertCommandSuccess(clearCommand, model, ClearCommand.MESSAGE_SUCCESS, expectedAfterClear);
 
         Model expectedAfterUndo = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
-        assertCommandSuccess(new UndoCommand(), model, UndoCommand.MESSAGE_SUCCESS, expectedAfterUndo);
+        assertCommandSuccess(new UndoCommand(), model,
+                String.format(UndoCommand.MESSAGE_SUCCESS, ClearCommand.COMMAND_WORD.toLowerCase()),
+                expectedAfterUndo);
+    }
+
+    @Test
+    public void execute_withUnknownLabel_usesFallback() {
+        UndoHistory.clear();
+        Model mutatedModel = new ModelManager(new AddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+
+        UndoHistory.recordState(expectedModel.getAddressBook(), "");
+        assertCommandSuccess(new UndoCommand(), mutatedModel,
+                String.format(UndoCommand.MESSAGE_SUCCESS, "unknown"), expectedModel);
     }
 }

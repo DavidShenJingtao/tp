@@ -81,7 +81,7 @@ public class CommandTestUtil {
             CommandResult result = command.execute(actualModel);
 
             if (command.isStateChanging() && previousState != null) {
-                UndoHistory.recordState(previousState);
+                UndoHistory.recordState(previousState, determineUndoLabel(command));
             }
             assertEquals(expectedCommandResult, result);
             assertEquals(expectedModel, actualModel);
@@ -128,6 +128,19 @@ public class CommandTestUtil {
         model.updateFilteredPersonList(new NameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
 
         assertEquals(1, model.getFilteredPersonList().size());
+    }
+
+    private static String determineUndoLabel(Command command) {
+        String label = command.getUndoLabel();
+        if (label != null && !label.isBlank()) {
+            return label;
+        }
+
+        String simpleName = command.getClass().getSimpleName();
+        if (simpleName.endsWith("Command")) {
+            simpleName = simpleName.substring(0, simpleName.length() - "Command".length());
+        }
+        return simpleName.toLowerCase();
     }
 
 }

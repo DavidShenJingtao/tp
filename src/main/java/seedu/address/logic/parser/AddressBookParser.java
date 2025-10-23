@@ -52,45 +52,58 @@ public class AddressBookParser {
         // Lower level log messages are used sparingly to minimize noise in the code.
         logger.fine("Command word: " + commandWord + "; Arguments: " + arguments);
 
+        Command command;
         switch (commandWord) {
 
         case AddCommand.COMMAND_WORD:
-            return new AddCommandParser().parse(arguments);
+            command = new AddCommandParser().parse(arguments);
+            break;
 
         case DeleteCommand.COMMAND_WORD:
         case "del":
         case "rm":
-            return new DeleteCommandParser().parse(arguments);
+            command = new DeleteCommandParser().parse(arguments);
+            break;
 
         case ClearCommand.COMMAND_WORD:
-            return new ClearCommand();
+            command = new ClearCommand();
+            break;
 
         case FindCommand.COMMAND_WORD:
-            return new FindCommandParser().parse(arguments);
+            command = new FindCommandParser().parse(arguments);
+            break;
 
         case ListCommand.COMMAND_WORD:
-            return new ListCommand();
+            command = new ListCommand();
+            break;
 
         case ListSessionCommand.COMMAND_WORD:
-            return new ListSessionCommandParser().parse(arguments);
+            command = new ListSessionCommandParser().parse(arguments);
+            break;
 
         case ExitCommand.COMMAND_WORD:
-            return new ExitCommand();
+            command = new ExitCommand();
+            break;
 
         case HelpCommand.COMMAND_WORD:
-            return new HelpCommand();
+            command = new HelpCommand();
+            break;
 
         case UndoCommand.COMMAND_WORD:
             if (!arguments.trim().isEmpty()) {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                         UndoCommand.MESSAGE_USAGE));
             }
-            return new UndoCommand();
+            command = new UndoCommand();
+            break;
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
             throw new ParseException(MESSAGE_UNKNOWN_COMMAND);
         }
+
+        command.setUndoLabel(commandWord);
+        return command;
     }
 
 }

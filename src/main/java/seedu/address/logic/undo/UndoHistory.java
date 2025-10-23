@@ -14,7 +14,17 @@ import seedu.address.model.ReadOnlyAddressBook;
  */
 public final class UndoHistory {
 
-    private static final Deque<AddressBook> history = new ArrayDeque<>();
+    private static final class UndoEntry {
+        private final AddressBook state;
+        private final String label;
+
+        private UndoEntry(AddressBook state, String label) {
+            this.state = state;
+            this.label = label;
+        }
+    }
+
+    private static final Deque<UndoEntry> history = new ArrayDeque<>();
 
     private UndoHistory() {
     }
@@ -22,9 +32,10 @@ public final class UndoHistory {
     /**
      * Records a snapshot of the address book before a state-changing command is executed.
      */
-    public static void recordState(ReadOnlyAddressBook state) {
+    public static void recordState(ReadOnlyAddressBook state, String commandLabel) {
         requireNonNull(state);
-        history.push(new AddressBook(state));
+        requireNonNull(commandLabel);
+        history.push(new UndoEntry(new AddressBook(state), commandLabel));
     }
 
     /**
@@ -37,13 +48,14 @@ public final class UndoHistory {
     /**
      * Restores the most recently saved state into the provided {@code model}.
      */
-    public static void restorePreviousState(Model model) {
+    public static String restorePreviousState(Model model) {
         requireNonNull(model);
         if (!canUndo()) {
-            return;
+            return null;
         }
-        AddressBook previousState = history.pop();
-        model.setAddressBook(previousState);
+        UndoEntry entry = history.pop();
+        model.setAddressBook(entry.state);
+        return entry.label;
     }
 
     /**
@@ -53,4 +65,3 @@ public final class UndoHistory {
         history.clear();
     }
 }
-

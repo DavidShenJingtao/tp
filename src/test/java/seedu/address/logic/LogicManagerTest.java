@@ -97,8 +97,24 @@ public class LogicManagerTest {
         assertTrue(UndoHistory.canUndo());
 
         CommandResult undoResult = logic.execute(UndoCommand.COMMAND_WORD);
-        assertEquals(UndoCommand.MESSAGE_SUCCESS, undoResult.getFeedbackToUser());
+        assertEquals(String.format(UndoCommand.MESSAGE_SUCCESS, AddCommand.COMMAND_WORD.toLowerCase()),
+                undoResult.getFeedbackToUser());
         assertEquals(new ModelManager(), model);
+    }
+
+    @Test
+    public void execute_deleteAliasThenUndo_reportsAlias() throws Exception {
+        UndoHistory.clear();
+        Person person = new PersonBuilder().build();
+        logic.execute(PersonUtil.getAddCommand(person));
+
+        Model expectedAfterAdd = new ModelManager(model.getAddressBook(), new UserPrefs());
+
+        logic.execute("del 1");
+
+        CommandResult undoResult = logic.execute(UndoCommand.COMMAND_WORD);
+        assertEquals(String.format(UndoCommand.MESSAGE_SUCCESS, "del"), undoResult.getFeedbackToUser());
+        assertEquals(expectedAfterAdd, model);
     }
 
     @Test

@@ -8,6 +8,8 @@ import seedu.address.model.Model;
  */
 public abstract class Command {
 
+    private String undoLabel;
+
     /**
      * Executes the command and returns the result message.
      *
@@ -23,6 +25,20 @@ public abstract class Command {
      */
     public boolean isStateChanging() {
         return false;
+    }
+
+    /**
+     * Sets the label used when reporting that this command has been undone.
+     */
+    public void setUndoLabel(String undoLabel) {
+        this.undoLabel = undoLabel;
+    }
+
+    /**
+     * Returns the label used when reporting that this command has been undone.
+     */
+    public String getUndoLabel() {
+        return undoLabel;
     }
 
 }
