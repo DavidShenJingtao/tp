@@ -102,4 +102,15 @@ public class UndoCommandTest {
                 String.format(UndoCommand.MESSAGE_SUCCESS, ClearCommand.COMMAND_WORD.toLowerCase()),
                 expectedAfterUndo);
     }
+
+    @Test
+    public void execute_withUnknownLabel_usesFallback() {
+        UndoHistory.clear();
+        Model mutatedModel = new ModelManager(new AddressBook(), new UserPrefs());
+        Model expectedModel = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
+
+        UndoHistory.recordState(expectedModel.getAddressBook(), "");
+        assertCommandSuccess(new UndoCommand(), mutatedModel,
+                String.format(UndoCommand.MESSAGE_SUCCESS, "unknown"), expectedModel);
+    }
 }
