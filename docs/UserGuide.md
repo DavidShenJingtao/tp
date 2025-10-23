@@ -158,8 +158,8 @@ Undoes the most recent command that modified the contact list (e.g., `add`, `del
 Format: `undo`
 
 Examples:
-* `add n/John Doe ...` followed by `undo` removes the newly added contact.
-* `delete 1 3-4` followed by `undo` restores the contacts removed by that delete.
+* `add n/John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
+* `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
 
 ### Clearing all entries : `clear`
 

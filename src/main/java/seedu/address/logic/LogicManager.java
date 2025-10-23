@@ -59,7 +59,7 @@ public class LogicManager implements Logic {
         commandResult = command.execute(model);
 
         if (command.isStateChanging() && previousState != null) {
-            UndoHistory.recordState(previousState);
+            UndoHistory.recordState(previousState, determineUndoLabel(command));
         }
 
         try {
@@ -96,5 +96,18 @@ public class LogicManager implements Logic {
     @Override
     public void setGuiSettings(GuiSettings guiSettings) {
         model.setGuiSettings(guiSettings);
+    }
+
+    private String determineUndoLabel(Command command) {
+        String label = command.getUndoLabel();
+        if (label != null && !label.isBlank()) {
+            return label;
+        }
+
+        String simpleName = command.getClass().getSimpleName();
+        if (simpleName.endsWith("Command")) {
+            simpleName = simpleName.substring(0, simpleName.length() - "Command".length());
+        }
+        return simpleName.toLowerCase();
     }
 }

@@ -13,7 +13,7 @@ public class UndoCommand extends Command {
 
     public static final String COMMAND_WORD = "undo";
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Undoes the most recent command that modified data.";
-    public static final String MESSAGE_SUCCESS = "Previous command undone.";
+    public static final String MESSAGE_SUCCESS = "Undo successful (reverted: %1$s)";
     public static final String MESSAGE_NOTHING_TO_UNDO = "There is no command to undo.";
 
     @Override
@@ -24,9 +24,12 @@ public class UndoCommand extends Command {
             throw new CommandException(MESSAGE_NOTHING_TO_UNDO);
         }
 
-        UndoHistory.restorePreviousState(model);
+        String revertedLabel = UndoHistory.restorePreviousState(model);
+        if (revertedLabel == null || revertedLabel.isBlank()) {
+            revertedLabel = "unknown";
+        }
         model.updateFilteredPersonList(Model.PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(MESSAGE_SUCCESS);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, revertedLabel));
     }
 
     @Override
@@ -39,4 +42,3 @@ public class UndoCommand extends Command {
         return UndoCommand.class.hashCode();
     }
 }
-

@@ -97,7 +97,8 @@ public class LogicManagerTest {
         assertTrue(UndoHistory.canUndo());
 
         CommandResult undoResult = logic.execute(UndoCommand.COMMAND_WORD);
-        assertEquals(UndoCommand.MESSAGE_SUCCESS, undoResult.getFeedbackToUser());
+        assertEquals(String.format(UndoCommand.MESSAGE_SUCCESS, AddCommand.COMMAND_WORD),
+                undoResult.getFeedbackToUser());
         assertEquals(new ModelManager(), model);
     }
 
