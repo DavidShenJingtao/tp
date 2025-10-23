@@ -21,7 +21,11 @@ checkstyle {
 }
 
 test {
-    useJUnitPlatform()
+    useJUnitPlatform {
+        if (System.getenv("CI") != null) {
+            excludeTags "ui"
+        }
+    }
     finalizedBy jacocoTestReport
 }
 

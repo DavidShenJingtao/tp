@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import javafx.application.Platform;
@@ -14,6 +15,7 @@ import seedu.address.logic.commands.CommandResult;
  * Minimal smoke test for {@code CommandBox}.
  * Initializes JavaFX toolkit headlessly (Monocle) once for all tests.
  */
+@Tag("ui")
 public class CommandBoxTest {
 
     @BeforeAll
