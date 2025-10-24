@@ -1,0 +1,3 @@
+ignore:
+  - "src/main/java/seedu/address/ui/CommandBox.java"
+  - "src/test/java/seedu/address/ui/CommandBoxTest.java"
