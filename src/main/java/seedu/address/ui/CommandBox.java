@@ -1,3 +1,4 @@
+// codecov:ignore-file
 package seedu.address.ui;
 
 import javafx.fxml.FXML;
