@@ -14,4 +14,9 @@ public interface ReadOnlyAddressBook {
      */
     ObservableList<Person> getPersonList();
 
+    /**
+     * Returns a read-only counter object.
+     * This tracks person and unique session count.
+     */
+    ReadOnlyPersonAndSessionCounter getCounter();
 }
