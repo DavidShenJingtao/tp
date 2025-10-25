@@ -1,0 +1,42 @@
+@startuml
+title Command History Navigation in CommandBox
+
+actor User
+participant "CommandBox" as CB
+participant "CommandHistory" as CH
+
+== Navigate Up ==
+User -> CB: press ↑ key
+CB -> CH: hasPrevious()
+CH --> CB: true/false
+alt has previous
+  CB -> CH: previous()
+  CH --> CB: commandText
+  CB -> CB: setText(commandText)
+  CB -> CB: positionCaretToEnd()
+else no previous
+  CB -> CB: ignore
+end
+
+== Navigate Down ==
+User -> CB: press ↓ key
+CB -> CH: hasNext()
+CH --> CB: true/false
+alt has next
+  CB -> CH: next()
+  CH --> CB: commandText (or empty)
+  CB -> CB: setText(commandText)
+  CB -> CB: positionCaretToEnd()
+else no next
+  CB -> CB: ignore
+end
+
+== After Execute ==
+User -> CB: press Enter (execute)
+CB -> CB: trimmed = getCommandText().trim()
+alt non-empty input
+  CB -> CH: add(trimmed)
+else empty input
+  CB -> CB: do nothing
+end
+@enduml
