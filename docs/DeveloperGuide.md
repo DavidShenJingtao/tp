@@ -71,6 +71,8 @@ The sections below give more details of each component.
 To keep inputs clean and predictable, the Model enforces the following field constraints:
 
 - Phone (Singapore): exactly 8 digits (0–9). Implemented via `\d{8}` in `seedu.address.model.person.Phone`.
+- Name: letters (no digits), spaces, apostrophes (' or ’), hyphens (-), periods (.), slashes (/). Enforced by regex in
+  `seedu.address.model.person.Name` with a max length of 500.
 - Email: `local-part@domain` with pragmatic checks:
   - exactly one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63

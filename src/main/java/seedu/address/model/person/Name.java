@@ -10,15 +10,18 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     /*
-     * The first character of the address must not be a whitespace,
-     * otherwise " " (a blank string) becomes a valid input.
+     * Allowed characters in legal names: letters (no digits), spaces, apostrophes (' or \u2019),
+     * hyphens (-), periods (.), and slashes (/). The first character must not be whitespace
+     * to prevent blank inputs.
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
+    public static final String VALIDATION_REGEX =
+            "[-\\p{L}'\\u2019./][-\\p{L}'\\u2019./ ]*";
     public static final int MAX_NAME_LENGTH = 500;
 
     public static final String MESSAGE_CONSTRAINTS =
-        "Names should only contain alphanumeric characters and spaces, fit within "
-        + MAX_NAME_LENGTH + " characters and it should not be blank";
+        "Names can contain letters, spaces, apostrophes (' or \u2019), hyphens (-),\n"
+        + "periods (.), and slashes (/). They must not be blank and must be at most "
+        + MAX_NAME_LENGTH + " characters.";
 
     public final String fullName;
 
@@ -37,7 +40,7 @@ public class Name {
      * Returns true if a given string is a valid name.
      */
     public static boolean isValidName(String test) {
-        return test.matches(VALIDATION_REGEX) && test.length() <= 500;
+        return test.matches(VALIDATION_REGEX) && test.length() <= MAX_NAME_LENGTH;
     }
 
 
