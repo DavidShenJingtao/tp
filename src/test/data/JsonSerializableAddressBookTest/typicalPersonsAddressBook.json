@@ -34,7 +34,7 @@
     },
     {
       "name": "Elle Meyer",
-      "phone": "9482224",
+      "phone": "94822242",
       "email": "elle@example.com",
       "type": "student",
       "telegramUsername": null,
@@ -42,7 +42,7 @@
     },
     {
       "name": "Fiona Kunz",
-      "phone": "9482427",
+      "phone": "94824270",
       "email": "fiona@example.com",
       "type": "instructor",
       "telegramUsername": "@fionak",
@@ -50,7 +50,7 @@
     },
     {
       "name": "George Best",
-      "phone": "9482442",
+      "phone": "94824420",
       "email": "george@example.com",
       "type": "staff",
       "telegramUsername": "@georgeBest",

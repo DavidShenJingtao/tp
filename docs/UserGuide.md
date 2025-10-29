@@ -64,6 +64,16 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
+### Field Constraints
+
+- Phone: Singapore numbers only — exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
+- Email: Must be of the form local-part@domain and adhere to:
+  - one and only one '@', no spaces
+  - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
+  - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
+  - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - domain is case-insensitive; stored in lowercase
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
