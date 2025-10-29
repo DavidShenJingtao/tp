@@ -1,9 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-
-import java.util.ArrayList;
-import java.util.List;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_SESSION_FORMAT;
 
 import seedu.address.logic.commands.ListSessionCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -27,20 +25,12 @@ public class ListSessionCommandParser implements Parser<ListSessionCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListSessionCommand.MESSAGE_USAGE));
         }
 
-        String[] stringSessions = trimmedArgs.split("\\s+");
-        final List<Session> sessions = new ArrayList<>(stringSessions.length);
-
-        for (int i = 0; i < stringSessions.length; i++) {
-            String session = stringSessions[i];
-            if (!Session.isValidSession(session)) {
-                // todo(haxatron): More descriptive error
-                throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListSessionCommand.MESSAGE_USAGE));
-            }
-            sessions.add(new Session(session));
+        if (!Session.isValidSession(trimmedArgs)) {
+            throw new ParseException(MESSAGE_INVALID_SESSION_FORMAT);
         }
 
-        return new ListSessionCommand(new SessionMatchPredicate(sessions));
+        final Session session = new Session(trimmedArgs);
+        return new ListSessionCommand(new SessionMatchPredicate(session));
     }
 
 }
