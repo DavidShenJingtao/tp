@@ -5,10 +5,10 @@
 
 # TAConnect
 
-TAConnect is designed for Teaching Assistants (TAs) at NUS teaching CS modules, 
+TAConnect is designed for Teaching Assistants (TAs) at NUS teaching CS modules,
 who want to deal with the contact of students in their sessions, fellow TAs, course instructors, and faculty staff.
 
-It proposes an efficient way for TAs to access contact details, 
+It proposes an efficient way for TAs to access contact details,
 making it more convenient to support students, coordinate with other TAs and reach out to staff in case of unexpected situations.
 
 For the detailed documentation of this project, see the *[Product Website](https://ay2526s1-cs2103t-f15a-1.github.io/tp/)*.

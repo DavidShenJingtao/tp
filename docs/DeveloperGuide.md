@@ -278,7 +278,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | ----- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
 | `* *` | tutor                                      | see usage instructions         | refer to instructions when I forget how to use the App                 |
 | `* * *` | tutor                                      | add new _contacts_ | keep the contact list updated with _contact details_ and _session_ |
-| `* * *` | tutor                                      | delete _contacts_ by _contact ID_ | remove _contacts_ from the contact list in case they have  |                                
+| `* * *` | tutor                                      | delete _contacts_ by _contact ID_ | remove _contacts_ from the contact list in case they have  |
 | `* * *` | tutor                                      | search contact list by _name_ | locate details of _contacts_ by name without having to go through the entire list |
 | `* *` | tutor                                      | search contact list by _contact ID_ | locate details of _contacts_ by _contact ID_ without having to go through the entire list |
 | `* *` | tutor                                      | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
@@ -315,7 +315,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 4a. TAConnect finds that the added contact already exists in the contact list.
   * 4a1. TAConnect rejects the duplicate entry.
   * 4a2. TAConnect shows an error message indicating that the added contact already exists.
-    
+
     Use case ends.
 
 5a. Storage operation fails due to I/O error.
