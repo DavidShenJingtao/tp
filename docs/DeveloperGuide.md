@@ -283,6 +283,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *` | tutor                                      | search contact list by _contact ID_ | locate details of _contacts_ by _contact ID_ without having to go through the entire list |
 | `* *` | tutor                                      | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
 | `* * *` | tutor                                      | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
+| `* *` | tutor | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
+
 
 *{More to be added}*
 
@@ -430,6 +432,55 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 4a1. TAConnect displays an error message indicating that data could not be accessed.
 
     Use case ends.
+
+
+**Use case: UC6 – Recall the previous command**
+
+**MSS**
+
+1. Tutor requests to show the previous command.
+2. TAConnect displays the previous command in the input area.
+   
+    Use case ends.
+
+**Extensions**
+
+1a. The current position is already at the oldest command.
+  * 1a1. TAConnect does nothing, the command box remains unchanged.
+    
+    Use case ends.
+1b. No command history exists.
+  * 1b1. TAConnect does nothing, the command box remains unchanged.
+
+    Use case ends.
+
+**Use case: UC7 – Move to the next newer command**
+
+**MSS**
+
+1. Tutor requests to show the next newer command.
+2. TAConnect displays the next newer command in the input area.
+
+    Use case ends.
+
+**Extensions**
+
+1a. The current position is already at the latest.
+  * 1a1. TAConnect does nothing, the command box remains unchanged.
+
+    Use case ends.
+
+
+**Use case: UC8 – Reuse a recalled command**
+
+**MSS**
+
+1. Tutor edits it or left the command as-is.
+2. Tutor presses **Enter**.
+2. TAConnect executes the shown command and displays the outcome.
+
+    Use case ends.
+
 
 ### Non-Functional Requirements
 
