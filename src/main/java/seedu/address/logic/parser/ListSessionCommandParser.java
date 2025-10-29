@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_SESSION_FORMAT;
 
 import seedu.address.logic.commands.ListSessionCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -25,9 +26,7 @@ public class ListSessionCommandParser implements Parser<ListSessionCommand> {
         }
 
         if (!Session.isValidSession(trimmedArgs)) {
-            // todo(haxatron): More descriptive error
-            throw new ParseException(
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListSessionCommand.MESSAGE_USAGE));
+            throw new ParseException(MESSAGE_INVALID_SESSION_FORMAT);
         }
 
         final Session session = new Session(trimmedArgs);

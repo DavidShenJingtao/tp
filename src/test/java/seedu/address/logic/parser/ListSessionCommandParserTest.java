@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_SESSION_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
@@ -23,16 +24,13 @@ public class ListSessionCommandParserTest {
     @Test
     public void parse_invalidSession_throwsParseException() {
         // incorrect format
-        assertParseFailure(parser, "abc",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListSessionCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "abc", MESSAGE_INVALID_SESSION_FORMAT);
 
         // more than 2 digits
-        assertParseFailure(parser, "G100",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListSessionCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "G100", MESSAGE_INVALID_SESSION_FORMAT);
 
         // no capital letter
-        assertParseFailure(parser, "g10",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListSessionCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "g10", MESSAGE_INVALID_SESSION_FORMAT);
     }
 
     @Test
