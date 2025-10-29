@@ -4,8 +4,6 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
-import java.util.Arrays;
-
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.ListSessionCommand;
@@ -41,10 +39,10 @@ public class ListSessionCommandParserTest {
     public void parse_validArgs_returnsListSessionCommand() {
         // no leading and trailing whitespaces
         ListSessionCommand expectedListSessionCommand =
-                new ListSessionCommand(new SessionMatchPredicate(Arrays.asList(new Session("G1"), new Session("F12"))));
-        assertParseSuccess(parser, "G1 F12", expectedListSessionCommand);
+                new ListSessionCommand(new SessionMatchPredicate(new Session("G1")));
+        assertParseSuccess(parser, "G1", expectedListSessionCommand);
 
-        // multiple whitespaces between keywords
-        assertParseSuccess(parser, " \n G1 \n \t F12  \t", expectedListSessionCommand);
+        // multiple whitespaces between session
+        assertParseSuccess(parser, " \n G1 \n", expectedListSessionCommand);
     }
 }

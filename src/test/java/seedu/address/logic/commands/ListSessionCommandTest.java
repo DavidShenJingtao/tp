@@ -5,14 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.testutil.TypicalPersons.ALICE;
-import static seedu.address.testutil.TypicalPersons.BENSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,9 +27,9 @@ public class ListSessionCommandTest {
     @Test
     public void equals() {
         SessionMatchPredicate firstPredicate =
-                new SessionMatchPredicate(Collections.singletonList(new Session("G1")));
+                new SessionMatchPredicate(new Session("G1"));
         SessionMatchPredicate secondPredicate =
-                new SessionMatchPredicate(Collections.singletonList(new Session("F12")));
+                new SessionMatchPredicate(new Session("F12"));
 
         ListSessionCommand listSessionFirstCommand = new ListSessionCommand(firstPredicate);
         ListSessionCommand listSessionSecondCommand = new ListSessionCommand(secondPredicate);
@@ -67,20 +62,9 @@ public class ListSessionCommandTest {
         assertEquals(Collections.emptyList(), model.getFilteredPersonList());
     }
 
-
-    @Test
-    public void execute_multipleSessions_multiplePersonsFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 2);
-        SessionMatchPredicate predicate = preparePredicate("S1 S2");
-        ListSessionCommand command = new ListSessionCommand(predicate);
-        expectedModel.updateFilteredPersonList(predicate);
-        assertCommandSuccess(command, model, expectedMessage, expectedModel);
-        assertEquals(Arrays.asList(ALICE, BENSON), model.getFilteredPersonList());
-    }
-
     @Test
     public void toStringMethod() {
-        SessionMatchPredicate predicate = new SessionMatchPredicate(Arrays.asList(new Session("S1")));
+        SessionMatchPredicate predicate = new SessionMatchPredicate(new Session("S1"));
         ListSessionCommand listSessionCommand = new ListSessionCommand(predicate);
         String expected = ListSessionCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, listSessionCommand.toString());
@@ -90,13 +74,7 @@ public class ListSessionCommandTest {
      * Parses {@code userInput} into a {@code SessionMatchPredicate}.
      */
     private SessionMatchPredicate preparePredicate(String userInput) {
-        String[] stringSessions = userInput.split("\\s+");
-        final List<Session> sessions = new ArrayList<>(stringSessions.length);
-        for (int i = 0; i < stringSessions.length; i++) {
-            String session = stringSessions[i];
-            sessions.add(new Session(session));
-        }
-
-        return new SessionMatchPredicate(sessions);
+        final Session session = new Session(userInput);
+        return new SessionMatchPredicate(session);
     }
 }

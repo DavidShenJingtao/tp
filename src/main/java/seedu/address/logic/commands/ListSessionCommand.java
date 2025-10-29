@@ -14,10 +14,10 @@ public class ListSessionCommand extends Command {
 
     public static final String COMMAND_WORD = "listsession";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons whose session equals any of"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons whose session equals to the"
             + "the specified sessions (case-insensitive) and displays them as a list with index numbers.\n"
             + "Parameters: SESSION [MORE_SESSIONS]...\n"
-            + "Example: " + COMMAND_WORD + " S1 G30 H5";
+            + "Example: " + COMMAND_WORD + " S1";
 
     private final SessionMatchPredicate predicate;
 
