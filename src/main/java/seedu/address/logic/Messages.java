@@ -25,6 +25,7 @@ public class Messages {
     public static final String MESSAGE_FIND_PERSONS_FOUND_OVERVIEW = "%1$d person%2$s found";
     public static final String MESSAGE_INVALID_SESSION_FORMAT = "Specified session has invalid format."
             + " Make sure it starts with a capital letter followed by 1–2 digits (1–99)";
+    public static final String MESSAGE_SESSION_NOT_FOUND = "Specified session %1$s does not exist.";
 
     /**
      * Returns an error message indicating the duplicate prefixes.

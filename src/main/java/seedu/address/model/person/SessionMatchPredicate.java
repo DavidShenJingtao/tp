@@ -14,6 +14,10 @@ public class SessionMatchPredicate implements Predicate<Person> {
         this.session = session;
     }
 
+    public Session getSession() {
+        return session;
+    }
+
     @Override
     public boolean test(Person person) {
         return person.getSession().map(session::equals).orElse(false);
