@@ -68,6 +68,36 @@ public class EmailTest {
     }
 
     @Test
+    public void isValidEmail_additionalEnforcementCases() {
+        // uppercase domain accepted (domain case-insensitive)
+        assertTrue(Email.isValidEmail("user@EXAMPLE.COM"));
+
+        // local-part length > 64 should be invalid
+        String tooLongLocal = "a".repeat(65) + "@example.com";
+        assertFalse(Email.isValidEmail(tooLongLocal));
+
+        // domain label length > 63 should be invalid
+        String longLabel = "a".repeat(64);
+        assertFalse(Email.isValidEmail("user@" + longLabel + ".com"));
+
+        // total length > 254 should be invalid (local ≤ 64, labels ≤ 63)
+        String local = "a".repeat(64);
+        String label63 = "b".repeat(63);
+        String label62 = "c".repeat(62);
+        String overTotal = local + "@" + label63 + "." + label63 + "." + label62; // length 255
+        assertFalse(Email.isValidEmail(overTotal));
+    }
+
+    @Test
+    public void constructor_normalizesDomainCase() {
+        Email mixed = new Email("User@EXAMPLE.Com");
+        assertTrue(mixed.value.endsWith("@example.com"));
+
+        // equality after normalization of domain
+        assertTrue(new Email("user@example.com").equals(new Email("user@EXAMPLE.COM")));
+    }
+
+    @Test
     public void equals() {
         Email email = new Email("valid@example.com");
 
