@@ -5,14 +5,18 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
  * Represents a Person's phone number in the address book.
- * Guarantees: immutable; is valid as declared in {@link #isValidPhone(String)}
+ * Guarantees: immutable; is valid as declared in {@link #isValidPhone(String)}.
+ *
+ * Enforcement:
+ * - Singapore phone numbers must be exactly 8 digits (0–9).
+ * - No spaces, symbols, or country codes in this field.
  */
 public class Phone {
 
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should only contain numbers, and it should be at least 3 digits long";
-    public static final String VALIDATION_REGEX = "\\d{3,}";
+            "Phone number must be a Singapore number with exactly 8 digits (0-9).";
+    public static final String VALIDATION_REGEX = "\\d{8}";
     public final String value;
 
     /**
@@ -27,7 +31,7 @@ public class Phone {
     }
 
     /**
-     * Returns true if a given string is a valid phone number.
+     * Returns true if a given string is a valid Singapore phone number (exactly 8 digits).
      */
     public static boolean isValidPhone(String test) {
         return test.matches(VALIDATION_REGEX);
