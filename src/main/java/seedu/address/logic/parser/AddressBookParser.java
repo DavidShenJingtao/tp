@@ -18,6 +18,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListSessionCommand;
+import seedu.address.logic.commands.SessionsCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -99,6 +100,10 @@ public class AddressBookParser {
                         UndoCommand.MESSAGE_USAGE));
             }
             command = new UndoCommand();
+            break;
+
+        case SessionsCommand.COMMAND_WORD:
+            command = new SessionsCommand();
             break;
 
         default:
