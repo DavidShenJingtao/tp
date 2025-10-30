@@ -10,7 +10,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Type {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "The content must be “student”, “ta”, “instructor”, or “staff” in the tag field.";
+            "The content must be “student”, “ta”, “instructor”, or “staff” in the type field.";
     public static final String VALIDATION_REGEX = "(?i)(student|ta|instructor|staff)";
 
     public final String value;

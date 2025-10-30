@@ -7,6 +7,8 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SESSION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
+import static seedu.address.model.person.Person.MESSAGE_INSTRUCTOR_STAFF;
+import static seedu.address.model.person.Person.MESSAGE_STUDENT_TA;
 
 import java.util.Optional;
 
@@ -17,6 +19,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyPersonAndSessionCounter;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Session;
+import seedu.address.model.person.Type;
 
 /**
  * Adds a person to the address book.
@@ -83,6 +86,17 @@ public class AddCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         checkCapacity(model, toAdd);
+
+        Type type = toAdd.getType();
+        boolean hasSession = toAdd.getSession().isPresent();
+
+        if ((type.isStudent() || type.isTa()) && !hasSession) {
+            throw new CommandException(MESSAGE_STUDENT_TA);
+        }
+
+        if ((type.isInstructor() || type.isStaff()) && hasSession) {
+            throw new CommandException(MESSAGE_INSTRUCTOR_STAFF);
+        }
 
         if (model.hasPerson(toAdd)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);

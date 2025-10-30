@@ -38,15 +38,6 @@ public class Person {
         this.telegramUsername = Optional.ofNullable(telegramUsername);
         this.type = type;
         this.session = Optional.ofNullable(session);
-
-        // Validation: enforce session presence rules
-        if ((type.isStudent() || type.isTa()) && this.session.isEmpty()) {
-            throw new IllegalArgumentException(MESSAGE_STUDENT_TA);
-        }
-
-        if ((type.isInstructor() || type.isStaff()) && this.session.isPresent()) {
-            throw new IllegalArgumentException(MESSAGE_INSTRUCTOR_STAFF);
-        }
     }
 
     /**

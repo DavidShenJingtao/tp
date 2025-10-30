@@ -5,8 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
+import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.model.person.Person.MESSAGE_INSTRUCTOR_STAFF;
+import static seedu.address.model.person.Person.MESSAGE_STUDENT_TA;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,20 +29,22 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
+import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
+import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
 
-
     private static final Path TEST_DATA_FOLDER = Paths.get("src", "test", "data", "AddCommandTest");
     private static final Path AT_MAX_PERSON_COUNT_FILE =
                                  TEST_DATA_FOLDER.resolve("atMaxPersonCountAddressBook.json");
     private static final Path AT_MAX_SESSION_COUNT_FILE =
                                  TEST_DATA_FOLDER.resolve("atMaxSessionCountAddressBook.json");
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void constructor_nullPerson_throwsNullPointerException() {
@@ -54,6 +61,88 @@ public class AddCommandTest {
         assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validPerson)),
                 commandResult.getFeedbackToUser());
         assertEquals(Arrays.asList(validPerson), modelStub.personsAdded);
+    }
+
+    @Test
+    public void execute_validStudentWithSession_success() {
+        Person validStudent = new PersonBuilder()
+                .withName("Alice")
+                .withPhone("98765432")
+                .withEmail("alice@example.com")
+                .withType("student")
+                .withSession("L1")
+                .build();
+
+        Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
+        expectedModel.addPerson(validStudent);
+
+        String expectedMessage = String.format(AddCommand.MESSAGE_SUCCESS, Messages.format(validStudent));
+
+        assertCommandSuccess(new AddCommand(validStudent), model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_studentWithoutSession_throwsCommandException() {
+        Person invalidStudent = new PersonBuilder()
+                .withName("Alice")
+                .withPhone("98765432")
+                .withEmail("alice@example.com")
+                .withType("student")
+                .withSession(null)
+                .skipValidation()
+                .build();
+
+        AddCommand addCommand = new AddCommand(invalidStudent);
+
+        assertCommandFailure(addCommand, model, MESSAGE_STUDENT_TA);
+    }
+
+    @Test
+    public void execute_taWithoutSession_throwsCommandException() {
+        Person invalidTa = new PersonBuilder()
+                .withName("Bob")
+                .withPhone("87654321")
+                .withEmail("bob@example.com")
+                .withType("ta")
+                .withSession(null)
+                .skipValidation()
+                .build();
+
+        AddCommand addCommand = new AddCommand(invalidTa);
+
+        assertCommandFailure(addCommand, model, MESSAGE_STUDENT_TA);
+    }
+
+    @Test
+    public void execute_instructorWithSession_throwsCommandException() {
+        Person invalidInstructor = new PersonBuilder()
+                .withName("Charlie")
+                .withPhone("88888888")
+                .withEmail("charlie@example.com")
+                .withType("instructor")
+                .withSession("S2")
+                .skipValidation()
+                .build();
+
+        AddCommand addCommand = new AddCommand(invalidInstructor);
+
+        assertCommandFailure(addCommand, model, MESSAGE_INSTRUCTOR_STAFF);
+    }
+
+    @Test
+    public void execute_staffWithSession_throwsCommandException() {
+        Person invalidStaff = new PersonBuilder()
+                .withName("Dana")
+                .withPhone("99999999")
+                .withEmail("dana@example.com")
+                .withType("staff")
+                .withSession("S3")
+                .skipValidation()
+                .build();
+
+        AddCommand addCommand = new AddCommand(invalidStaff);
+
+        assertCommandFailure(addCommand, model, MESSAGE_INSTRUCTOR_STAFF);
     }
 
     @Test
