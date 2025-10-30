@@ -99,16 +99,20 @@ Format: `help`
 
 Adds a contact to the contact list of TAConnect.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL t/TYPE [u/TELEGRAM_USERNAME] s/SESSION`
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL t/TYPE [u/TELEGRAM_USERNAME] [s/SESSION]`
+
+Notes:
+* `s/SESSION` must be provided when the Type is `student` or `ta`.
+* `s/SESSION` must be omitted when the Type is `instructor` or `staff`.
 
 For convenience, a TA can also record telegram username, but it is an optional field.
 
 Examples:
-* Add contact type `student`: `add n/John Doe p/98765432 e/johnd@example.com t/student u/@johndoe s/F2`
+* Add contact type `student`: `add n/John Doe p/98765432 e/johnd@example.com t/student u/@johndoe s/F2` (session required)
 ![student.png](images/student.png)
 * Add contact type `ta`: `add n/David Shen p/23456789 e/davidshen@example.com t/ta s/L3`
 ![ta.png](images/ta.png)
-* Add contact type `instructor`: `add n/Betsy Crowe p/34560781 e/betsycrowe@example.com t/instructor`
+* Add contact type `instructor`: `add n/Betsy Crowe p/34560781 e/betsycrowe@example.com t/instructor` (session omitted)
 ![instructor.png](images/instructor.png)
 * Add contact type `staff`: `add n/Sophie Yuan p/17480572 e/sophie@example.come t/staff u/@yyssophie`
 ![staff.png](images/staff.png)
