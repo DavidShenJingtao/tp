@@ -103,6 +103,23 @@ public class ExportCommandTest {
     }
 
     @Test
+    public void execute_relativeTargetWithoutParent_exportsCsv() throws Exception {
+        Path relativeTarget = Paths.get("relative-export.csv");
+        Files.deleteIfExists(relativeTarget);
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 7, 1, 8, 0);
+        ExportCommand exportCommand = new ExportCommand(relativeTarget, false, () -> fixedTime);
+
+        try {
+            CommandResult result = exportCommand.execute(model);
+            assertTrue(Files.exists(relativeTarget));
+            assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, 2, relativeTarget.toAbsolutePath()),
+                    result.getFeedbackToUser());
+        } finally {
+            Files.deleteIfExists(relativeTarget);
+        }
+    }
+
+    @Test
     public void execute_targetFileAlreadyExists_throwsCommandException() throws Exception {
         Path targetFile = tempDir.resolve("duplicate.csv");
         Files.createFile(targetFile);
