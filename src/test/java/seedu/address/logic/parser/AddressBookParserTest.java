@@ -8,7 +8,6 @@ import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -116,10 +115,10 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_listSession() throws Exception {
-        List<Session> sessions = Arrays.asList(new Session("S1"), new Session("G30"), new Session("H15"));
+        Session session = new Session("S1");
         ListSessionCommand command = (ListSessionCommand) parser.parseCommand(
-                ListSessionCommand.COMMAND_WORD + " S1 G30 H15");
-        assertEquals(new ListSessionCommand(new SessionMatchPredicate(sessions)), command);
+                ListSessionCommand.COMMAND_WORD + " S1");
+        assertEquals(new ListSessionCommand(new SessionMatchPredicate(session)), command);
     }
 
     @Test

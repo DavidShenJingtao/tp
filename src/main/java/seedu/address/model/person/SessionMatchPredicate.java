@@ -1,23 +1,26 @@
 package seedu.address.model.person;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Session} matches any of the sessions given.
+ * Tests that a {@code Person}'s {@code Session} matches the sessions given.
  */
 public class SessionMatchPredicate implements Predicate<Person> {
-    private final List<Session> sessions;
+    private final Session session;
 
-    public SessionMatchPredicate(List<Session> sessions) {
-        this.sessions = sessions;
+    public SessionMatchPredicate(Session session) {
+        this.session = session;
+    }
+
+    public Session getSession() {
+        return session;
     }
 
     @Override
     public boolean test(Person person) {
-        return person.getSession().map(sessions::contains).orElse(false);
+        return person.getSession().map(session::equals).orElse(false);
     }
 
     @Override
@@ -32,11 +35,11 @@ public class SessionMatchPredicate implements Predicate<Person> {
         }
 
         SessionMatchPredicate otherSessionMatchPredicate = (SessionMatchPredicate) other;
-        return sessions.equals(otherSessionMatchPredicate.sessions);
+        return session.equals(otherSessionMatchPredicate.session);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("sessions", sessions).toString();
+        return new ToStringBuilder(this).add("session", session).toString();
     }
 }

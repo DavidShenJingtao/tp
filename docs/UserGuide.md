@@ -3,7 +3,7 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+TAConnect is a **desktop app for teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
 
 * Table of Contents
 {:toc}
@@ -15,7 +15,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-F15a-1/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
 
@@ -64,6 +64,17 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
+### Field Constraints
+
+- Name: Allows letters (no digits), spaces, apostrophes (' or ’), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
+- Phone: Singapore numbers only — exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
+- Email: Must be of the form local-part@domain and adhere to:
+  - one and only one '@', no spaces
+  - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
+  - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
+  - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - domain is case-insensitive; stored in lowercase
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -87,11 +98,33 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
-### Listing all persons : `list`
+### Listing all contacts : `list`
 
-Shows a list of all persons in the address book.
+Displays all contacts currently stored in TAConnect.
 
 Format: `list`
+
+* The list is reset to the full view, clearing any filters applied by previous commands such as `find` or `listsession`.
+* Useful when you want to return to the complete contact list after filtering.
+
+Examples:
+* `list` — Displays all contacts in TAConnect.
+
+### Listing contacts by session : `listsession`
+
+Shows a list of all persons who belong to the specified session.
+
+Format: `listsession SESSION`
+
+* Displays only the contacts whose session field matches the given `SESSION` value.
+* Session names are **case-insensitive** and must follow the valid pattern `[A-Z]\d+` (e.g., `F1`, `G2`, `T10`), meaning a single uppercase letter followed by a number from **1 to 99** (without leading zeros)..
+* Contacts without a session (e.g., instructors or staff) will not appear in the result.
+* Useful for TAs who manage multiple tutorial or lab groups.
+
+Examples:
+* `listsession F20` — Lists all contacts in session F20.
+* `listsession G1` — Lists all contacts in session G1.
+
 
 ### Exporting the displayed contacts : `export`
 
@@ -173,6 +206,20 @@ Format: `undo`
 Examples:
 * `add n/John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
 * `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
+
+### Command history (↑/↓)
+
+You can navigate your previously entered commands using the **UP** and **DOWN** arrow keys, similar to a terminal.
+
+* **UP:** Shows the previous command in history.
+* **DOWN:** Shows the next command in history; if you reach the end, your current unfinished input (buffer) is restored.
+* **Duplicates & empty lines:** Empty inputs are not saved. Consecutive identical commands are stored only once.
+* **Edits while browsing history:** If you edit the text at any time, those edits are preserved when you return to the end (buffer).
+
+Examples:
+1. Type `list` → press Enter. Press ↑ → `list` appears.
+2. Type `find alex` → press Enter. Press ↑ twice → `find alex`, then `list`.
+3. Press ↑ to view `list`, type `l` to modify it, then press ↓ until the end → your unfinished text appears again (e.g., `l`).
 
 ### Clearing all entries : `clear`
 

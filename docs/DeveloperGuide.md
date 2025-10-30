@@ -66,6 +66,22 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 
 The sections below give more details of each component.
 
+### Data Validation Rules
+
+To keep inputs clean and predictable, the Model enforces the following field constraints:
+
+- Phone (Singapore): exactly 8 digits (0–9). Implemented via `\d{8}` in `seedu.address.model.person.Phone`.
+- Name: letters (no digits), spaces, apostrophes (' or ’), hyphens (-), periods (.), slashes (/). Enforced by regex in
+  `seedu.address.model.person.Name` with a max length of 500.
+- Email: `local-part@domain` with pragmatic checks:
+  - exactly one '@', no spaces
+  - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
+  - local-part: alphanumerics with [._+-] separators; cannot start/end with a separator; no consecutive dots
+  - domain: labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - domain is case-insensitive and normalized to lowercase on storage
+
+See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
+
 ### UI component
 
 The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
@@ -278,11 +294,13 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | ----- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
 | `* *` | tutor                                      | see usage instructions         | refer to instructions when I forget how to use the App                 |
 | `* * *` | tutor                                      | add new _contacts_ | keep the contact list updated with _contact details_ and _session_ |
-| `* * *` | tutor                                      | delete _contacts_ by _contact ID_ | remove _contacts_ from the contact list in case they have  |                                
+| `* * *` | tutor                                      | delete _contacts_ by _contact ID_ | remove _contacts_ from the contact list in case they have  |
 | `* * *` | tutor                                      | search contact list by _name_ | locate details of _contacts_ by name without having to go through the entire list |
 | `* *` | tutor                                      | search contact list by _contact ID_ | locate details of _contacts_ by _contact ID_ without having to go through the entire list |
 | `* *` | tutor                                      | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
 | `* * *` | tutor                                      | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
+| `* *` | tutor | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
+
 
 *{More to be added}*
 
@@ -315,7 +333,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 4a. TAConnect finds that the added contact already exists in the contact list.
   * 4a1. TAConnect rejects the duplicate entry.
   * 4a2. TAConnect shows an error message indicating that the added contact already exists.
-    
+
     Use case ends.
 
 5a. Storage operation fails due to I/O error.
@@ -430,6 +448,55 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 4a1. TAConnect displays an error message indicating that data could not be accessed.
 
     Use case ends.
+
+
+**Use case: UC6 – Recall the previous command**
+
+**MSS**
+
+1. Tutor requests to show the previous command.
+2. TAConnect displays the previous command in the input area.
+   
+    Use case ends.
+
+**Extensions**
+
+1a. The current position is already at the oldest command.
+  * 1a1. TAConnect does nothing, the command box remains unchanged.
+    
+    Use case ends.
+1b. No command history exists.
+  * 1b1. TAConnect does nothing, the command box remains unchanged.
+
+    Use case ends.
+
+**Use case: UC7 – Move to the next newer command**
+
+**MSS**
+
+1. Tutor requests to show the next newer command.
+2. TAConnect displays the next newer command in the input area.
+
+    Use case ends.
+
+**Extensions**
+
+1a. The current position is already at the latest.
+  * 1a1. TAConnect does nothing, the command box remains unchanged.
+
+    Use case ends.
+
+
+**Use case: UC8 – Reuse a recalled command**
+
+**MSS**
+
+1. Tutor edits it or left the command as-is.
+2. Tutor presses **Enter**.
+2. TAConnect executes the shown command and displays the outcome.
+
+    Use case ends.
+
 
 ### Non-Functional Requirements
 

@@ -28,7 +28,8 @@ class UndoHistoryTest {
         int totalStates = 55; // exceed limit (50)
         for (int i = 0; i < totalStates; i++) {
             AddressBook state = new AddressBook();
-            Person person = new PersonBuilder().withName("Person " + i).build();
+            String suffix = alphaIndex(i); // avoid digits in name
+            Person person = new PersonBuilder().withName("Person " + suffix).build();
             state.addPerson(person);
             UndoHistory.recordState(state, "cmd" + i);
         }
@@ -39,7 +40,7 @@ class UndoHistoryTest {
             String restoredLabel = UndoHistory.restorePreviousState(model);
             assertEquals(expectedLabel, restoredLabel);
 
-            String expectedPersonName = "Person " + (totalStates - 1 - offset);
+            String expectedPersonName = "Person " + alphaIndex(totalStates - 1 - offset);
             assertEquals(expectedPersonName,
                     model.getAddressBook().getPersonList().get(0).getName().fullName);
         }
@@ -67,5 +68,11 @@ class UndoHistoryTest {
         assertEquals("export", label);
         assertEquals("Alice", model.getAddressBook().getPersonList().get(0).getName().fullName);
     }
-}
 
+    // Returns a two-letter uppercase index (AA, AB, ..., AZ, BA, ...) for small n (sufficient for this test)
+    private String alphaIndex(int n) {
+        int a = n / 26;
+        int b = n % 26;
+        return "" + (char) ('A' + a) + (char) ('A' + b);
+    }
+}

@@ -14,10 +14,10 @@ public class ListSessionCommand extends Command {
 
     public static final String COMMAND_WORD = "listsession";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons whose session equals any of"
-            + "the specified sessions (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: SESSION [MORE_SESSIONS]...\n"
-            + "Example: " + COMMAND_WORD + " S1 G30 H5";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons whose session equals to the"
+            + "the specified session and displays them as a list with index numbers.\n"
+            + "Parameters: SESSION\n"
+            + "Example: " + COMMAND_WORD + " S1";
 
     private final SessionMatchPredicate predicate;
 
@@ -30,8 +30,13 @@ public class ListSessionCommand extends Command {
         requireNonNull(model);
         model.updateFilteredPersonList(predicate);
         //model.sortFilteredPersonList(new PersonTypeComparator());
-        return new CommandResult(
-                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+        if (model.getFilteredPersonList().size() > 0) {
+            return new CommandResult(
+                    String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+        } else {
+            return new CommandResult(
+                    String.format(Messages.MESSAGE_SESSION_NOT_FOUND, predicate.getSession()));
+        }
     }
 
     @Override

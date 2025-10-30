@@ -1,0 +1,28 @@
+@startuml
+title Session Validation (Class Diagram)
+
+class Session {
+  - value: String
+  + Session(value: String)
+  + getValue(): String
+  + equals(Object): boolean
+  + hashCode(): int
+  {static} + isValid(String): boolean
+}
+
+class ParserUtil {
+  {static} + parseSession(String): Session
+}
+
+class ParseException
+
+ParserUtil ..> Session : «creates»
+ParserUtil ..> ParseException : «throws»
+
+note right of Session
+Allowed: G1..G99 (no leading zero)
+Regex: ^G([1-9]\\d?)$
+Invalid: G01, G00
+Valid: G1, G9, G10, G99
+end note
+@enduml
