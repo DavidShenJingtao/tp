@@ -17,7 +17,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-F15a-1/tp/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for your TAConnect contact list.
 
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
@@ -28,7 +28,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe p/98765432 e/johnd@example.com t/student u/@johndoe s/F2` : Adds a student contact named `John Doe` to the contact list.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -90,7 +90,7 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a contact to the address book.
+Adds a contact to the contact list of TAConnect.
 
 Format: `add n/NAME p/PHONE_NUMBER e/EMAIL t/TYPE [u/TELEGRAM_USERNAME] s/SESSION`
 
@@ -168,7 +168,7 @@ Examples:
 ### Deleting a person : `delete`
 Aliases: `del`, `rm`
 
-Deletes the specified person from the address book.
+Deletes the specified person from the contact list.
 
 Format: `delete INDEX [MORE_INDEXES|RANGE] [n/NAME] [n/MORE_NAMES]`
 
@@ -179,7 +179,7 @@ Format: `delete INDEX [MORE_INDEXES|RANGE] [n/NAME] [n/MORE_NAMES]`
 * Names are case-sensitive and must match the contact name exactly, including spaces.
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
+* `list` followed by `delete 2` deletes the 2nd person in the contact list.
 * `list` followed by `delete 1 3` deletes both the 1st and 3rd persons in the currently displayed list.
 * `delete 2-5` deletes the 2nd to 5th persons shown in the current list (inclusive).
 * `delete 1 3-4` deletes the 1st, 3rd, and 4th persons.
@@ -246,7 +246,7 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous TAConnect home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
