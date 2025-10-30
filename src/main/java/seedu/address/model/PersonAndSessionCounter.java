@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Session;
@@ -92,5 +93,10 @@ public class PersonAndSessionCounter implements ReadOnlyPersonAndSessionCounter 
     @Override
     public short getUniqueSessionCountIfSessionAdded(Session s) {
         return (individualSessionCount.get(s) == null) ? (short) (uniqueSessionCount + 1) : uniqueSessionCount;
+    }
+
+    @Override
+    public Set<Session> listAllSessions() {
+        return individualSessionCount.keySet();
     }
 }
