@@ -165,12 +165,17 @@ public class MainWindow extends UiPart<Stage> {
      * Triggers the export of the currently displayed contacts.
      */
     private void handleExport() {
+        String feedback = getExportFeedback(logic, logger);
+        resultDisplay.setFeedbackToUser(feedback);
+    }
+
+    static String getExportFeedback(Logic logic, Logger logger) {
         try {
             CommandResult exportResult = logic.exportDisplayedContacts();
-            resultDisplay.setFeedbackToUser(exportResult.getFeedbackToUser());
+            return exportResult.getFeedbackToUser();
         } catch (CommandException commandException) {
             logger.warning("Failed to export contacts: " + commandException.getMessage());
-            resultDisplay.setFeedbackToUser(commandException.getMessage());
+            return commandException.getMessage();
         }
     }
 
