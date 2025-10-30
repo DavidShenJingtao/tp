@@ -36,39 +36,57 @@ public class ExportCommand extends Command {
 
     private static final Path DEFAULT_EXPORT_DIRECTORY = Paths.get("exports");
     private static final DateTimeFormatter FILE_NAME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
+    public static final Path DEFAULT_BUTTON_EXPORT_PATH = DEFAULT_EXPORT_DIRECTORY.resolve("contacts-latest.csv");
 
     private final Path targetPath;
     private final boolean treatTargetAsDirectory;
     private final Supplier<LocalDateTime> timestampSupplier;
+    private final boolean overwriteExisting;
 
     /**
      * Creates an {@code ExportCommand} that writes to a timestamped CSV file inside the default export directory.
      */
     public ExportCommand() {
-        this(null, false);
+        this(null, false, false);
     }
 
     /**
      * Creates an {@code ExportCommand} that writes to {@code targetPath}.
      */
     public ExportCommand(Path targetPath) {
-        this(targetPath, false);
+        this(targetPath, false, false);
     }
 
     /**
      * Creates an {@code ExportCommand} that writes into {@code targetPath} treating it explicitly as a directory.
      */
     public ExportCommand(Path targetPath, boolean treatAsDirectory) {
-        this(targetPath, treatAsDirectory, LocalDateTime::now);
+        this(targetPath, treatAsDirectory, false);
+    }
+
+    /**
+     * Creates an {@code ExportCommand} that writes into {@code targetPath} with overwrite configuration.
+     */
+    public ExportCommand(Path targetPath, boolean treatAsDirectory, boolean overwriteExisting) {
+        this(targetPath, treatAsDirectory, LocalDateTime::now, overwriteExisting);
     }
 
     /**
      * Internal constructor that allows injecting a timestamp supplier for testing.
      */
     ExportCommand(Path targetPath, boolean treatAsDirectory, Supplier<LocalDateTime> timestampSupplier) {
+        this(targetPath, treatAsDirectory, timestampSupplier, false);
+    }
+
+    /**
+     * Internal constructor allowing both timestamp and overwrite behaviour injection.
+     */
+    ExportCommand(Path targetPath, boolean treatAsDirectory, Supplier<LocalDateTime> timestampSupplier,
+            boolean overwriteExisting) {
         this.targetPath = targetPath;
         this.treatTargetAsDirectory = treatAsDirectory;
         this.timestampSupplier = requireNonNull(timestampSupplier);
+        this.overwriteExisting = overwriteExisting;
     }
 
     @Override
@@ -119,8 +137,21 @@ public class ExportCommand extends Command {
     }
 
     private void writeCsv(Path path, Iterable<Person> persons) throws IOException {
-        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8,
-                StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+        StandardOpenOption[] options;
+        if (overwriteExisting) {
+            options = new StandardOpenOption[] {
+                StandardOpenOption.CREATE,
+                StandardOpenOption.TRUNCATE_EXISTING,
+                StandardOpenOption.WRITE
+            };
+        } else {
+            options = new StandardOpenOption[] {
+                StandardOpenOption.CREATE_NEW,
+                StandardOpenOption.WRITE
+            };
+        }
+
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, options)) {
             writer.write("Name,Telegram,Email,Type,Session");
             writer.newLine();
             for (Person person : persons) {
@@ -154,11 +185,12 @@ public class ExportCommand extends Command {
 
         ExportCommand otherExportCommand = (ExportCommand) other;
         return Objects.equals(targetPath, otherExportCommand.targetPath)
-                && treatTargetAsDirectory == otherExportCommand.treatTargetAsDirectory;
+                && treatTargetAsDirectory == otherExportCommand.treatTargetAsDirectory
+                && overwriteExisting == otherExportCommand.overwriteExisting;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(targetPath, treatTargetAsDirectory);
+        return Objects.hash(targetPath, treatTargetAsDirectory, overwriteExisting);
     }
 }

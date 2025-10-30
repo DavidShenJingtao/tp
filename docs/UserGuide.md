@@ -153,18 +153,14 @@ Examples:
 * `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
 
 
-### Exporting the displayed contacts : `export`
+### Exporting the displayed contacts
 
 Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
 
-Format: `export [FILE_PATH]`
-
-* If no path is provided, TAConnect creates a new file named `contacts-YYYYMMDD-HHMMSS.csv` inside the `exports/` folder (relative to where you launched the app).
-* If `FILE_PATH` points to an existing directory (or ends with `/` or `\`), the CSV is written into that directory with the timestamped name shown above.
-* If `FILE_PATH` points to a new file, the `.csv` extension is added automatically when missing.
-* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset.
-
-You can trigger the export either by typing the command or by clicking the `Export CSV` button beside the command box. The result display shows the location of the generated file.
+* Click the `Export CSV` button located beside the command box.
+* TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you click the button.
+* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
+* The result display shows the location of the generated file once the export completes.
 
 ### Locating persons by name: `find`
 
@@ -291,6 +287,6 @@ Action | Format, Examples
 **List session** | `listsession SESSION` <br> e.g., `listsession F20`
 **Sessions** | `sessions`
 **Undo** | `undo`
-**Export** | `export [FILE_PATH]`<br> e.g., `export`, `export exports/tutorial-group.csv`
+**Export CSV** | Click the `Export CSV` button (saves to `exports/contacts-YYYYMMDD-HHmmss.csv`)
 **Help** | `help`
 **Exit** | `exit`
