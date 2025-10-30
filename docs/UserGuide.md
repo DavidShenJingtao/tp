@@ -19,7 +19,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 
 1. Copy the file to the folder you want to use as the _home folder_ for your TAConnect contact list.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TAConnect-v1.5.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -79,6 +79,13 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
   - optionally, include @ as the first character
   - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
 
+### Data limits
+
+- Maximum contacts: 2500
+- Maximum unique sessions: 250
+- When either limit is reached, `add` will fail with a clear error message.
+- Importing a JSON data file that exceeds these limits will be rejected on startup.
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -122,10 +129,10 @@ Examples:
 
 Shows a list of all persons who belong to the specified session.
 
-Format: `listsession [SESSION]`
+Format: `listsession SESSION`
 
 * Displays only the contacts whose session field matches the given `SESSION` value.
-* Session names are **case-insensitive** and must follow the valid pattern `[A-Z]\d+` (e.g., `F1`, `G2`, `T10`), meaning a single uppercase letter followed by a number from **1 to 99** (without leading zeros)..
+* Sessions are case-sensitive and must match `[A-Z](?:[1-9][0-9]?)` (e.g., `F1`, `G2`, `T10`): one uppercase letter followed by 1–2 digits from 1 to 99, with no leading zeros.
 * Contacts without a session (e.g., instructors or staff) will not appear in the result.
 * Useful for TAs who manage multiple tutorial or lab groups.
 
@@ -133,37 +140,42 @@ Examples:
 * `listsession F20` — Lists all contacts in session F20.
 * `listsession G1` — Lists all contacts in session G1.
 
+### Listing all sessions : `sessions`
 
-### Exporting the displayed contacts : `export`
+Shows all unique sessions currently recorded in TAConnect.
+
+Format: `sessions`
+
+* Displays the number of sessions and a list of the session codes in the result display.
+* Useful for getting an overview of all existing tutorial/lab groups.
+
+Examples:
+* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
+
+
+### Exporting the displayed contacts
 
 Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
 
-Format: `export [FILE_PATH]`
-
-* If no path is provided, TAConnect creates a new file named `contacts-YYYYMMDD-HHMMSS.csv` inside the `exports/` folder (relative to where you launched the app).
-* If `FILE_PATH` points to an existing directory (or ends with `/` or `\`), the CSV is written into that directory with the timestamped name shown above.
-* If `FILE_PATH` points to a new file, the `.csv` extension is added automatically when missing.
-* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset.
-
-You can trigger the export either by typing the command or by clicking the `Export CSV` button beside the command box. The result display shows the location of the generated file.
+* Click the `Export CSV` button located beside the command box.
+* TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you click the button.
+* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
+* The result display shows the location of the generated file once the export completes.
 
 ### Locating persons by name: `find`
 
-Finds persons whose names contain any of the given keywords.
+Finds persons whose names contain the given substring (case-insensitive).
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find KEYWORD`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 * Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+* The search is case-insensitive. e.g `hans` will match `Hans`.
+* Partial matches are allowed. e.g. `Han` will match `Hans`.
+* Whitespace inside `KEYWORD` is preserved; `find alex david` searches for the exact substring `"alex david"` (including the space).
 
 Examples:
 * `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find alex` returns `Alex Yeoh`
 
 ### Deleting a person : `delete`
 Aliases: `del`, `rm`
@@ -230,7 +242,7 @@ TAConnect data are saved in the hard disk automatically after any command that c
 
 ### Editing the data file
 
-TAConnect data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+TAConnect data are saved automatically as a JSON file `[JAR file location]/data/taconnect.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file makes its format invalid, TAConnect will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
@@ -269,8 +281,9 @@ Action | Format, Examples
 **Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n/Alice Tan`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
-**List session** | `listsession [SESSION]` <br> e.g., `listsession F20`
+**List session** | `listsession SESSION` <br> e.g., `listsession F20`
+**Sessions** | `sessions`
 **Undo** | `undo`
-**Export** | `export [FILE_PATH]`<br> e.g., `export`, `export exports/tutorial-group.csv`
+**Export CSV** | Click the `Export CSV` button (saves to `exports/contacts-YYYYMMDD-HHmmss.csv`)
 **Help** | `help`
 **Exit** | `exit`

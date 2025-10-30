@@ -7,7 +7,6 @@ import static seedu.address.logic.Messages.MESSAGE_UNKNOWN_COMMAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,11 +16,11 @@ import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ExitCommand;
-import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListSessionCommand;
+import seedu.address.logic.commands.SessionsCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
@@ -76,13 +75,6 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_export() throws Exception {
-        assertEquals(new ExportCommand(), parser.parseCommand(ExportCommand.COMMAND_WORD));
-        assertEquals(new ExportCommand(Paths.get("reports.csv")),
-                parser.parseCommand(ExportCommand.COMMAND_WORD + " reports"));
-    }
-
-    @Test
     public void parseCommand_find() throws Exception {
         String keyword = "foo bar baz";
         FindCommand command = (FindCommand) parser.parseCommand(
@@ -119,6 +111,12 @@ public class AddressBookParserTest {
         ListSessionCommand command = (ListSessionCommand) parser.parseCommand(
                 ListSessionCommand.COMMAND_WORD + " S1");
         assertEquals(new ListSessionCommand(new SessionMatchPredicate(session)), command);
+    }
+
+    @Test
+    public void parseCommand_sessions() throws Exception {
+        assertTrue(parser.parseCommand(SessionsCommand.COMMAND_WORD) instanceof SessionsCommand);
+        assertTrue(parser.parseCommand(SessionsCommand.COMMAND_WORD + " 3") instanceof SessionsCommand);
     }
 
     @Test

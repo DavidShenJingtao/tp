@@ -296,7 +296,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *` | tutor                                      | add new _contacts_ | keep the contact list updated with _contact details_ and _session_ |
 | `* * *` | tutor                                      | delete _contacts_ by _contact ID_ | remove _contacts_ from the contact list in case they have  |
 | `* * *` | tutor                                      | search contact list by _name_ | locate details of _contacts_ by name without having to go through the entire list |
-| `* *` | tutor                                      | search contact list by _contact ID_ | locate details of _contacts_ by _contact ID_ without having to go through the entire list |
+| `* *` | tutor                                      | list all _sessions_ | get an overview of existing tutorial and lab groups |
 | `* *` | tutor                                      | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
 | `* * *` | tutor                                      | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
 | `* *` | tutor | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
@@ -422,10 +422,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor enters `listsession` command with one or more session identifiers.
-2. TAConnect parses the command input and validates that the session identifiers are correctly formatted.
-3. TAConnect filters the contact list to show all contacts belonging to the specified sessions.
-4. TAConnect displays the filtered list of contacts for the specified sessions.
+1. Tutor enters `listsession` command with a session identifier.
+2. TAConnect parses the command input and validates that the session identifier is correctly formatted.
+3. TAConnect filters the contact list to show all contacts belonging to the specified session.
+4. TAConnect displays the filtered list of contacts for the specified session.
 
     Use case ends.
 
@@ -450,7 +450,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.
 
 
-**Use case: UC6 – Recall the previous command**
+**Use case: UC6 – List all unique sessions in the course**
+
+**MSS**
+
+1. Tutor enters `sessions`.
+2. TAConnect parses the command (no arguments required).
+3. TAConnect retrieves all unique sessions from the model.
+4. TAConnect displays the number of sessions and the list of session codes.
+
+    Use case ends.
+
+**Use case: UC7 – Recall the previous command**
 
 **MSS**
 
@@ -470,7 +481,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-**Use case: UC7 – Move to the next newer command**
+**Use case: UC8 – Move to the next newer command**
 
 **MSS**
 
@@ -487,7 +498,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     Use case ends.
 
 
-**Use case: UC8 – Reuse a recalled command**
+**Use case: UC9 – Reuse a recalled command**
 
 **MSS**
 
@@ -520,8 +531,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Contact ID**: For students or tutors who are not full-time employees of NUS this is their matriculation number (eg. A01234567X). For tutors or instructors who are full-time employees of NUS, the TAConnect program will assign a contact ID with the format `FTE-{INITIALS}`, so a NUS full-time employee that has a name Betsy Crowe will have the contact ID `FTE-BC`. If multiple contacts have the same initials we will append a number, representing the number of times this initial has been used, in front, so if the contact ID `FTE-BC` already exists and another NUS full-time employee that has a name Bob Charlie is added, the contact ID will be `FTE-BC2`.
-* **Contact**: The user's name, _contact ID_, email and optionally a Telegram handle.
+* **Contact**: The user's name, email, type, session, and optionally a Telegram handle.
 * **Contact Type**: The category of a contact, i.e. student, tutor, course instructor, staff
 * **Mainstream OS**: Windows, Linux, Unix, Mac
 * **Session**: A period of lab or tutorial during which tutor is responsible for delivering the class.

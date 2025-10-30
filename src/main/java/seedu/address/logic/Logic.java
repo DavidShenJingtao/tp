@@ -24,6 +24,14 @@ public interface Logic {
     CommandResult execute(String commandText) throws CommandException, ParseException;
 
     /**
+     * Exports the currently displayed contacts to a fixed CSV location.
+     *
+     * @return result of the export operation.
+     * @throws CommandException if exporting fails.
+     */
+    CommandResult exportDisplayedContacts() throws CommandException;
+
+    /**
      * Returns the AddressBook.
      *
      * @see seedu.address.model.Model#getAddressBook()

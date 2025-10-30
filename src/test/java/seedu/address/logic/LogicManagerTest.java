@@ -18,6 +18,7 @@ import static seedu.address.testutil.TypicalPersons.AMY;
 
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.UndoCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -54,6 +56,7 @@ public class LogicManagerTest {
 
     @BeforeEach
     public void setUp() {
+        model = new ModelManager();
         JsonAddressBookStorage addressBookStorage =
                 new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
@@ -72,6 +75,36 @@ public class LogicManagerTest {
     public void execute_commandExecutionError_throwsCommandException() {
         String deleteCommand = "delete 9";
         assertCommandException(deleteCommand, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+    }
+
+    @Test
+    public void exportDisplayedContacts_withContacts_success() throws Exception {
+        model.addPerson(new PersonBuilder().build());
+
+        CommandResult result = logic.exportDisplayedContacts();
+
+        assertTrue(result.getFeedbackToUser().startsWith("Exported 1 contact(s) to "));
+
+        String targetPathString = result.getFeedbackToUser()
+                .substring("Exported 1 contact(s) to ".length());
+        Path exportedPath = Path.of(targetPathString);
+        assertTrue(Files.exists(exportedPath));
+
+        Files.deleteIfExists(exportedPath);
+        Path parentDirectory = exportedPath.getParent();
+        if (parentDirectory != null && Files.exists(parentDirectory)) {
+            try (var stream = Files.list(parentDirectory)) {
+                if (!stream.findAny().isPresent()) {
+                    Files.delete(parentDirectory);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void exportDisplayedContacts_noContacts_throwsCommandException() {
+        assertThrows(CommandException.class, ExportCommand.MESSAGE_NO_CONTACTS, () ->
+                logic.exportDisplayedContacts());
     }
 
     @Test

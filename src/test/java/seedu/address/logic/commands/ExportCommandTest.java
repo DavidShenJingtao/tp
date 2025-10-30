@@ -103,6 +103,23 @@ public class ExportCommandTest {
     }
 
     @Test
+    public void execute_relativeTargetWithoutParent_exportsCsv() throws Exception {
+        Path relativeTarget = Paths.get("relative-export.csv");
+        Files.deleteIfExists(relativeTarget);
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 7, 1, 8, 0);
+        ExportCommand exportCommand = new ExportCommand(relativeTarget, false, () -> fixedTime);
+
+        try {
+            CommandResult result = exportCommand.execute(model);
+            assertTrue(Files.exists(relativeTarget));
+            assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, 2, relativeTarget.toAbsolutePath()),
+                    result.getFeedbackToUser());
+        } finally {
+            Files.deleteIfExists(relativeTarget);
+        }
+    }
+
+    @Test
     public void execute_targetFileAlreadyExists_throwsCommandException() throws Exception {
         Path targetFile = tempDir.resolve("duplicate.csv");
         Files.createFile(targetFile);
@@ -111,6 +128,26 @@ public class ExportCommandTest {
         CommandException thrown = assertThrows(CommandException.class, () -> exportCommand.execute(model));
         assertEquals(String.format(ExportCommand.MESSAGE_IO_ERROR,
                 "File already exists: " + targetFile.toAbsolutePath()), thrown.getMessage());
+    }
+
+    @Test
+    public void execute_targetFileAlreadyExistsOverwriteEnabled_succeeds() throws Exception {
+        Path targetFile = tempDir.resolve("overwrite.csv");
+        Files.createDirectories(targetFile.getParent());
+        Files.writeString(targetFile, "existing");
+
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 6, 1, 10, 0);
+        ExportCommand exportCommand = new ExportCommand(targetFile, false, () -> fixedTime, true);
+
+        CommandResult result = exportCommand.execute(model);
+
+        List<String> lines = Files.readAllLines(targetFile);
+        assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, 2, targetFile.toAbsolutePath()),
+                result.getFeedbackToUser());
+        assertEquals(List.of(
+                "Name,Telegram,Email,Type,Session",
+                "\"Alice Pauline\",\"@alice123\",\"alice@example.com\",\"student\",\"G1\"",
+                "\"Bob Brown\",\"\",\"bob@example.com\",\"student\",\"G2\""), lines);
     }
 
     @Test
@@ -130,6 +167,7 @@ public class ExportCommandTest {
         ExportCommand samePathCommand = new ExportCommand(samplePath);
         ExportCommand samePathCommandCopy = new ExportCommand(samplePath);
         ExportCommand directoryCommand = new ExportCommand(Paths.get("exports"), true);
+        ExportCommand overwriteCommand = new ExportCommand(samplePath, false, true);
 
         // same object -> true
         assertTrue(defaultCommand.equals(defaultCommand));
@@ -145,5 +183,8 @@ public class ExportCommandTest {
 
         // different configuration -> false
         assertFalse(samePathCommand.equals(directoryCommand));
+
+        // different overwrite flag -> false
+        assertFalse(samePathCommand.equals(overwriteCommand));
     }
 }

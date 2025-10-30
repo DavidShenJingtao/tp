@@ -18,7 +18,6 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
-import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -166,10 +165,17 @@ public class MainWindow extends UiPart<Stage> {
      * Triggers the export of the currently displayed contacts.
      */
     private void handleExport() {
+        String feedback = getExportFeedback(logic, logger);
+        resultDisplay.setFeedbackToUser(feedback);
+    }
+
+    static String getExportFeedback(Logic logic, Logger logger) {
         try {
-            executeCommand(ExportCommand.COMMAND_WORD);
-        } catch (CommandException | ParseException commandException) {
+            CommandResult exportResult = logic.exportDisplayedContacts();
+            return exportResult.getFeedbackToUser();
+        } catch (CommandException commandException) {
             logger.warning("Failed to export contacts: " + commandException.getMessage());
+            return commandException.getMessage();
         }
     }
 
