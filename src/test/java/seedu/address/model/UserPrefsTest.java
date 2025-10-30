@@ -1,9 +1,15 @@
 package seedu.address.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.testutil.Assert.assertThrows;
+
+import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests for {@link UserPrefs}.
+ */
 public class UserPrefsTest {
 
     @Test
@@ -18,4 +24,9 @@ public class UserPrefsTest {
         assertThrows(NullPointerException.class, () -> userPrefs.setAddressBookFilePath(null));
     }
 
+    @Test
+    public void defaultAddressBookFilePath_isTaconnectJson() {
+        UserPrefs prefs = new UserPrefs();
+        assertEquals(Paths.get("data", "taconnect.json"), prefs.getAddressBookFilePath());
+    }
 }
