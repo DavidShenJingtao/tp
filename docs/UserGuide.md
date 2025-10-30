@@ -50,10 +50,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
-
-* Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
+  e.g `n/NAME [u/TELEGRAM_USERNAME]` can be used as `n/John Doe u/@JohnDoe` or as `n/John Doe`.
 
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
@@ -74,6 +71,13 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
   - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
   - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
   - domain is case-insensitive; stored in lowercase
+- Type and Session: Type must be one of the four inputs, **case-sensitive**: `student`, `ta`, `instructor`, and `staff`
+  - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
+- Telegram Username: Optional field, must adhere to:
+  - 5 to 32 characters long
+  - accepted characters: a-z, A-Z, 0-9 and underscores
+  - optionally, include @ as the first character
+  - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
 
 ### Viewing help : `help`
 
@@ -86,17 +90,21 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book.
+Adds a contact to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL t/TYPE [u/TELEGRAM_USERNAME] s/SESSION`
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0)
-</div>
+For convenience, a TA can also record telegram username, but it is an optional field.
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
+* Add contact type `student`: `add n/John Doe p/98765432 e/johnd@example.com t/student u/@johndoe s/F2`
+![student.png](images/student.png)
+* Add contact type `ta`: `add n/David Shen p/23456789 e/davidshen@example.com t/ta s/L3`
+![ta.png](images/ta.png)
+* Add contact type `instructor`: `add n/Betsy Crowe p/34560781 e/betsycrowe@example.com t/instructor`
+![instructor.png](images/instructor.png)
+* Add contact type `staff`: `add n/Sophie Yuan p/17480572 e/sophie@example.come t/staff u/@yyssophie`
+![staff.png](images/staff.png)
 
 ### Listing all contacts : `list`
 
@@ -114,7 +122,7 @@ Examples:
 
 Shows a list of all persons who belong to the specified session.
 
-Format: `listsession SESSION`
+Format: `listsession [SESSION]`
 
 * Displays only the contacts whose session field matches the given `SESSION` value.
 * Session names are **case-insensitive** and must follow the valid pattern `[A-Z]\d+` (e.g., `F1`, `G2`, `T10`), meaning a single uppercase letter followed by a number from **1 to 99** (without leading zeros)..
@@ -138,23 +146,6 @@ Format: `export [FILE_PATH]`
 * Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset.
 
 You can trigger the export either by typing the command or by clicking the `Export CSV` button beside the command box. The result display shows the location of the generated file.
-
-### Editing a person : `edit`
-
-Edits an existing person in the address book.
-
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
-
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-    specifying any tags after it.
-
-Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
 ### Locating persons by name: `find`
 
@@ -223,7 +214,7 @@ Examples:
 
 ### Clearing all entries : `clear`
 
-Clears all entries from the address book.
+Clears all entries from the contact list of TAConnect.
 
 Format: `clear`
 
@@ -235,15 +226,15 @@ Format: `exit`
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+TAConnect data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+TAConnect data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes to the data file makes its format invalid, TAConnect will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause the TAConnect to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
 ### Archiving data files `[coming in v2.0]`
@@ -270,11 +261,16 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Add student** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/student [u/TELEGRAM_USERNAME] s/SESSION` <br> e.g., `add n/John Doe p/98765432 e/johnd@example.com t/student u/@johndoe s/F2`
+**Add ta** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/ta [u/TELEGRAM_USERNAME] s/SESSION` <br> e.g., `add n/David Shen p/23456789 e/davidshen@example.com t/ta s/L3`
+**Add instructor** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/instructor [u/TELEGRAM_USERNAME]` <br> e.g., `add n/Betsy Crowe p/34560781 e/betsycrowe@example.com t/instructor`
+**Add staff** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/staff [u/TELEGRAM_USERNAME]` <br> e.g., `add n/Sophie Yuan p/17480572 e/sophie@example.come t/staff u/@yyssophie`
 **Clear** | `clear`
 **Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n/Alice Tan`
-**Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
+**List session** | `listsession [SESSION]` <br> e.g., `listsession F20`
+**Undo** | `undo`
 **Export** | `export [FILE_PATH]`<br> e.g., `export`, `export exports/tutorial-group.csv`
 **Help** | `help`
+**Exit** | `exit`
