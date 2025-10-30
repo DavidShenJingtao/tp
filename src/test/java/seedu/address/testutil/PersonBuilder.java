@@ -29,6 +29,9 @@ public class PersonBuilder {
     private Optional<TelegramUsername> telegramUsername;
     private Optional<Session> session;
 
+    // Skip automatic type/session adjustments? For AddCommand invalid tests
+    private boolean skipValidation = false;
+
     /**
      * Creates a {@code PersonBuilder} with the default details.
      */
@@ -37,8 +40,8 @@ public class PersonBuilder {
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
         type = new Type(DEFAULT_TYPE);
-        telegramUsername = Optional.ofNullable(new TelegramUsername(DEFAULT_TELEGRAM));
-        session = Optional.ofNullable(new Session(DEFAULT_SESSION));
+        telegramUsername = Optional.of(new TelegramUsername(DEFAULT_TELEGRAM));
+        session = Optional.of(new Session(DEFAULT_SESSION));
     }
 
     /**
@@ -51,6 +54,14 @@ public class PersonBuilder {
         type = personToCopy.getType();
         telegramUsername = personToCopy.getTelegramUsername();
         session = personToCopy.getSession();
+    }
+
+    /**
+     * Skips type/session validation for AddCommand tests.
+     */
+    public PersonBuilder skipValidation() {
+        this.skipValidation = true;
+        return this;
     }
 
     /**
@@ -113,15 +124,18 @@ public class PersonBuilder {
      * Builds a Person based on type/session constraints.
      */
     public Person build() {
-        // Handle constraints according to Person.java rules
-        if (type.isStudent() || type.isTa()) {
-            return new Person(name, phone, email, type, telegramUsername.orElse(null),
-                    session.orElseThrow(() -> new IllegalArgumentException(Person.MESSAGE_STUDENT_TA)));
-        } else {
-            // Instructors and staff cannot have sessions
-            return new Person(name, phone, email, type,
-                    telegramUsername.orElse(null), null);
+        if (!skipValidation) {
+            // Enforce valid storage rules
+            if (type.isInstructor() || type.isStaff()) {
+                return new Person(name, phone, email, type, telegramUsername.orElse(null), null);
+            }
+            if ((type.isStudent() || type.isTa()) && session.isEmpty()) {
+                return new Person(name, phone, email, type, telegramUsername.orElse(null),
+                        new Session(DEFAULT_SESSION));
+            }
         }
-    }
 
+        // If skipValidation = true → build exactly what is set
+        return new Person(name, phone, email, type, telegramUsername.orElse(null), session.orElse(null));
+    }
 }
