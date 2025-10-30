@@ -23,4 +23,4 @@ src/test/data/sandbox/
 docs/_site/
 bin/
 exports/
-.vscode
+.vscode/

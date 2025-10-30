@@ -10,6 +10,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.AddressBookParser;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -71,6 +72,13 @@ public class LogicManager implements Logic {
         }
 
         return commandResult;
+    }
+
+    @Override
+    public CommandResult exportDisplayedContacts() throws CommandException {
+        logger.info("----------------[EXPORT CONTACTS VIA BUTTON]");
+        Command exportCommand = new ExportCommand();
+        return exportCommand.execute(model);
     }
 
     @Override
