@@ -79,6 +79,13 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
   - optionally, include @ as the first character
   - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
 
+### Data limits
+
+- Maximum contacts: 2500
+- Maximum unique sessions: 250
+- When either limit is reached, `add` will fail with a clear error message.
+- Importing a JSON data file that exceeds these limits will be rejected on startup.
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -122,16 +129,28 @@ Examples:
 
 Shows a list of all persons who belong to the specified session.
 
-Format: `listsession [SESSION]`
+Format: `listsession SESSION`
 
 * Displays only the contacts whose session field matches the given `SESSION` value.
-* Session names are **case-insensitive** and must follow the valid pattern `[A-Z]\d+` (e.g., `F1`, `G2`, `T10`), meaning a single uppercase letter followed by a number from **1 to 99** (without leading zeros)..
+* Sessions are case-sensitive and must match `[A-Z](?:[1-9][0-9]?)` (e.g., `F1`, `G2`, `T10`): one uppercase letter followed by 1–2 digits from 1 to 99, with no leading zeros.
 * Contacts without a session (e.g., instructors or staff) will not appear in the result.
 * Useful for TAs who manage multiple tutorial or lab groups.
 
 Examples:
 * `listsession F20` — Lists all contacts in session F20.
 * `listsession G1` — Lists all contacts in session G1.
+
+### Listing all sessions : `sessions`
+
+Shows all unique sessions currently recorded in TAConnect.
+
+Format: `sessions`
+
+* Displays the number of sessions and a list of the session codes in the result display.
+* Useful for getting an overview of all existing tutorial/lab groups.
+
+Examples:
+* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
 
 
 ### Exporting the displayed contacts : `export`
@@ -269,7 +288,8 @@ Action | Format, Examples
 **Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n/Alice Tan`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
-**List session** | `listsession [SESSION]` <br> e.g., `listsession F20`
+**List session** | `listsession SESSION` <br> e.g., `listsession F20`
+**Sessions** | `sessions`
 **Undo** | `undo`
 **Export** | `export [FILE_PATH]`<br> e.g., `export`, `export exports/tutorial-group.csv`
 **Help** | `help`
