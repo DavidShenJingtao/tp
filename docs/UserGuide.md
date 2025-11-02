@@ -285,7 +285,7 @@ Action | Format, Examples
 **Add staff** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/staff [u/TELEGRAM_USERNAME]` <br> e.g., `add n/Sophie Yuan p/17480572 e/sophie@example.come t/staff u/@yyssophie`
 **Clear** | `clear`
 **Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n/Alice Tan`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find** | `find KEYWORD`<br> e.g., `find James Jake`
 **List** | `list`
 **List session** | `listsession SESSION` <br> e.g., `listsession F20`
 **Sessions** | `sessions`
