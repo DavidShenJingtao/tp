@@ -3,7 +3,7 @@ layout: page
 title: User Guide
 ---
 
-TAConnect is a **desktop app for teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+TAConnect is a **desktop app for teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAConnect can get your tutorial group management tasks done faster than traditional GUI apps.
 
 * Table of Contents
 {:toc}
