@@ -218,9 +218,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *` | tutor                                      | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
 | `* *` | tutor | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
 
-
-*{More to be added}*
-
 ### Use cases
 
 (For all use cases below, the **System** is the `TAConnect` program and the **Actor** is the `tutor`, unless specified otherwise)
