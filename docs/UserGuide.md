@@ -12,8 +12,10 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+1. This app supports Java `17` only. Ensure you have the precise JDK version installed:
+   - For Windows users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationWindows.html).
+   - For Mac users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+   - For Linux users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationLinux.html).
 
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-F15a-1/tp/releases).
 
