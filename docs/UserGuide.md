@@ -65,7 +65,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 
 ### Field Constraints
 
-- Name: Allows letters (no digits), spaces, apostrophes (' or ’), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
+- Name: Maximum of up to 500 characters. Allows letters (no digits), spaces, apostrophes (' or ’), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
 - Phone: Singapore numbers only — exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
 - Email: Must be of the form local-part@domain and adhere to:
   - one and only one '@', no spaces
