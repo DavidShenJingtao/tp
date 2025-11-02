@@ -3,7 +3,7 @@ layout: page
 title: User Guide
 ---
 
-TAConnect is a **desktop app for teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+TAConnect is a **desktop app for teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAConnect can get your tutorial group management tasks done faster than traditional GUI apps.
 
 * Table of Contents
 {:toc}
@@ -12,8 +12,10 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+1. This app supports Java `17` only. Ensure you have the precise JDK version installed:
+   - For Windows users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationWindows.html).
+   - For Mac users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
+   - For Linux users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationLinux.html).
 
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-F15a-1/tp/releases).
 
@@ -63,7 +65,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 
 ### Field Constraints
 
-- Name: Allows letters (no digits), spaces, apostrophes (' or ’), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
+- Name: Maximum of up to 500 characters. Allows letters (no digits), spaces, apostrophes (' or ’), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
 - Phone: Singapore numbers only — exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
 - Email: Must be of the form local-part@domain and adhere to:
   - one and only one '@', no spaces
@@ -283,7 +285,7 @@ Action | Format, Examples
 **Add staff** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/staff [u/TELEGRAM_USERNAME]` <br> e.g., `add n/Sophie Yuan p/17480572 e/sophie@example.come t/staff u/@yyssophie`
 **Clear** | `clear`
 **Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n/Alice Tan`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
+**Find** | `find KEYWORD`<br> e.g., `find James Jake`
 **List** | `list`
 **List session** | `listsession SESSION` <br> e.g., `listsession F20`
 **Sessions** | `sessions`
