@@ -14,6 +14,7 @@ import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FindCommand;
+import seedu.address.logic.commands.ExportCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListSessionCommand;
@@ -80,6 +81,14 @@ public class AddressBookParser {
 
         case ListSessionCommand.COMMAND_WORD:
             command = new ListSessionCommandParser().parse(arguments);
+            break;
+
+        case ExportCommand.COMMAND_WORD:
+            if (!arguments.trim().isEmpty()) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        ExportCommand.MESSAGE_USAGE));
+            }
+            command = new ExportCommand();
             break;
 
         case ExitCommand.COMMAND_WORD:

@@ -182,8 +182,8 @@ Examples:
 
 Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
 
-* Click the `Export CSV` button located beside the command box.
-* TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you click the button.
+* Run `export` or click the `Export CSV` button located beside the command box.
+* TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you trigger the export.
 * Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
 * The result display shows the location of the generated file once the export completes, e.g., `Exported 12 contact(s) to /path/to/exports/contacts-20241027-153120.csv`.
 
@@ -334,6 +334,6 @@ Action | Format, Examples
 **List session** | `listsession SESSION` <br> e.g., `listsession F20`
 **Sessions** | `sessions`
 **Undo** | `undo`
-**Export CSV** | Click the `Export CSV` button (saves to `exports/contacts-YYYYMMDD-HHmmss.csv`)
+**Export CSV** | `export` or click the `Export CSV` button (saves to `exports/contacts-YYYYMMDD-HHmmss.csv`)
 **Help** | `help`
 **Exit** | `exit`
