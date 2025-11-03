@@ -85,9 +85,11 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
   - domain labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
   - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
   - domain is case-insensitive; stored in lowercase
-- Type and Session: 
+- Type: 
   - Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
-  - `Session` format: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9), and an optional trailing uppercase letter (e.g., `G1`, `F01`, `T07`, `BA03`, `T07B`).
+- Session:
+  - Format: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9), and an optional trailing uppercase letter (e.g., `G1`, `F01`, `T07`, `BA03`, `T07B`).
+  - Note that `G01` and `G1` are treated as **different sessions**. Users should consistently use one format (with or without leading zeros) to avoid confusion.
   - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
 - Telegram Username: Optional field, must adhere to:
   - 5 to 32 characters long
@@ -159,11 +161,7 @@ Shows a list of all persons who belong to the specified session.
 Format: `listsession SESSION`
 
 * Displays only the contacts whose session field matches the given `SESSION` value.
-* Sessions must match the format **`[A-Z]{1,2}(?:0?[1-9]|[1-9][0-9])(?:[A-Z])?`**, meaning:
-    * 1–2 uppercase letters (e.g., `G`, `BA`, `T`),
-    * followed by a number from **1–99**, with an **optional leading zero** for 1–9 (e.g., `07`, `9`),
-    * and an **optional trailing uppercase letter** (e.g., `T07B`).
-* Examples of valid sessions: `G1`, `F01`, `T07`, `BA03`, `BD04`, `T07B`.
+* The session format follows the rules described in [Field Constraints](#field-constraints).
 * Contacts without a session (e.g., instructors or staff) will not appear in the result.
 * Useful for CS2040 TAs who manage multiple tutorial or lab groups.
 
