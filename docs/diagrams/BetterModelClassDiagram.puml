@@ -5,17 +5,15 @@ skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
 AddressBook *-right-> "1" UniquePersonList
-AddressBook *-right-> "1" UniqueTagList
-UniqueTagList -[hidden]down- UniquePersonList
-UniqueTagList -[hidden]down- UniquePersonList
-
-UniqueTagList -right-> "*" Tag
+AddressBook *-right-> "1" UniqueSessionList
+UniqueSessionList -[hidden]down- UniquePersonList
+UniqueSessionList -right-> "*" Session
 UniquePersonList -right-> Person
 
-Person -up-> "*" Tag
-
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
+Person *--> "1" Name
+Person *--> "1" Phone
+Person *--> "1" Email
+Person *--> "1" Type
+Person *--> "0..1" TelegramUsername
+Person --> "0..1" Session
 @enduml
