@@ -330,7 +330,7 @@ Action | Format, Examples
 **Add instructor** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:instructor [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Betsy Crowe p:34560781 e:betsycrowe@example.com t:instructor`
 **Add staff** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:staff [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
 **Clear** | `clear`
-**Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n:NAME] [n:MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n:Alice Tan`
+**Delete** | `delete\|del\|rm INDEX [MORE_INDEXES\|RANGE] [n:NAME] [n:MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm 2-4`, `delete n:Alice Tan`
 **Find** | `find KEYWORD`<br> e.g., `find James Jake`
 **List** | `list`
 **List session** | `listsession SESSION` <br> e.g., `listsession F20`
