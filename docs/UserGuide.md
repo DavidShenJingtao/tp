@@ -41,7 +41,7 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com t/student u/@johndoe s/F2` : Adds a student contact named `John Doe` to the contact list.
+   * `add n:John Doe p:98765432 e:johnd@example.com t:student u:@johndoe s:F2` : Adds a student contact named `John Doe` to the contact list.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -60,13 +60,13 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 **:information_source: Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
+  e.g. in `add n:NAME`, `NAME` is a parameter which can be used as `add n:John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [u/TELEGRAM_USERNAME]` can be used as `n/John Doe u/@JohnDoe` or as `n/John Doe`.
+  e.g `n:NAME [u:TELEGRAM_USERNAME]` can be used as `n:John Doe u:@JohnDoe` or as `n:John Doe`.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
+  e.g. if the command specifies `n:NAME p:PHONE_NUMBER`, `p:PHONE_NUMBER n:NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -87,6 +87,8 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
   - domain is case-insensitive; stored in lowercase
 - Type and Session: Type must be one of the four inputs, **case-sensitive**: `student`, `ta`, `instructor`, and `staff`
   - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
+- Session: Must match `[A-Z](?:[1-9][0-9]?)` — one uppercase letter followed by 1–2 digits from 1 to 99 (no leading zeros).
+  - Examples: `F1`, `G2`, `T10`. Invalid: `f1` (lowercase), `G01` (leading zero), `AA1` (two letters).
 - Telegram Username: Optional field, must adhere to:
   - 5 to 32 characters long
   - accepted characters: a-z, A-Z, 0-9 and underscores
@@ -119,23 +121,23 @@ Format: `help`
 
 Adds a contact to the contact list of TAConnect.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL t/TYPE [u/TELEGRAM_USERNAME] [s/SESSION]`
+Format: `add n:NAME p:PHONE_NUMBER e:EMAIL t:TYPE [u:TELEGRAM_USERNAME] [s:SESSION]`
 
 Notes:
-* `s/SESSION` must be provided when the Type is `student` or `ta`.
-* `s/SESSION` must be omitted when the Type is `instructor` or `staff`.
+* `s:SESSION` must be provided when the Type is `student` or `ta`.
+* `s:SESSION` must be omitted when the Type is `instructor` or `staff`.
 * Trying to add a contact whose name exactly matches an existing one (same letter casing) will be rejected as a duplicate, even if the other fields differ.
 
 For convenience, a TA can also record telegram username, but it is an optional field.
 
 Examples:
-* Add contact type `student`: `add n/John Doe p/98765432 e/johnd@example.com t/student u/@johndoe s/F2` (session required)
+* Add contact type `student`: `add n:John Doe p:98765432 e:johnd@example.com t:student u:@johndoe s:F2` (session required)
 ![student.png](images/student.png)
-* Add contact type `ta`: `add n/David Shen p/23456789 e/davidshen@example.com t/ta s/L3`
+* Add contact type `ta`: `add n:David Shen p:23456789 e:davidshen@example.com t:ta s:L3`
 ![ta.png](images/ta.png)
-* Add contact type `instructor`: `add n/Betsy Crowe p/34560781 e/betsycrowe@example.com t/instructor` (session omitted)
+* Add contact type `instructor`: `add n:Betsy Crowe p:34560781 e:betsycrowe@example.com t:instructor` (session omitted)
 ![instructor.png](images/instructor.png)
-* Add contact type `staff`: `add n/Sophie Yuan p/17480572 e/sophie@example.come t/staff u/@yyssophie`
+* Add contact type `staff`: `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
 ![staff.png](images/staff.png)
 
 ### Listing all contacts : `list`
@@ -212,7 +214,7 @@ Aliases: `del`, `rm`
 
 Deletes the specified person from the contact list.
 
-Format: `delete INDEX [MORE_INDEXES|RANGE] [n/NAME] [n/MORE_NAMES]`
+Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 
 * Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive),
   or with the exact `NAME` provided.
@@ -225,10 +227,10 @@ Examples:
 * `list` followed by `delete 1 3` deletes both the 1st and 3rd persons in the currently displayed list.
 * `delete 2-5` deletes the 2nd to 5th persons shown in the current list (inclusive).
 * `delete 1 3-4` deletes the 1st, 3rd, and 4th persons.
-* `delete n/Alice Tan` deletes the contact whose name is exactly `Alice Tan`.
-* `list` followed by `delete 1 n/Alice Tan` deletes the 1st person in the list and the contact named `Alice Tan`.
+* `delete n:Alice Tan` deletes the contact whose name is exactly `Alice Tan`.
+* `list` followed by `delete 1 n:Alice Tan` deletes the 1st person in the list and the contact named `Alice Tan`.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
-* Aliases: `del 2`, `rm n/Alice Tan` behave the same as `delete`.
+* Aliases: `del 2`, `rm n:Alice Tan` behave the same as `delete`.
 
 ### Undo last change : `undo`
 
@@ -237,7 +239,7 @@ Undoes the most recent command that modified the contact list (e.g., `add`, `del
 Format: `undo`
 
 Examples:
-* `add n/John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
+* `add n:John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
 * `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
 
 ### Command history (↑/↓)
@@ -323,12 +325,12 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add student** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/student [u/TELEGRAM_USERNAME] s/SESSION` <br> e.g., `add n/John Doe p/98765432 e/johnd@example.com t/student u/@johndoe s/F2`
-**Add ta** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/ta [u/TELEGRAM_USERNAME] s/SESSION` <br> e.g., `add n/David Shen p/23456789 e/davidshen@example.com t/ta s/L3`
-**Add instructor** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/instructor [u/TELEGRAM_USERNAME]` <br> e.g., `add n/Betsy Crowe p/34560781 e/betsycrowe@example.com t/instructor`
-**Add staff** | `add n/NAME p/PHONE_NUMBER e/EMAIL t/staff [u/TELEGRAM_USERNAME]` <br> e.g., `add n/Sophie Yuan p/17480572 e/sophie@example.come t/staff u/@yyssophie`
+**Add student** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:student [u:TELEGRAM_USERNAME] s:SESSION` <br> e.g., `add n:John Doe p:98765432 e:johnd@example.com t:student u:@johndoe s:F2`
+**Add ta** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:ta [u:TELEGRAM_USERNAME] s:SESSION` <br> e.g., `add n:David Shen p:23456789 e:davidshen@example.com t:ta s:L3`
+**Add instructor** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:instructor [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Betsy Crowe p:34560781 e:betsycrowe@example.com t:instructor`
+**Add staff** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:staff [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
 **Clear** | `clear`
-**Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n/NAME] [n/MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n/Alice Tan`
+**Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n:NAME] [n:MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n:Alice Tan`
 **Find** | `find KEYWORD`<br> e.g., `find James Jake`
 **List** | `list`
 **List session** | `listsession SESSION` <br> e.g., `listsession F20`
