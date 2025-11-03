@@ -74,42 +74,6 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-### Field Constraints
-
-- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
-- Phone: Singapore numbers only — exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
-- Email: Must be of the form local-part@domain and adhere to:
-  - one and only one '@', no spaces
-  - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
-  - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
-  - domain labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
-  - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
-  - domain is case-insensitive; stored in lowercase
-- Type: 
-  - Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
-- Session:
-  - Format: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9), and an optional trailing uppercase letter (e.g., `G1`, `F01`, `T07`, `BA03`, `T07B`).
-  - Note that `G01` and `G1` are treated as **different sessions**. Users should consistently use one format (with or without leading zeros) to avoid confusion.
-  - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
-- Telegram Username: Optional field, must adhere to:
-  - 5 to 32 characters long
-  - accepted characters: a-z, A-Z, 0-9 and underscores
-  - optionally, include @ as the first character
-  - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
-
-### Data limits
-
-- Maximum contacts: 2500
-- Maximum unique sessions: 250
-- When either limit is reached, `add` will fail with a clear error message.
-- Importing a JSON data file that exceeds these limits will be rejected on startup.
-
-### Duplicate contacts
-
-- TAConnect allows only one contact per exact `NAME`. A duplicate is any new entry whose name matches an existing contact **with the same letter casing**.
-- Differences in email, phone, Telegram username, session, or tags do not matter once the names match exactly; the command will be rejected as a duplicate.
-- Names that differ only by letter casing (e.g., `alice tan` vs `Alice Tan`) are treated as different contacts.
-
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -142,6 +106,42 @@ Examples:
 * Add contact type `staff`: `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
 ![staff.png](images/staff.png)
 
+#### Field Constraints
+
+- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
+- Phone: Singapore numbers only - exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
+- Email: Must be of the form local-part@domain and adhere to:
+  - one and only one '@', no spaces
+  - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
+  - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
+  - domain labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
+  - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
+  - domain is case-insensitive; stored in lowercase
+- Type: 
+  - Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
+- Session:
+  - Format: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9), and an optional trailing uppercase letter (e.g., `G1`, `F01`, `T07`, `BA03`, `T07B`).
+  - Note that `G01` and `G1` are treated as **different sessions**. Users should consistently use one format (with or without leading zeros) to avoid confusion.
+  - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
+- Telegram Username: Optional field, must adhere to:
+  - 5 to 32 characters long
+  - accepted characters: a-z, A-Z, 0-9 and underscores
+  - optionally, include @ as the first character
+  - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
+
+#### Data limits
+
+- Maximum contacts: 2500
+- Maximum unique sessions: 250
+- When either limit is reached, `add` will fail with a clear error message.
+- Importing a JSON data file that exceeds these limits will be rejected on startup.
+
+#### Duplicate contacts
+
+- TAConnect allows only one contact per exact `NAME`. A duplicate is any new entry whose name matches an existing contact **with the same letter casing**.
+- Differences in email, phone, Telegram username, session, or tags do not matter once the names match exactly; the command will be rejected as a duplicate.
+- Names that differ only by letter casing (e.g., `alice tan` vs `Alice Tan`) are treated as different contacts.
+  
 ### Listing all contacts : `list`
 
 Displays all contacts currently stored in TAConnect.
@@ -176,16 +176,15 @@ Shows all unique sessions currently recorded in TAConnect.
 
 Format: `sessions`
 
-* Displays the number of sessions and a list of the session codes in the result display.
+* Displays the number of sessions and a list of the session codes in the result display, sorted by alphanumeric order.
 * Useful for getting an overview of all existing tutorial/lab groups.
 
 Examples:
-* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
-
+* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: F1, F2, G3, ...`.
 
 ### Exporting the displayed contacts
 
-Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
+Exports the contacts currently shown in the list to a CSV file containing `Name`, `Phone`, `Telegram`, `Email`, `Type`, and `Session`.
 
 * Run `export` or click the `Export CSV` button located beside the command box.
 * TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you trigger the export.
@@ -245,40 +244,6 @@ Examples:
 * `add n:John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
 * `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
 
-### Command history (↑/↓)
-
-You can navigate your previously entered commands using the **UP** and **DOWN** arrow keys, similar to a terminal.
-
-## Common Errors and Fixes
-
-- “Keyword to find is invalid! Use only letters (a–z, A–Z), spaces, apostrophes (' ‘ ’ ʼ), hyphens (-), periods (.), or slashes (/).”
-  - Cause: `KEYWORD` contains disallowed characters (e.g., `@`, backtick `\``).
-  - Fix: Use only the same characters allowed in names.
-
-- “Emails must be of the form local-part@domain … domain contains at least one '.' … final label (TLD) ≥ 2 chars”
-  - Cause: Domain missing a dot (e.g., `rob@ro`) or TLD too short (e.g., `exeee.m`).
-  - Fix: Use domains like `example.com`, `u.nus.edu`, or TLDs with ≥ 2 characters, e.g., `exeee.me`.
-
-- “Phone number must be a Singapore number with exactly 8 digits (0-9).”
-  - Cause: Too few/many digits, or non-digit characters/spaces.
-  - Fix: Provide exactly 8 digits with no spaces or symbols.
-
-## Glossary
-- TA: Teaching Assistant.
-- Session: Group code for a tutorial/lab (e.g., `F1`, `G2`, `T10`).
-- Telegram username: Optional contact handle (5–32 chars; letters, digits, underscores; may start with `@`).
-- TLD (Top‑Level Domain): The last label in a domain (e.g., `.com`, `.sg`, `.edu`). Must be ≥ 2 characters in this app.
-
-* **UP:** Shows the previous command in history.
-* **DOWN:** Shows the next command in history; if you reach the end, your current unfinished input (buffer) is restored.
-* **Duplicates & empty lines:** Empty inputs are not saved. Consecutive identical commands are stored only once.
-* **Edits while browsing history:** If you edit the text at any time, those edits are preserved when you return to the end (buffer).
-
-Examples:
-1. Type `list` → press Enter. Press ↑ → `list` appears.
-2. Type `find alex` → press Enter. Press ↑ twice → `find alex`, then `list`.
-3. Press ↑ to view `list`, type `l` to modify it, then press ↓ until the end → your unfinished text appears again (e.g., `l`).
-
 ### Clearing all entries : `clear`
 
 Clears all entries from the contact list of TAConnect.
@@ -290,6 +255,10 @@ Format: `clear`
 Exits the program.
 
 Format: `exit`
+
+### Command history (↑/↓)
+
+You can navigate your previously entered commands using the **UP** and **DOWN** arrow keys, similar to a terminal.
 
 ### Saving the data
 
@@ -305,9 +274,7 @@ Furthermore, certain edits can cause the TAConnect to behave in unexpected ways 
 </div>
 
 ### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
-
+   
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
@@ -342,3 +309,21 @@ Action | Format, Examples
 **Export CSV** | `export` or click the `Export CSV` button (saves to `exports/contacts-YYYYMMDD-HHmmss.csv`)
 **Help** | `help`
 **Exit** | `exit`
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Glossary
+- TA: Teaching Assistant.
+- Session: Group code for a tutorial/lab (e.g., `F1`, `G2`, `T10`).
+- Telegram username: Optional contact handle (5–32 chars; letters, digits, underscores; may start with `@`).
+- TLD (Top‑Level Domain): The last label in a domain (e.g., `.com`, `.sg`, `.edu`). Must be ≥ 2 characters in this app.
+
+* **UP:** Shows the previous command in history.
+* **DOWN:** Shows the next command in history; if you reach the end, your current unfinished input (buffer) is restored.
+* **Duplicates & empty lines:** Empty inputs are not saved. Consecutive identical commands are stored only once.
+* **Edits while browsing history:** If you edit the text at any time, those edits are preserved when you return to the end (buffer).
+
+Examples:
+1. Type `list` → press Enter. Press ↑ → `list` appears.
+2. Type `find alex` → press Enter. Press ↑ twice → `find alex`, then `list`.
+3. Press ↑ to view `list`, type `l` to modify it, then press ↓ until the end → your unfinished text appears again (e.g., `l`).
