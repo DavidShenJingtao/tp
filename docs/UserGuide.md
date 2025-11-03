@@ -82,10 +82,10 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
   - one and only one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
   - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
-  - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (Top Level Domain, TLD) ≥ 2 characters
+  - domain labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
   - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
   - domain is case-insensitive; stored in lowercase
-- Type and Session: Type must be one of the four inputs, **case-sensitive**: `student`, `ta`, `instructor`, and `staff`
+- Type and Session: Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
   - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
 - Session: Must match `[A-Z](?:[1-9][0-9]?)` — one uppercase letter followed by 1–2 digits from 1 to 99 (no leading zeros).
   - Examples: `F1`, `G2`, `T10`. Invalid: `f1` (lowercase), `G01` (leading zero), `AA1` (two letters).
@@ -216,7 +216,7 @@ Deletes the specified person from the contact list.
 
 Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 
-* Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive),
+* Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive; A <= B),
   or with the exact `NAME` provided.
 * The indexes refer to the numbers shown in the displayed person list.
 * Every index **must be a positive integer** 1, 2, 3, …​
@@ -330,7 +330,7 @@ Action | Format, Examples
 **Add instructor** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:instructor [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Betsy Crowe p:34560781 e:betsycrowe@example.com t:instructor`
 **Add staff** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:staff [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
 **Clear** | `clear`
-**Delete** | `delete|del|rm INDEX [MORE_INDEXES] [n:NAME] [n:MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm n:Alice Tan`
+**Delete** | `delete\|del\|rm INDEX [MORE_INDEXES\|RANGE] [n:NAME] [n:MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm 2-4`, `delete n:Alice Tan`
 **Find** | `find KEYWORD`<br> e.g., `find James Jake`
 **List** | `list`
 **List session** | `listsession SESSION` <br> e.g., `listsession F20`
