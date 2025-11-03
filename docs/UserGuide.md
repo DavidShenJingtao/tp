@@ -246,7 +246,7 @@ You can navigate your previously entered commands using the **UP** and **DOWN** 
 
 ## Common Errors and Fixes
 
-- “Keyword to find is invalid! Use only letters, spaces, apostrophes (' ‘ ’ ʼ), hyphens (-), periods (.), or slashes (/).”
+- “Keyword to find is invalid! Use only letters (a–z, A–Z), spaces, apostrophes (' ‘ ’ ʼ), hyphens (-), periods (.), or slashes (/).”
   - Cause: `KEYWORD` contains disallowed characters (e.g., `@`, backtick `\``).
   - Fix: Use only the same characters allowed in names.
 
