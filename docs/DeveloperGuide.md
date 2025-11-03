@@ -78,6 +78,8 @@ To keep inputs clean and predictable, the Model enforces the following field con
 - Phone (Singapore): exactly 8 digits (0–9). Implemented via `\d{8}` in `seedu.address.model.person.Phone`.
 - Name: ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), slashes (/).
   Enforced by regex in `seedu.address.model.person.Name` with a maximum length of 500.
+- Session: one uppercase letter followed by 1–2 digits in 1–99 (no leading zeros). Enforced by `seedu.address.model.person.Session`
+  using the pattern `[A-Z](?:[1-9][0-9]?)`.
 - Email: `local-part@domain` with pragmatic checks:
   - exactly one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
@@ -541,13 +543,13 @@ testers are expected to do more *exploratory* testing.
 ### Adding a person
 
 1. Test case (student with session):<br>
-   `add n/Imran Aziz p/81234567 e/imran@example.com t/student s/F5`<br>
+   `add n:Imran Aziz p:81234567 e:imran@example.com t:student s:F5`<br>
    Expected: New contact appears at the bottom of the list with the supplied details. Status message confirms the addition.
 1. Test case (duplicate name):<br>
    Repeat the previous command.<br>
    Expected: Command fails with a duplicate-person error because the same name already exists.
 1. Test case (missing session for student):<br>
-   `add n/Tessa Lim p/82345678 e/tessa@example.com t/student`<br>
+   `add n:Tessa Lim p:82345678 e:tessa@example.com t:student`<br>
    Expected: Command fails with a validation message stating that students require a session.
 
 ### Finding persons by name
@@ -608,7 +610,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Test case: `sessions`<br>
    Expected: Result display shows `N sessions found in TAConnect. Here is the list: [...]` with every distinct session code.
-1. Optional: Add a contact with a new session (e.g. `add ... s=H5`), run `sessions` again, and confirm the new session code appears in the output.
+1. Optional: Add a contact with a new session (e.g. `add ... s:H5`), run `sessions` again, and confirm the new session code appears in the output.
 
 ### Exporting contacts
 
@@ -628,7 +630,7 @@ testers are expected to do more *exploratory* testing.
 ### Undoing changes
 
 1. Test case (undo after add):<br>
-   a. Run `add n/Test User p/81234567 e=testuser@example.com t=student s=G9`.<br>
+   a. Run `add n:Test User p:81234567 e:testuser@example.com t:student s:G9`.<br>
    b. Confirm the new contact appears in the list.<br>
    c. Run `undo`.<br>
    Expected: Result display shows a success message such as `Undo successful (reverted: add)` and the contact disappears from the list.
