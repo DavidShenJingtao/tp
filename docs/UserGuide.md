@@ -346,9 +346,7 @@ Why export:
 - Share a filtered list with instructors or teammates.
 - Upload to spreadsheets/LMS, or keep quick backups.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-Ensure the application has write access to the `exports/` folder. If the folder is read-only or on a restricted path, the export may fail.
-</div>
+**Caution:** Ensure the application has write access to the `exports/` folder. If the folder is read-only or on a restricted path, the export may fail.
 
 <a id="510-clearing-all-entries-clear"></a>
 ### 5.10 Clearing All Entries: `clear`
