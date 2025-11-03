@@ -22,6 +22,7 @@ Class Type
 Class TelegramUsername
 Class Session
 
+Class PersonAndSessionCounter
 Class I #FFFFFF
 }
 
@@ -33,7 +34,11 @@ AddressBook .up.|> ReadOnlyAddressBook
 ModelManager .up.|> Model
 Model .right.> ReadOnlyUserPrefs
 Model .left.> ReadOnlyAddressBook
+<<<<<<< HEAD
 Model .left.> ReadOnlyPersonAndSessionCounter
+=======
+ReadOnlyAddressBook .down.> ReadOnlyPersonAndSessionCounter
+>>>>>>> df42ef75 (Modify UML for PersonAndSessionCounter)
 ModelManager -left-> "1" AddressBook
 ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
@@ -59,5 +64,4 @@ Type -[hidden]right-> TelegramUsername
 ModelManager --> "~* filtered" Person
 AddressBook *--> "1" PersonAndSessionCounter
 PersonAndSessionCounter .up.|> ReadOnlyPersonAndSessionCounter
-Class PersonAndSessionCounter
 @enduml
