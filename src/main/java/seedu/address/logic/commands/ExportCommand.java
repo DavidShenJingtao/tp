@@ -152,11 +152,12 @@ public class ExportCommand extends Command {
         }
 
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8, options)) {
-            writer.write("Name,Telegram,Email,Type,Session");
+            writer.write("Name,Phone,Telegram,Email,Type,Session");
             writer.newLine();
             for (Person person : persons) {
                 writer.write(String.join(",",
                         toCsvField(person.getName().fullName),
+                        toCsvField(person.getPhone().value),
                         toCsvField(person.getTelegramUsername().map(Object::toString).orElse("")),
                         toCsvField(person.getEmail().value),
                         toCsvField(person.getType().toString()),
