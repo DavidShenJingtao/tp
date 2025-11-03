@@ -313,9 +313,7 @@ Examples:
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * Aliases: `del 2`, `rm n:Alice Tan` behave the same as `delete`.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-Deleting is irreversible unless you immediately use `undo` in the same session.
-</div>
+**Caution:** Deleting is irreversible unless you immediately use `undo` in the same session.
 
 Expected output: The result display confirms which entries were deleted (by index or name).
 
