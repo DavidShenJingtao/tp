@@ -428,7 +428,7 @@ Action | Format, Examples
 <a id="91-multi-session-assignment-for-tas"></a>
 ### 9.1 Multi‑session assignment for TAs
 - What: Allow a user to be associated with multiple sessions (e.g., `s:F1 s:F2`) or store a list of sessions.
-- Why: Many TAs can teach more than one session. Similarly a user can exist in multiple sessions -(one session for lab group and tutorial groups.
+- Why: Many TAs can teach more than one session. Similarly a user can exist in multiple sessions: one session for lab group and one session for tutorial group.
 - Status: Planned for a future release.
 
 <a id="92-role-based-listing-listrole"></a>
@@ -436,7 +436,6 @@ Action | Format, Examples
 - What: List people by role (e.g., `student`, `ta`, `instructor`, `staff`).
 - Why: Quickly find and contact specific groups, (e.g. contacting instructor)
 - Status: Planned for a future release.
-- Tip: Combine with `export` once available to share role‑specific lists.
 
 --------------------------------------------------------------------------------------------------------------------
 
