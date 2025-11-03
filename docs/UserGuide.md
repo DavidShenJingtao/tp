@@ -89,6 +89,12 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 - When either limit is reached, `add` will fail with a clear error message.
 - Importing a JSON data file that exceeds these limits will be rejected on startup.
 
+### Duplicate contacts
+
+- TAConnect allows only one contact per exact `NAME`. A duplicate is any new entry whose name matches an existing contact **with the same letter casing**.
+- Differences in email, phone, Telegram username, session, or tags do not matter once the names match exactly; the command will be rejected as a duplicate.
+- Names that differ only by letter casing (e.g., `alice tan` vs `Alice Tan`) are treated as different contacts.
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -107,6 +113,7 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL t/TYPE [u/TELEGRAM_USERNAME] [s/SESSI
 Notes:
 * `s/SESSION` must be provided when the Type is `student` or `ta`.
 * `s/SESSION` must be omitted when the Type is `instructor` or `staff`.
+* Trying to add a contact whose name exactly matches an existing one (same letter casing) will be rejected as a duplicate, even if the other fields differ.
 
 For convenience, a TA can also record telegram username, but it is an optional field.
 
