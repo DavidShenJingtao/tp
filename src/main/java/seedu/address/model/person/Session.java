@@ -14,7 +14,7 @@ public class Session {
     public static final String MESSAGE_CONSTRAINTS =
             "Sessions must be 1–2 uppercase letters, followed by 1–99 "
                     + "(leading zero allowed for 1–9), with an optional trailing uppercase letter "
-                    + "(e.g., G1, F01, T07, BA03, BD04, T07B).";
+                    + "(e.g., G1, F01, WD7, BA03B, BD44, T07B).";
 
     // 1–2 letters, then (1–9 with optional leading 0 OR 10–99), optional trailing letter
     public static final String VALIDATION_REGEX = "[A-Z]{1,2}(?:0?[1-9]|[1-9][0-9])(?:[A-Z])?";
@@ -33,9 +33,7 @@ public class Session {
     }
 
     /**
-     * Returns true if the given string is a valid session identifier.
-     * A valid session consists of 1–2 uppercase letters, followed by a number from 1–99
-     * (leading zero allowed for 1–9), and an optional trailing uppercase letter.
+     * Returns true if the given string is a valid session identifier (as provided in the User Guide).
      *
      * @param test String to validate.
      * @return True if the string matches the session format.

@@ -74,7 +74,9 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
   - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
   - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
   - domain is case-insensitive; stored in lowercase
-- Type and Session: Type must be one of the four inputs, **case-sensitive**: `student`, `ta`, `instructor`, and `staff`
+- Type and Session: 
+  - Type must be one of the four inputs, **case-sensitive**: `student`, `ta`, `instructor`, and `staff`
+  - `Session` format: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9), and an optional trailing uppercase letter (e.g., `G1`, `F01`, `T07`, `BA03`, `T07B`).
   - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
 - Telegram Username: Optional field, must adhere to:
   - 5 to 32 characters long
@@ -146,12 +148,17 @@ Shows a list of all persons who belong to the specified session.
 Format: `listsession SESSION`
 
 * Displays only the contacts whose session field matches the given `SESSION` value.
-* Sessions are case-sensitive and must match `[A-Z](?:[1-9][0-9]?)` (e.g., `F1`, `G2`, `T10`): one uppercase letter followed by 1–2 digits from 1 to 99, with no leading zeros.
+* Sessions must match the format **`[A-Z]{1,2}(?:0?[1-9]|[1-9][0-9])(?:[A-Z])?`**, meaning:
+    * 1–2 uppercase letters (e.g., `G`, `BA`, `T`),
+    * followed by a number from **1–99**, with an **optional leading zero** for 1–9 (e.g., `07`, `9`),
+    * and an **optional trailing uppercase letter** (e.g., `T07B`).
+* Examples of valid sessions: `G1`, `F01`, `T07`, `BA03`, `BD04`, `T07B`.
 * Contacts without a session (e.g., instructors or staff) will not appear in the result.
 * Useful for TAs who manage multiple tutorial or lab groups.
 
 Examples:
-* `listsession F20` — Lists all contacts in session F20.
+* `listsession F01` — Lists all contacts in session F01.
+* `listsession T07B` — Lists all contacts in session T07B.
 * `listsession G1` — Lists all contacts in session G1.
 
 ### Listing all sessions : `sessions`
