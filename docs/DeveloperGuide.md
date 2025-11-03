@@ -84,6 +84,12 @@ To keep inputs clean and predictable, the Model enforces the following field con
   - local-part: alphanumerics with [._+-] separators; cannot start/end with a separator; no consecutive dots
   - domain: contains at least one '.', labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
   - domain is case-insensitive and normalized to lowercase on storage
+- Session: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9),
+  and an optional trailing uppercase letter.  
+  Implemented via `[A-Z]{1,2}(?:0?[1-9]|[1-9][0-9])(?:[A-Z])?` in `seedu.address.model.person.Session`.  
+  The format aligns with standard NUS module session naming conventions (e.g., `T07`, `T07B`, `F01`, `G1`).  
+  Invalid inputs (e.g., `G00`, `BA100`, lowercase variants) trigger
+  `MESSAGE_INVALID_SESSION_FORMAT` with corrective examples.
 
 See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
 The `find` command accepts keywords using the same character set as `Name` and rejects digits or other symbols.
@@ -104,6 +110,43 @@ The `UI` component,
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
 * depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+
+#### Command history semantics
+
+- The command history is a linear list of previously **entered** commands.
+- The history cursor ranges over the *k* past commands plus one special **latest position**.
+- **Latest position (draft):**
+    - When the tutor first navigates away from latest, TAConnect saves the current input text as a **draft**.
+    - Navigating **Down** back to latest **restores the draft** exactly as it was before history navigation began.
+    - Edits made while viewing a recalled command **do not** overwrite the draft.
+    - After returning to latest, any new edits update the input normally; if the tutor navigates again, the updated text becomes the new draft.
+
+- **Navigation:**
+    - **Up** moves from latest → most recent command → … → oldest command (stops at oldest).
+    - **Down** moves toward newer commands and finally back to **latest**; at latest the **draft** is shown.
+
+- **History lifecycle**
+
+    - The history and cursor are **in-memory** and **not persisted** to disk; they reset on app restart.
+    - The **draft** is scoped to the **latest position** and is not saved to storage.
+
+- **History recording rules**
+
+    - When the tutor presses **Enter**, if the input contains any non-whitespace characters, the **exact text** is appended to history **before** parsing/execution.
+    - Therefore, **both successful and failed** commands are recorded.
+    - Inputs that are empty or whitespace-only are **not** recorded.
+
+- **Key bindings (UI mapping)**
+
+    - `Up Arrow` → “Recall previous” (move cursor older by 1).
+    - `Down Arrow` → “Next newer / latest (draft)” (move cursor newer by 1; at latest, show draft).
+
+- **Edge cases**
+
+    - If the tutor modifies the recalled command text **without executing**, those edits are **discarded** upon any navigation; the draft remains as originally captured at latest.
+    - Any **non-blank** command is recorded in history (even if parsing/execution fails). Whitespace-only inputs are not recorded.
+
+- *Related use cases: UC7, UC8, UC9.*
 
 ### Logic component
 
@@ -406,6 +449,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
+**Related rules for UC7, UC8 and UC9**: see [Command history semantics](#command-history-semantics).
+
 **Use case: UC7 – Recall the previous command**
 
 **MSS**
@@ -438,11 +483,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-1a. The current position is already at the latest.
+1a. The current position is already at the latest (the draft/origin command box).
   * 1a1. TAConnect does nothing, the command box remains unchanged.
 
     Use case ends.
 
+1b. No command history exists.
+  * 1b1. TAConnect does nothing, the command box remains unchanged.
+
+    Use case ends.
 
 **Use case: UC9 – Reuse a recalled command**
 
