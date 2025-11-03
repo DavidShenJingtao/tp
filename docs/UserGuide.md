@@ -380,6 +380,16 @@ Furthermore, certain edits can cause the TAConnect to behave in unexpected ways 
 
 You can navigate your previously entered commands using the **UP** and **DOWN** arrow keys, similar to a terminal.
 
+* **UP:** Shows the previous command in history.
+* **DOWN:** Shows the next command in history; if you reach the end, your current unfinished input (buffer) is restored.
+* **Duplicates & empty lines:** Empty inputs are not saved. Consecutive identical commands are stored only once.
+* **Edits while browsing history:** If you edit the text at any time, those edits are preserved when you return to the end (buffer).
+
+Examples:
+1. Type `list` → press Enter. Press ↑ → `list` appears.
+2. Type `find alex` → press Enter. Press ↑ twice → `find alex`, then `list`.
+3. Press ↑ to view `list`, type `l` to modify it, then press ↓ until the end → your unfinished text appears again (e.g., `l`).
+
 --------------------------------------------------------------------------------------------------------------------
 
 <a id="6-faq"></a>
@@ -443,13 +453,3 @@ Action | Format, Examples
 - Session: Group code for a tutorial/lab (e.g., `F1`, `G2`, `T10`).
 - Telegram username: Optional contact handle (5–32 chars; letters, digits, underscores; may start with `@`).
 - TLD (Top‑Level Domain): The last label in a domain (e.g., `.com`, `.sg`, `.edu`). Must be ≥ 2 characters in this app.
-
-* **UP:** Shows the previous command in history.
-* **DOWN:** Shows the next command in history; if you reach the end, your current unfinished input (buffer) is restored.
-* **Duplicates & empty lines:** Empty inputs are not saved. Consecutive identical commands are stored only once.
-* **Edits while browsing history:** If you edit the text at any time, those edits are preserved when you return to the end (buffer).
-
-Examples:
-1. Type `list` → press Enter. Press ↑ → `list` appears.
-2. Type `find alex` → press Enter. Press ↑ twice → `find alex`, then `list`.
-3. Press ↑ to view `list`, type `l` to modify it, then press ↓ until the end → your unfinished text appears again (e.g., `l`).
