@@ -145,11 +145,12 @@ The `Model` component,
 
 * stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
+* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` object.
+* restricts each `Person` to at most one `Session`; students and TAs must have one, while instructors and staff must have none.
 * treats two `Person` entries as duplicates if, and only if, their `Name` values are identical with the same letter casing. (eg. 'John Doe' and 'john doe' are not treated as duplicates) Any differences in phone, email, Telegram handle, session, or tags are ignored for duplicate detection.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It maintains a shared `Session` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to reuse a single `Session` object per unique session code, instead of each `Person` needing their own duplicated `Session` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
@@ -396,6 +397,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 1a1. TAConnect does nothing, the command box remains unchanged.
     
     Use case ends.
+
 1b. No command history exists.
   * 1b1. TAConnect does nothing, the command box remains unchanged.
 
@@ -449,13 +451,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1. Should work on any _mainstream OS_ as long as it has Java `17` installed.
 2. All unit and integration tests should pass before release, maintaining at least 75% test coverage.
 
+### Planned enhancements
+
+- Allow TAs to be assigned to multiple sessions simultaneously while keeping students restricted to one session. (Not implemented yet; requires data model and command updates.)
+
 ### Glossary
 
 * **Contact**: The user's name, email, type, session, and optionally a Telegram handle.
 * **Contact Type**: The category of a contact, i.e. student, tutor, course instructor, staff
 * **Mainstream OS**: Windows, Linux, Unix, Mac
 * **Session**: A period of lab or tutorial during which tutor is responsible for delivering the class.
-* **Tutor**: Teaching assistant in a NUS CS-coded course
+* **Tutor**: Teaching assistant in a NUS CS2040 course.
 * **UI (User interface)**: The visual and interactive components of TAConnect through which users issue commands and receive responses.
 
 --------------------------------------------------------------------------------------------------------------------
