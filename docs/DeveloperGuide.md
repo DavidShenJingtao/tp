@@ -201,8 +201,8 @@ display.
 `ExportCommand` resolves the output path (including directory creation) and serialises the currently filtered contacts to
 CSV using the header `Name,Phone,Telegram,Email,Type,Session`. Values are escaped to preserve commas and quotes. When a
 target file already exists and overwriting is disabled, the command raises a `CommandException` so the UI can show a
-clear failure message. The command is invoked by the **Export CSV** button, and each click creates a timestamped file in
-the `exports/` directory.
+clear failure message. The command can be run via the `export` keyword or the **Export CSV** button, with each invocation
+creating a timestamped file in the `exports/` directory.
 
 ### `undo` command
 `UndoCommand` coordinates with the `UndoHistory` utility (in `seedu.address.logic.undo`), which snapshots the address
@@ -615,14 +615,14 @@ testers are expected to do more *exploratory* testing.
 1. Prerequisites: Ensure the `exports` directory is writable. Delete any existing test files you plan to reuse.
 1. Test case (filtered export):<br>
    a. Run `find alex` (or any keyword that returns at least one contact).<br>
-   b. Click the **Export CSV** button.<br>
+   b. Run `export` (or click the **Export CSV** button).<br>
    Expected: A new file named `exports/contacts-<timestamp>.csv` is created containing only the contacts currently visible in the list panel.
 1. Test case (repeated export):<br>
-   a. With any non-empty list displayed, click **Export CSV** twice, waiting at least one second between clicks.<br>
-   Expected: Each click succeeds and produces a distinct timestamped file in `exports/`. If two exports occur within the same second, the second click fails with `Unable to export contacts: File already exists: ...`.
+   a. With any non-empty list displayed, invoke `export` twice (or click **Export CSV** twice), waiting at least one second between runs.<br>
+   Expected: Each invocation succeeds and produces a distinct timestamped file in `exports/`. If two exports occur within the same second, the second attempt fails with `Unable to export contacts: File already exists: ...`.
 1. Test case (empty list):<br>
    a. Run `find thiskeyworddoesnotexist` so that the filtered list is empty.<br>
-   b. Click **Export CSV**.<br>
+   b. Run `export`.<br>
    Expected: The attempt fails with `There are no contacts to export.` and no files are created.
 
 ### Undoing changes
