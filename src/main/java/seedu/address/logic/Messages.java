@@ -20,8 +20,8 @@ public class Messages {
                 "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_EMPTY_FIND_KEYWORD = "Keyword to find cannot be empty.";
     public static final String MESSAGE_INVALID_FIND_KEYWORD =
-            "Keyword to find is invalid! Use only letters, spaces, apostrophes (' ’ ʼ), hyphens (-), periods (.),"
-            + " or slashes (/).";
+            "Keyword to find is invalid! Use only letters (a-z, A-Z), spaces, apostrophes (' ’ ʼ), hyphens (-),"
+            + " periods (.), or slashes (/).";
     public static final String MESSAGE_FIND_NO_MATCH = "Oops, no one's name contains %1$s";
     public static final String MESSAGE_FIND_PERSONS_FOUND_OVERVIEW = "%1$d person%2$s found";
     public static final String MESSAGE_INVALID_SESSION_FORMAT = "Specified session has invalid format."

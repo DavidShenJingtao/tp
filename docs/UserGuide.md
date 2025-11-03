@@ -76,7 +76,7 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 
 ### Field Constraints
 
-- Name: Maximum of up to 500 characters. Allows letters (no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
+- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
 - Phone: Singapore numbers only — exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
 - Email: Must be of the form local-part@domain and adhere to:
   - one and only one '@', no spaces
@@ -201,7 +201,7 @@ Format: `find KEYWORD`
 * The search is case-insensitive. e.g `hans` will match `Hans`.
 * Partial matches are allowed. e.g. `Han` will match `Hans`.
 * Whitespace inside `KEYWORD` is preserved; `find alex david` searches for the exact substring `"alex david"` (including the space).
-* Allowed characters in `KEYWORD`: letters (no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: `find O’Connor`, `find Jean-Luc`, `find Rajesh S/O`.
+* Allowed characters in `KEYWORD`: ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: `find O’Connor`, `find Jean-Luc`, `find Rajesh S/O`.
 
 Examples:
 * `find John` returns `john` and `John Doe`

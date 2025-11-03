@@ -76,7 +76,7 @@ The sections below give more details of each component.
 To keep inputs clean and predictable, the Model enforces the following field constraints:
 
 - Phone (Singapore): exactly 8 digits (0–9). Implemented via `\d{8}` in `seedu.address.model.person.Phone`.
-- Name: letters (no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), slashes (/).
+- Name: ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), slashes (/).
   Enforced by regex in `seedu.address.model.person.Name` with a maximum length of 500.
 - Email: `local-part@domain` with pragmatic checks:
   - exactly one '@', no spaces
@@ -86,7 +86,7 @@ To keep inputs clean and predictable, the Model enforces the following field con
   - domain is case-insensitive and normalized to lowercase on storage
 
 See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
-The `find` command accepts keywords using the same character set as `Name` and rejects digits or other symbols.
+The `find` command accepts keywords using the same (ASCII‑only) character set as `Name` and rejects digits, Unicode letters, or other symbols.
 
 ### UI component
 
