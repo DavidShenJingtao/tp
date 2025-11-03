@@ -3,7 +3,7 @@ layout: page
 title: User Guide
 ---
 
-TAConnect is a **desktop app for teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAConnect can get your tutorial group management tasks done faster than traditional GUI apps.
+TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAConnect can get your tutorial group management tasks done faster than traditional GUI apps.
 
 * Table of Contents
 {:toc}
@@ -71,7 +71,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
   - one and only one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
   - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
-  - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (Top Level Domain, TLD) ≥ 2 characters
   - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
   - domain is case-insensitive; stored in lowercase
 - Type and Session: Type must be one of the four inputs, **case-sensitive**: `student`, `ta`, `instructor`, and `staff`
@@ -148,7 +148,7 @@ Format: `listsession SESSION`
 * Displays only the contacts whose session field matches the given `SESSION` value.
 * Sessions are case-sensitive and must match `[A-Z](?:[1-9][0-9]?)` (e.g., `F1`, `G2`, `T10`): one uppercase letter followed by 1–2 digits from 1 to 99, with no leading zeros.
 * Contacts without a session (e.g., instructors or staff) will not appear in the result.
-* Useful for TAs who manage multiple tutorial or lab groups.
+* Useful for CS2040 TAs who manage multiple tutorial or lab groups.
 
 Examples:
 * `listsession F20` — Lists all contacts in session F20.

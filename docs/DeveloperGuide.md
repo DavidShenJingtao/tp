@@ -151,7 +151,7 @@ The `Model` component,
 * treats two `Person` entries as duplicates if, and only if, their `Name` values are identical with the same letter casing. (eg. 'John Doe' and 'john doe' are not treated as duplicates) Any differences in phone, email, Telegram handle, session, or tags are ignored for duplicate detection.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It maintains a shared `Session` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to reuse a single `Session` object per unique session code, instead of each `Person` needing their own duplicated `Session` objects.<br>
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It maintains a shared `Session` list in the `AddressBook` model class, which `Person` references. This allows the `AddressBook` model to reuse a single `Session` object per unique session code, instead of each `Person` needing their own duplicated `Session` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
@@ -192,9 +192,10 @@ filtered list. The UI immediately reflects the narrowed list and the resulting `
 of contacts listed or that no contacts are assigned to the session.
 
 ### `sessions` command
-`SessionsCommand` queries the `AddressBook` for its set of unique `Session` objects, relying on the session counter that
-is maintained whenever contacts are added or removed. The command does not mutate state; instead it returns a summary
-message containing the total count and the textual representation of the session set for display.
+`SessionsCommand` queries the `AddressBook` model for its set of unique `Session` objects, relying on the
+`PersonAndSessionCounter` that is maintained whenever contacts are added or removed. The command does not mutate state;
+instead it returns a summary message containing the total count and the textual representation of the session set for
+display.
 
 ### `export` command
 `ExportCommand` resolves the output path (including directory creation) and serialises the currently filtered contacts to
@@ -204,9 +205,10 @@ clear failure message. The command is invoked by the **Export CSV** button, and 
 the `exports/` directory.
 
 ### `undo` command
-`UndoCommand` coordinates with the `UndoHistory` utility, which snapshots the address book whenever a mutating command
-completes. If a snapshot is available, it restores the previous state and resets the filtered list to show all contacts;
-otherwise it throws a `CommandException` with the “no command to undo” feedback so the user knows nothing was reverted.
+`UndoCommand` coordinates with the `UndoHistory` utility (in `seedu.address.logic.undo`), which snapshots the address
+book whenever a mutating command completes. If a snapshot is available, it restores the previous state and resets the
+filtered list to show all contacts; otherwise it throws a `CommandException` with the “no command to undo” feedback so
+the user knows nothing was reverted.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -226,13 +228,13 @@ otherwise it throws a `CommandException` with the “no command to undo” feedb
 
 **Target user profile**:
 
-* NUS tutors teaching CS mods who want to deal with the contacts of students, tutors and course instructors in a specific course
+* NUS CS2040 teaching assistants who need to manage the contacts of students, fellow TAs, and course instructors for that module
 * prefer desktop apps over other types
 * can type fast
 * prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: proposes an efficient way for TAs to add, modify and access _contact details_ of student, tutors, instructors for a specific course, which makes it more convenient to help students with learning, connect with other TAs and reach out to staff in case of unexpected situations.
+**Value proposition**: proposes an efficient way for CS2040 TAs to add, modify, and access _contact details_ of students, fellow TAs, and instructors for that module, making it easier to support learners, coordinate with other TAs, and reach out to staff when needed.
 
 ### User stories
 
@@ -240,23 +242,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
 | ----- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* *` | tutor                                      | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *` | tutor                                      | add new _contacts_ | keep the contact list updated with _contact details_ and _session_ |
-| `* * *` | tutor                                      | delete _contacts_ by _index_ or _name_ | remove _contacts_ from the contact list |
-| `* * *` | tutor                                      | search contact list by _name_ | locate details of _contacts_ by name without having to go through the entire list |
-| `* *` | tutor                                      | list all _sessions_ | get an overview of existing tutorial and lab groups |
-| `* *` | tutor                                      | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
-| `* * *` | tutor                                      | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
-| `* *` | tutor | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
+| `* *` | CS2040 TA                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
+| `* * *` | CS2040 TA                                   | add new _contacts_ | keep the contact list updated with _contact details_ and _session_ |
+| `* * *` | CS2040 TA                                   | delete _contacts_ by _index_ or _name_ | remove _contacts_ from the contact list |
+| `* * *` | CS2040 TA                                   | search contact list by _name_ | locate details of _contacts_ by name without having to go through the entire list |
+| `* *` | CS2040 TA                                   | list all _sessions_ | get an overview of existing tutorial and lab groups |
+| `* *` | CS2040 TA                                   | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
+| `* * *` | CS2040 TA                                   | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
+| `* *` | CS2040 TA | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `TAConnect` program and the **Actor** is the `tutor`, unless specified otherwise)
+(For all use cases below, the **System** is the `TAConnect` program and the **Actor** is the `TA`, unless specified otherwise)
 
 **Use case: UC1 - Add a new contact in the contact list**
 
 **MSS**
-1.  Tutor enters `add command` including details of a contact.
+1.  TA enters `add command` including details of a contact.
 2.  TAConnect parses the command input.
 3.  TAConnect validates that the command is correctly formatted and all required fields are correctly updated.
 4.  TAConnect adds the new contact in the contact list.
@@ -269,7 +271,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 3a. TAConnect detects an error in the command (invalid type or incorrect format).
   * 3a1. TAConnect shows an error message specifying the issue and correct format.
-  * 3a2. Tutor re-enters the command.
+  * 3a2. TA re-enters the command.
 
     Steps 3a1-3a2 are repeated until the type entered is correct.
 
@@ -294,9 +296,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case: UC2 - Delete a contact in the contact list**
 
 **MSS**
-1.  Tutor enters `list` to view the current contacts and their indexes.
+1.  TA enters `list` to view the current contacts and their indexes.
 2.  TAConnect shows the list of contacts with index numbers.
-3.  Tutor enters `delete INDEX` to remove the intended contact.
+3.  TA enters `delete INDEX` to remove the intended contact.
 4.  TAConnect validates that the `INDEX` refers to a contact in the displayed list.
 5.  TAConnect removes the contact from the contact list, saves the updated data, and confirms the deletion.
 
@@ -304,14 +306,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-3a. Tutor enters an `INDEX` that is not a positive integer.
+3a. TA enters an `INDEX` that is not a positive integer.
   * 3a1. TAConnect shows an error message describing the valid index format.
-  * 3a2. Tutor re-enters the command with a valid `INDEX`.
+  * 3a2. TA re-enters the command with a valid `INDEX`.
 
     Use case resumes from step 3.
 
 4a. The specified `INDEX` does not correspond to any contact currently displayed.
-  * 4a1. TAConnect informs the tutor that the index is invalid.
+  * 4a1. TAConnect informs the TA that the index is invalid.
 
     Use case resumes from step 3.
 
@@ -323,17 +325,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case: UC3 - Search contacts in the list by name**
 
 **MSS**
-1.  Tutor enters `find KEYWORD` to locate a contact.
+1.  TA enters `find KEYWORD` to locate a contact.
 2.  TAConnect parses the command and checks that at least one keyword is provided.
 3.  TAConnect filters the contact list to contacts whose names contain the keyword(s).
-4.  TAConnect displays the filtered list to the tutor.
-5.  Tutor uses the displayed contact details to reach out to the intended person.
+4.  TAConnect displays the filtered list to the TA.
+5.  TA uses the displayed contact details to reach out to the intended person.
 
     Use case ends.
 
 **Extensions**
 
-2a. Tutor omits the keyword or enters only whitespace.
+2a. TA omits the keyword or enters only whitespace.
   * 2a1. TAConnect shows an error message indicating that at least one keyword is required.
 
     Use case resumes from step 1.
@@ -343,8 +345,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-5a. Tutor wishes to refine the search.
-  * 5a1. Tutor enters another `find` command with different keyword(s).
+5a. TA wishes to refine the search.
+  * 5a1. TA enters another `find` command with different keyword(s).
 
     Use case resumes from step 1.
 
@@ -352,7 +354,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to list all users as well as their _contact types_ and _session_ for the particular course
+1.  TA requests to list all users as well as their _contact types_ and _session_ for the particular course
 2.  TAConnect shows a list of all users as well as their _contact types_ and _session_ for the particular course
 
     Use case ends.
@@ -367,18 +369,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor enters `listsession` command with a session identifier.
-2. TAConnect parses the command input and validates that the session identifier is correctly formatted.
-3. TAConnect filters the contact list to show all contacts belonging to the specified session.
-4. TAConnect displays the filtered list of contacts for the specified session.
+1. TA requests to view all student contacts belonging to a chosen session.
+2. TAConnect checks that the supplied session identifier is correctly formatted.
+3. TAConnect filters the contact list to show the contacts assigned to that session.
+4. TAConnect displays the filtered list of contacts.
 
     Use case ends.
 
 **Extensions**
 
-2a. TAConnect detects an invalid command syntax or missing/incorrect session format.
+2a. TAConnect detects an invalid request or missing/incorrect session format.
   * 2a1. TAConnect shows an error message specifying the issue and the correct format.
-  * 2a2. Tutor re-enters the command.
+  * 2a2. TA provides the session identifier again with the corrected format.
 
     Steps 2a1-2a2 are repeated until the data entered are correct.
 
@@ -399,10 +401,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor enters `sessions`.
-2. TAConnect parses the command (no arguments required).
-3. TAConnect retrieves all unique sessions from the model.
-4. TAConnect displays the number of sessions and the list of session codes.
+1. TA requests an overview of every session recorded in TAConnect.
+2. TAConnect gathers the set of unique session identifiers from the model.
+3. TAConnect reports the number of sessions and the list of their codes.
 
     Use case ends.
 
@@ -410,7 +411,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor requests to show the previous command.
+1. TA requests to show the previous command.
 2. TAConnect displays the previous command in the input area.
    
     Use case ends.
@@ -431,7 +432,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor requests to show the next newer command.
+1. TA requests to show the next newer command.
 2. TAConnect displays the next newer command in the input area.
 
     Use case ends.
@@ -443,13 +444,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
+1b. No command history exists.
+  * 1b1. TAConnect does nothing, the command box remains unchanged.
+
+    Use case ends.
+
 
 **Use case: UC9 – Reuse a recalled command**
 
 **MSS**
 
-1. Tutor edits it or left the command as-is.
-2. Tutor presses **Enter**.
+1. TA edits it or left the command as-is.
+2. TA presses **Enter**.
 2. TAConnect executes the shown command and displays the outcome.
 
     Use case ends.
@@ -458,18 +464,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Non-Functional Requirements
 
 **Performance requirements**
-1. Should execute core commands (i.e. `add`, `delete`, `find`) within 1 second under usual conditions.
-2. Should be able to handle up to 2500 users and 250 sessions without a noticeable sluggishness in performance for typical usage.
+1. Should execute core commands (i.e. `add`, `delete`, `find`) within 1 second during typical usage (see Glossary).
+2. Should be able to handle up to 2500 users and 250 sessions without noticeable sluggishness during typical usage.
 3. Should automatically save after each successful modification command (i.e. `add`, `delete`) without affecting UI responsiveness.
 
 **Usability requirements**
-1. A tutor with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1. A TA with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 2. A new user should be able to learn and perform basic commands within 10 minutes under the help of user guide.
 3. The user interface should provide consistent layout and feedback messages across all _mainstream OSes_.
 
 **Scalability requirements**
-1. The internal data structures (contact list) should efficiently support search and retrieval operations in O(n) time complexity.
-2. Should allow easy addition of new commands without modifying existing core logic.
+1. Should allow easy addition of new commands without modifying existing core logic.
 
 **Other requirements**
 1. Should work on any _mainstream OS_ as long as it has Java `17` installed.
@@ -482,10 +487,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Glossary
 
 * **Contact**: The user's name, email, type, session, and optionally a Telegram handle.
-* **Contact Type**: The category of a contact, i.e. student, tutor, course instructor, staff
+* **Contact Type**: The category of a contact, i.e. `student`, `ta`, `instructor`, or `staff`.
 * **Mainstream OS**: Windows, Linux, Unix, Mac
-* **Session**: A period of lab or tutorial during which tutor is responsible for delivering the class.
-* **Tutor**: Teaching assistant in a NUS CS2040 course.
+* **Session**: A period of lab or tutorial during which a TA is responsible for delivering the class. Students and TAs must belong to exactly one session; instructors and staff must not have a session.
+* **TA**: Teaching assistant in NUS CS2040 course (maps to the `ta` contact type in TAConnect).
+* **Typical usage**: Running TAConnect on a standard teaching laptop (≥8 GB RAM, SSD) with up to 2500 contacts and 250 sessions, issuing sequential commands without concurrent automation.
+* **I/O error**: An input/output failure when reading from or writing to storage (e.g., a file cannot be accessed).
+* **Filtered list**: The subset of contacts exposed via `Model#getFilteredPersonList()` after applying search or session filters; drives what the UI shows.
+* **Undo history**: The stack of previous address book snapshots maintained by `UndoHistory` so the `undo` command can restore earlier states.
 * **UI (User interface)**: The visual and interactive components of TAConnect through which users issue commands and receive responses.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -577,6 +586,15 @@ testers are expected to do more *exploratory* testing.
    1. Open `data/addressbook.json` in a text editor and replace its contents with invalid text (e.g. `not json`).
    1. Launch TAConnect.<br>
       Expected: A warning is logged that the data file could not be loaded; the UI starts with an empty contact list and a fresh `addressbook.json` will be written on exit.
+
+### Listing all contacts
+
+1. Test case: `list`<br>
+   Expected: The result display confirms that all contacts are shown and the list panel resets to the full contact list, clearing any active filters.
+1. Test case (after a filter):<br>
+   a. Run `find alex` to narrow the list.<br>
+   b. Run `list`.<br>
+   Expected: The list panel returns to the complete contact set and the status message reflects the total number of contacts.
 
 ### Listing contacts by session
 
