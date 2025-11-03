@@ -72,6 +72,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
   - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
   - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
   - domain is case-insensitive; stored in lowercase
 - Type and Session: Type must be one of the four inputs, **case-sensitive**: `student`, `ta`, `instructor`, and `staff`
   - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session

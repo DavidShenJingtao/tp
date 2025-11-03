@@ -77,7 +77,7 @@ To keep inputs clean and predictable, the Model enforces the following field con
   - exactly one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
   - local-part: alphanumerics with [._+-] separators; cannot start/end with a separator; no consecutive dots
-  - domain: labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - domain: contains at least one '.', labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
   - domain is case-insensitive and normalized to lowercase on storage
 
 See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
