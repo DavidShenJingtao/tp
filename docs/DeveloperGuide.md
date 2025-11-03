@@ -86,11 +86,11 @@ To keep inputs clean and predictable, the Model enforces the following field con
   - domain is case-insensitive and normalized to lowercase on storage
 
 - Session: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9),
-  and an optional trailing uppercase letter.  
-  Implemented via `[A-Z]{1,2}(?:0?[1-9]|[1-9][0-9])(?:[A-Z])?` in `seedu.address.model.person.Session`.  
-  The format aligns with standard NUS module session naming conventions (e.g., `T07`, `T07B`, `F01`, `G1`, `WD12B`).  
-  Invalid inputs (e.g., `G00`, `BA100`, lowercase variants) trigger
-  `MESSAGE_INVALID_SESSION_FORMAT` with corrective examples.
+  and an optional trailing uppercase letter.
+    - The format aligns with standard NUS module session naming conventions (e.g., `T07`, `T07B`, `F01`, `G1`, `WD12B`).
+    - Invalid inputs (e.g., `G00`, `BA100`, lowercase variants) trigger
+      `MESSAGE_INVALID_SESSION_FORMAT` with corrective examples.
+    - Note that `G01` and `G1` are treated as different sessions; users should consistently use one format (with or without leading zeros) to avoid confusion.
 
 - Type: Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
 
@@ -118,9 +118,9 @@ The `UI` component,
 #### Command history semantics
 
 - The command history is a linear list of previously **entered** commands.
-- The history cursor ranges over the *k* past commands plus one special **latest position**.
+- The history cursor ranges over all previously entered commands plus one special **latest position** that represents the current empty input.
 - **Latest position (draft):**
-    - When the tutor first navigates away from latest, TAConnect saves the current input text as a **draft**.
+    - When the tutor navigates away from latest, TAConnect saves the current input text as a **draft**.
     - Navigating **Down** back to latest **restores the draft** exactly as it was before history navigation began.
     - Edits made while viewing a recalled command **do not** overwrite the draft.
     - After returning to latest, any new edits update the input normally; if the tutor navigates again, the updated text becomes the new draft.
