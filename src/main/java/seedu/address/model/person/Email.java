@@ -21,8 +21,8 @@ public class Email {
             + "1) exactly one '@', no spaces; 2) total length ≤ 254;\n"
             + "3) local-part ≤ 64 using [A-Za-z0-9] with [._+-] as separators "
             + "(no leading/trailing separator, no consecutive dots);\n"
-            + "4) domain is labels separated by '.', each label starts/ends alphanumeric, "
-            + "hyphens allowed inside, final label ≥ 2 chars;\n"
+            + "4) domain contains at least one '.', labels start/end alphanumeric, hyphens allowed inside, "
+            + "final label (TLD) ≥ 2 chars;\n"
             + "5) domain is case-insensitive (stored lowercased).";
 
     // Regex parts per enforcement above

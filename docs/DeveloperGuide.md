@@ -2,14 +2,19 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-{:toc}
+## Table of Contents
+- [Acknowledgements](#acknowledgements)
+- [Setting up, getting started](#setting-up-getting-started)
+- [Design](#design)
+- [Implementation](#implementation)
+- [Documentation, logging, testing, configuration, dev-ops](#documentation-logging-testing-configuration-dev-ops)
+- [Appendix: Requirements](#appendix-requirements)
 
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+- Application based on [SE-EDU AB3](https://github.com/se-edu/addressbook-level3)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -36,7 +41,7 @@ Given below is a quick overview of main components and how they interact with ea
 
 **Main components of the architecture**
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
+**`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
 * At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
 * At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
@@ -71,26 +76,29 @@ The sections below give more details of each component.
 To keep inputs clean and predictable, the Model enforces the following field constraints:
 
 - Phone (Singapore): exactly 8 digits (0–9). Implemented via `\d{8}` in `seedu.address.model.person.Phone`.
-- Name: letters (no digits), spaces, apostrophes (' or ’), hyphens (-), periods (.), slashes (/). Enforced by regex in
-  `seedu.address.model.person.Name` with a max length of 500.
+- Name: ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), slashes (/).
+  Enforced by regex in `seedu.address.model.person.Name` with a maximum length of 500.
+- Session: one uppercase letter followed by 1–2 digits in 1–99 (no leading zeros). Enforced by `seedu.address.model.person.Session`
+  using the pattern `[A-Z](?:[1-9][0-9]?)`.
 - Email: `local-part@domain` with pragmatic checks:
   - exactly one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
   - local-part: alphanumerics with [._+-] separators; cannot start/end with a separator; no consecutive dots
-  - domain: labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - domain: contains at least one '.', labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
   - domain is case-insensitive and normalized to lowercase on storage
 
 See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
+The `find` command accepts keywords using the same (ASCII‑only) character set as `Name` and rejects digits, Unicode letters, or other symbols.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
+The **API** of this component is specified in [`Ui.java`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
 The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -101,7 +109,7 @@ The `UI` component,
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
+**API** : [`Logic.java`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
 
 Here's a (partial) class diagram of the `Logic` component:
 
@@ -131,7 +139,7 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
+**API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <img src="images/ModelClassDiagram.png" width="450" />
 
@@ -140,10 +148,12 @@ The `Model` component,
 
 * stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
+* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` object.
+* restricts each `Person` to at most one `Session`; students and TAs must have one, while instructors and staff must have none.
+* treats two `Person` entries as duplicates if, and only if, their `Name` values are identical with the same letter casing. (eg. 'John Doe' and 'john doe' are not treated as duplicates) Any differences in phone, email, Telegram handle, session, or tags are ignored for duplicate detection.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It maintains a shared `Session` list in the `AddressBook` model class, which `Person` references. This allows the `AddressBook` model to reuse a single `Session` object per unique session code, instead of each `Person` needing their own duplicated `Session` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
@@ -152,7 +162,7 @@ The `Model` component,
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
+**API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
 
 <img src="images/StorageClassDiagram.png" width="550" />
 
@@ -171,94 +181,36 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### \[Proposed\] Undo/redo feature
-
-#### Proposed Implementation
-
-The proposed undo/redo mechanism is facilitated by `VersionedAddressBook`. It extends `AddressBook` with an undo/redo history, stored internally as an `addressBookStateList` and `currentStatePointer`. Additionally, it implements the following operations:
-
-* `VersionedAddressBook#commit()` — Saves the current address book state in its history.
-* `VersionedAddressBook#undo()` — Restores the previous address book state from its history.
-* `VersionedAddressBook#redo()` — Restores a previously undone address book state from its history.
-
-These operations are exposed in the `Model` interface as `Model#commitAddressBook()`, `Model#undoAddressBook()` and `Model#redoAddressBook()` respectively.
-
-Given below is an example usage scenario and how the undo/redo mechanism behaves at each step.
-
-Step 1. The user launches the application for the first time. The `VersionedAddressBook` will be initialized with the initial address book state, and the `currentStatePointer` pointing to that single address book state.
-
-![UndoRedoState0](images/UndoRedoState0.png)
-
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
-
-![UndoRedoState1](images/UndoRedoState1.png)
-
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
-
-![UndoRedoState2](images/UndoRedoState2.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If a command fails its execution, it will not call `Model#commitAddressBook()`, so the address book state will not be saved into the `addressBookStateList`.
-
-</div>
-
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
-
-![UndoRedoState3](images/UndoRedoState3.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index 0, pointing to the initial AddressBook state, then there are no previous AddressBook states to restore. The `undo` command uses `Model#canUndoAddressBook()` to check if this is the case. If so, it will return an error to the user rather
-than attempting to perform the undo.
-
-</div>
-
-The following sequence diagram shows how an undo operation goes through the `Logic` component:
-
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Logic.png)
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</div>
-
-Similarly, how an undo operation goes through the `Model` component is shown below:
-
-![UndoSequenceDiagram](images/UndoSequenceDiagram-Model.png)
-
-The `redo` command does the opposite — it calls `Model#redoAddressBook()`, which shifts the `currentStatePointer` once to the right, pointing to the previously undone state, and restores the address book to that state.
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the `currentStatePointer` is at index `addressBookStateList.size() - 1`, pointing to the latest address book state, then there are no undone AddressBook states to restore. The `redo` command uses `Model#canRedoAddressBook()` to check if this is the case. If so, it will return an error to the user rather than attempting to perform the redo.
-
-</div>
-
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
-
-![UndoRedoState4](images/UndoRedoState4.png)
-
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
-
-![UndoRedoState5](images/UndoRedoState5.png)
-
 The following activity diagram summarizes what happens when a user executes a new command:
 
 <img src="images/CommitActivityDiagram.png" width="250" />
 
-#### Design considerations:
+Key flows for selected commands are outlined below.
 
-**Aspect: How undo & redo executes:**
+### `listsession` command
+`ListSessionCommand` builds a `SessionMatchPredicate` from the supplied session code and feeds it to
+`Model#updateFilteredPersonList`. Only contacts whose optional `Session` value equals the requested code remain in the
+filtered list. The UI immediately reflects the narrowed list and the resulting `CommandResult` reports either the number
+of contacts listed or that no contacts are assigned to the session.
 
-* **Alternative 1 (current choice):** Saves the entire address book.
-  * Pros: Easy to implement.
-  * Cons: May have performance issues in terms of memory usage.
+### `sessions` command
+`SessionsCommand` queries the `AddressBook` model for its set of unique `Session` objects, relying on the
+`PersonAndSessionCounter` that is maintained whenever contacts are added or removed. The command does not mutate state;
+instead it returns a summary message containing the total count and the textual representation of the session set for
+display.
 
-* **Alternative 2:** Individual command knows how to undo/redo by
-  itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
-  * Cons: We must ensure that the implementation of each individual command are correct.
+### `export` command
+`ExportCommand` resolves the output path (including directory creation) and serialises the currently filtered contacts to
+CSV using the header `Name,Phone,Telegram,Email,Type,Session`. Values are escaped to preserve commas and quotes. When a
+target file already exists and overwriting is disabled, the command raises a `CommandException` so the UI can show a
+clear failure message. The command can be run via the `export` keyword or the **Export CSV** button, with each invocation
+creating a timestamped file in the `exports/` directory.
 
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
+### `undo` command
+`UndoCommand` coordinates with the `UndoHistory` utility (in `seedu.address.logic.undo`), which snapshots the address
+book whenever a mutating command completes. If a snapshot is available, it restores the previous state and resets the
+filtered list to show all contacts; otherwise it throws a `CommandException` with the “no command to undo” feedback so
+the user knows nothing was reverted.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -278,13 +230,13 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* NUS tutors teaching CS mods who want to deal with the contacts of students, tutors and course instructors in a specific course
+* NUS CS2040 teaching assistants who need to manage the contacts of students, fellow TAs, and course instructors for that module
 * prefer desktop apps over other types
 * can type fast
 * prefers typing to mouse interactions
 * is reasonably comfortable using CLI apps
 
-**Value proposition**: proposes an efficient way for TAs to add, modify and access _contact details_ of student, tutors, instructors for a specific course, which makes it more convenient to help students with learning, connect with other TAs and reach out to staff in case of unexpected situations.
+**Value proposition**: proposes an efficient way for CS2040 TAs to add, modify, and access _contact details_ of students, fellow TAs, and instructors for that module, making it easier to support learners, coordinate with other TAs, and reach out to staff when needed.
 
 ### User stories
 
@@ -292,26 +244,23 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 | Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
 | ----- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* *` | tutor                                      | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *` | tutor                                      | add new _contacts_ | keep the contact list updated with _contact details_ and _session_ |
-| `* * *` | tutor                                      | delete _contacts_ by _contact ID_ | remove _contacts_ from the contact list in case they have  |
-| `* * *` | tutor                                      | search contact list by _name_ | locate details of _contacts_ by name without having to go through the entire list |
-| `* *` | tutor                                      | list all _sessions_ | get an overview of existing tutorial and lab groups |
-| `* *` | tutor                                      | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
-| `* * *` | tutor                                      | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
-| `* *` | tutor | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
-
-
-*{More to be added}*
+| `* *` | CS2040 TA                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
+| `* * *` | CS2040 TA                                   | add new _contacts_ | keep the contact list updated with _contact details_ and _session_ |
+| `* * *` | CS2040 TA                                   | delete _contacts_ by _index_ or _name_ | remove _contacts_ from the contact list |
+| `* * *` | CS2040 TA                                   | search contact list by _name_ | locate details of _contacts_ by name without having to go through the entire list |
+| `* *` | CS2040 TA                                   | list all _sessions_ | get an overview of existing tutorial and lab groups |
+| `* *` | CS2040 TA                                   | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
+| `* * *` | CS2040 TA                                   | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
+| `* *` | CS2040 TA | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
 
 ### Use cases
 
-(For all use cases below, the **System** is the `TAConnect` program and the **Actor** is the `tutor`, unless specified otherwise)
+(For all use cases below, the **System** is the `TAConnect` program and the **Actor** is the `TA`, unless specified otherwise)
 
 **Use case: UC1 - Add a new contact in the contact list**
 
 **MSS**
-1.  Tutor enters `add command` including details of a contact.
+1.  TA enters `add command` including details of a contact.
 2.  TAConnect parses the command input.
 3.  TAConnect validates that the command is correctly formatted and all required fields are correctly updated.
 4.  TAConnect adds the new contact in the contact list.
@@ -324,7 +273,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 3a. TAConnect detects an error in the command (invalid type or incorrect format).
   * 3a1. TAConnect shows an error message specifying the issue and correct format.
-  * 3a2. Tutor re-enters the command.
+  * 3a2. TA re-enters the command.
 
     Steps 3a1-3a2 are repeated until the type entered is correct.
 
@@ -349,9 +298,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case: UC2 - Delete a contact in the contact list**
 
 **MSS**
-1.  Tutor enters `list` to view the current contacts and their indexes.
+1.  TA enters `list` to view the current contacts and their indexes.
 2.  TAConnect shows the list of contacts with index numbers.
-3.  Tutor enters `delete INDEX` to remove the intended contact.
+3.  TA enters `delete INDEX` to remove the intended contact.
 4.  TAConnect validates that the `INDEX` refers to a contact in the displayed list.
 5.  TAConnect removes the contact from the contact list, saves the updated data, and confirms the deletion.
 
@@ -359,14 +308,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **Extensions**
 
-3a. Tutor enters an `INDEX` that is not a positive integer.
+3a. TA enters an `INDEX` that is not a positive integer.
   * 3a1. TAConnect shows an error message describing the valid index format.
-  * 3a2. Tutor re-enters the command with a valid `INDEX`.
+  * 3a2. TA re-enters the command with a valid `INDEX`.
 
     Use case resumes from step 3.
 
 4a. The specified `INDEX` does not correspond to any contact currently displayed.
-  * 4a1. TAConnect informs the tutor that the index is invalid.
+  * 4a1. TAConnect informs the TA that the index is invalid.
 
     Use case resumes from step 3.
 
@@ -378,17 +327,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Use case: UC3 - Search contacts in the list by name**
 
 **MSS**
-1.  Tutor enters `find KEYWORD` to locate a contact.
+1.  TA enters `find KEYWORD` to locate a contact.
 2.  TAConnect parses the command and checks that at least one keyword is provided.
 3.  TAConnect filters the contact list to contacts whose names contain the keyword(s).
-4.  TAConnect displays the filtered list to the tutor.
-5.  Tutor uses the displayed contact details to reach out to the intended person.
+4.  TAConnect displays the filtered list to the TA.
+5.  TA uses the displayed contact details to reach out to the intended person.
 
     Use case ends.
 
 **Extensions**
 
-2a. Tutor omits the keyword or enters only whitespace.
+2a. TA omits the keyword or enters only whitespace.
   * 2a1. TAConnect shows an error message indicating that at least one keyword is required.
 
     Use case resumes from step 1.
@@ -398,8 +347,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
-5a. Tutor wishes to refine the search.
-  * 5a1. Tutor enters another `find` command with different keyword(s).
+5a. TA wishes to refine the search.
+  * 5a1. TA enters another `find` command with different keyword(s).
 
     Use case resumes from step 1.
 
@@ -407,7 +356,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Tutor requests to list all users as well as their _contact types_ and _session_ for the particular course
+1.  TA requests to list all users as well as their _contact types_ and _session_ for the particular course
 2.  TAConnect shows a list of all users as well as their _contact types_ and _session_ for the particular course
 
     Use case ends.
@@ -422,18 +371,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor enters `listsession` command with a session identifier.
-2. TAConnect parses the command input and validates that the session identifier is correctly formatted.
-3. TAConnect filters the contact list to show all contacts belonging to the specified session.
-4. TAConnect displays the filtered list of contacts for the specified session.
+1. TA requests to view all student contacts belonging to a chosen session.
+2. TAConnect checks that the supplied session identifier is correctly formatted.
+3. TAConnect filters the contact list to show the contacts assigned to that session.
+4. TAConnect displays the filtered list of contacts.
 
     Use case ends.
 
 **Extensions**
 
-2a. TAConnect detects an invalid command syntax or missing/incorrect session format.
+2a. TAConnect detects an invalid request or missing/incorrect session format.
   * 2a1. TAConnect shows an error message specifying the issue and the correct format.
-  * 2a2. Tutor re-enters the command.
+  * 2a2. TA provides the session identifier again with the corrected format.
 
     Steps 2a1-2a2 are repeated until the data entered are correct.
 
@@ -454,10 +403,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor enters `sessions`.
-2. TAConnect parses the command (no arguments required).
-3. TAConnect retrieves all unique sessions from the model.
-4. TAConnect displays the number of sessions and the list of session codes.
+1. TA requests an overview of every session recorded in TAConnect.
+2. TAConnect gathers the set of unique session identifiers from the model.
+3. TAConnect reports the number of sessions and the list of their codes.
 
     Use case ends.
 
@@ -465,7 +413,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor requests to show the previous command.
+1. TA requests to show the previous command.
 2. TAConnect displays the previous command in the input area.
    
     Use case ends.
@@ -476,6 +424,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
   * 1a1. TAConnect does nothing, the command box remains unchanged.
     
     Use case ends.
+
 1b. No command history exists.
   * 1b1. TAConnect does nothing, the command box remains unchanged.
 
@@ -485,7 +434,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1. Tutor requests to show the next newer command.
+1. TA requests to show the next newer command.
 2. TAConnect displays the next newer command in the input area.
 
     Use case ends.
@@ -497,13 +446,18 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case ends.
 
+1b. No command history exists.
+  * 1b1. TAConnect does nothing, the command box remains unchanged.
+
+    Use case ends.
+
 
 **Use case: UC9 – Reuse a recalled command**
 
 **MSS**
 
-1. Tutor edits it or left the command as-is.
-2. Tutor presses **Enter**.
+1. TA edits it or left the command as-is.
+2. TA presses **Enter**.
 2. TAConnect executes the shown command and displays the outcome.
 
     Use case ends.
@@ -512,30 +466,37 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Non-Functional Requirements
 
 **Performance requirements**
-1. Should execute core commands (i.e. `add`, `delete`, `find`) within 1 second under usual conditions.
-2. Should be able to handle up to 2500 users and 250 sessions without a noticeable sluggishness in performance for typical usage.
+1. Should execute core commands (i.e. `add`, `delete`, `find`) within 1 second during typical usage (see Glossary).
+2. Should be able to handle up to 2500 users and 250 sessions without noticeable sluggishness during typical usage.
 3. Should automatically save after each successful modification command (i.e. `add`, `delete`) without affecting UI responsiveness.
 
 **Usability requirements**
-1. A tutor with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
+1. A TA with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 2. A new user should be able to learn and perform basic commands within 10 minutes under the help of user guide.
 3. The user interface should provide consistent layout and feedback messages across all _mainstream OSes_.
 
 **Scalability requirements**
-1. The internal data structures (contact list) should efficiently support search and retrieval operations in O(n) time complexity.
-2. Should allow easy addition of new commands without modifying existing core logic.
+1. Should allow easy addition of new commands without modifying existing core logic.
 
 **Other requirements**
 1. Should work on any _mainstream OS_ as long as it has Java `17` installed.
 2. All unit and integration tests should pass before release, maintaining at least 75% test coverage.
 
+### Planned enhancements
+
+- Allow TAs to be assigned to multiple sessions simultaneously while keeping students restricted to one session. (Not implemented yet; requires data model and command updates.)
+
 ### Glossary
 
 * **Contact**: The user's name, email, type, session, and optionally a Telegram handle.
-* **Contact Type**: The category of a contact, i.e. student, tutor, course instructor, staff
+* **Contact Type**: The category of a contact, i.e. `student`, `ta`, `instructor`, or `staff`.
 * **Mainstream OS**: Windows, Linux, Unix, Mac
-* **Session**: A period of lab or tutorial during which tutor is responsible for delivering the class.
-* **Tutor**: Teaching assistant in a NUS CS-coded course
+* **Session**: A period of lab or tutorial during which a TA is responsible for delivering the class. Students and TAs must belong to exactly one session; instructors and staff must not have a session.
+* **TA**: Teaching assistant in NUS CS2040 course (maps to the `ta` contact type in TAConnect).
+* **Typical usage**: Running TAConnect on a standard teaching laptop (≥8 GB RAM, SSD) with up to 2500 contacts and 250 sessions, issuing sequential commands without concurrent automation.
+* **I/O error**: An input/output failure when reading from or writing to storage (e.g., a file cannot be accessed).
+* **Filtered list**: The subset of contacts exposed via `Model#getFilteredPersonList()` after applying search or session filters; drives what the UI shows.
+* **Undo history**: The stack of previous address book snapshots maintained by `UndoHistory` so the `undo` command can restore earlier states.
 * **UI (User interface)**: The visual and interactive components of TAConnect through which users issue commands and receive responses.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -564,8 +525,6 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
-
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
@@ -581,12 +540,100 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+### Adding a person
+
+1. Test case (student with session):<br>
+   `add n:Imran Aziz p:81234567 e:imran@example.com t:student s:F5`<br>
+   Expected: New contact appears at the bottom of the list with the supplied details. Status message confirms the addition.
+1. Test case (duplicate name):<br>
+   Repeat the previous command.<br>
+   Expected: Command fails with a duplicate-person error because the same name already exists.
+1. Test case (missing session for student):<br>
+   `add n:Tessa Lim p:82345678 e:tessa@example.com t:student`<br>
+   Expected: Command fails with a validation message stating that students require a session.
+
+### Finding persons by name
+
+1. Test case (single keyword):<br>
+   `find alex`<br>
+   Expected: Only contacts whose names contain “alex” (case-insensitive) remain visible. Status message shows the number of matches.
+1. Test case (multiple keywords):<br>
+   `find alex bernice`<br>
+   Expected: Only contacts whose names contain **both** “alex” and “bernice” (case-insensitive) remain.
+1. Test case (empty keyword):<br>
+   `find ` (trailing space)<br>
+   Expected: Command fails with `Keyword to find cannot be empty.` and the list remains unchanged.
+
+### Clearing all contacts
+
+1. Test case (clear when list is non-empty):<br>
+   `clear`<br>
+   Expected: All contacts are removed and status message confirms the clear action.
+1. Test case (clear when list is already empty):<br>
+   Run `clear` again.<br>
+   Expected: Command succeeds with the same confirmation message and the list stays empty.
 
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+1. Missing data file
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Exit TAConnect.
+   1. Navigate to the `data` directory and delete `addressbook.json`.
+   1. Launch TAConnect.<br>
+      Expected: The app recreates `addressbook.json` populated with the sample data set and the UI lists the sample contacts.
 
-1. _{ more test cases …​ }_
+1. Corrupted data file
+
+   1. Exit TAConnect.
+   1. Open `data/addressbook.json` in a text editor and replace its contents with invalid text (e.g. `not json`).
+   1. Launch TAConnect.<br>
+      Expected: A warning is logged that the data file could not be loaded; the UI starts with an empty contact list and a fresh `addressbook.json` will be written on exit.
+
+### Listing all contacts
+
+1. Test case: `list`<br>
+   Expected: The result display confirms that all contacts are shown and the list panel resets to the full contact list, clearing any active filters.
+1. Test case (after a filter):<br>
+   a. Run `find alex` to narrow the list.<br>
+   b. Run `list`.<br>
+   Expected: The list panel returns to the complete contact set and the status message reflects the total number of contacts.
+
+### Listing contacts by session
+
+1. Prerequisites: Ensure the data set contains at least one contact in session `G1` (the bundled sample data does).
+1. Test case: `listsession G1`<br>
+   Expected: Result display shows a message of the form `X persons listed!` (where `X` is the number of matches). The person list panel shows only contacts whose session is `G1`.
+1. Test case: `listsession Z9`<br>
+   Expected: Result display shows `Specified session Z9 does not exist.`. The list remains unchanged (or empty if no contacts were previously shown).
+
+### Listing all sessions
+
+1. Test case: `sessions`<br>
+   Expected: Result display shows `N sessions found in TAConnect. Here is the list: [...]` with every distinct session code.
+1. Optional: Add a contact with a new session (e.g. `add ... s:H5`), run `sessions` again, and confirm the new session code appears in the output.
+
+### Exporting contacts
+
+1. Prerequisites: Ensure the `exports` directory is writable. Delete any existing test files you plan to reuse.
+1. Test case (filtered export):<br>
+   a. Run `find alex` (or any keyword that returns at least one contact).<br>
+   b. Run `export` (or click the **Export CSV** button).<br>
+   Expected: A new file named `exports/contacts-<timestamp>.csv` is created containing only the contacts currently visible in the list panel.
+1. Test case (repeated export):<br>
+   a. With any non-empty list displayed, invoke `export` twice (or click **Export CSV** twice), waiting at least one second between runs.<br>
+   Expected: Each invocation succeeds and produces a distinct timestamped file in `exports/`. If two exports occur within the same second, the second attempt fails with `Unable to export contacts: File already exists: ...`.
+1. Test case (empty list):<br>
+   a. Run `find thiskeyworddoesnotexist` so that the filtered list is empty.<br>
+   b. Run `export`.<br>
+   Expected: The attempt fails with `There are no contacts to export.` and no files are created.
+
+### Undoing changes
+
+1. Test case (undo after add):<br>
+   a. Run `add n:Test User p:81234567 e:testuser@example.com t:student s:G9`.<br>
+   b. Confirm the new contact appears in the list.<br>
+   c. Run `undo`.<br>
+   Expected: Result display shows a success message such as `Undo successful (reverted: add)` and the contact disappears from the list.
+1. Test case (nothing to undo):<br>
+   a. Immediately run `undo` again.<br>
+   Expected: Command fails with `There is no command to undo.` and no data changes.

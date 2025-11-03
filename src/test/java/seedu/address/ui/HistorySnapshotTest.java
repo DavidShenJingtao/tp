@@ -15,16 +15,16 @@ public class HistorySnapshotTest {
     @Test
     public void navigation_basicPrevNext() {
         HistorySnapshot s = new HistorySnapshot(
-                Arrays.asList("add n/A", "list", "find alex"), "a");
+                Arrays.asList("add n:A", "list", "find alex"), "a");
 
         // Start at buffer; UP should give last command
         assertEquals("find alex", s.previous());
         // Another UP
         assertEquals("list", s.previous());
         // Another UP
-        assertEquals("add n/A", s.previous());
+        assertEquals("add n:A", s.previous());
         // No more previous; stays at first
-        assertEquals("add n/A", s.previous());
+        assertEquals("add n:A", s.previous());
 
         // DOWN back through history
         assertEquals("list", s.next());

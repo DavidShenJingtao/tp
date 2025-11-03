@@ -15,7 +15,9 @@ import seedu.address.model.person.NameContainsKeywordsPredicate;
  */
 public class FindCommandParser implements Parser<FindCommand> {
 
-    private static final Pattern VALID_KEYWORD_PATTERN = Pattern.compile("[\\p{Alnum} .'-]+");
+    // Allow ASCII letters (no digits), spaces, apostrophes (' ’ ʼ), hyphens (-), periods (.), and slashes (/)
+    private static final Pattern VALID_KEYWORD_PATTERN =
+            Pattern.compile("[-A-Za-z .'/\\u2018\\u2019\\u02BC/]+");
 
     /**
      * Parses the given {@code String} of arguments in the context of the FindCommand

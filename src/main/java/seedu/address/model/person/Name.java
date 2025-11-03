@@ -15,12 +15,12 @@ public class Name {
      * to prevent blank inputs.
      */
     public static final String VALIDATION_REGEX =
-            "[-\\p{L}'\\u2019./][-\\p{L}'\\u2019./ ]*";
+            "[-A-Za-z'\\u2018\\u2019\\u02BC./][-A-Za-z'\\u2018\\u2019\\u02BC./ ]*";
     public static final int MAX_NAME_LENGTH = 500;
 
     public static final String MESSAGE_CONSTRAINTS =
-        "Names can contain letters, spaces, apostrophes (' or \u2019), hyphens (-),\n"
-        + "periods (.), and slashes (/). They must not be blank and must be at most "
+        "Names can contain letters (a-z, A-Z), spaces, apostrophes (' or \u2019), hyphens (-),\n"
+        + "periods (.) and slashes (/). They must not be blank and must be at most "
         + MAX_NAME_LENGTH + " characters.";
 
     public final String fullName;

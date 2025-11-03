@@ -57,9 +57,9 @@ public class ExportCommandTest {
         assertTrue(Files.exists(targetFile));
         List<String> lines = Files.readAllLines(targetFile);
         assertEquals(List.of(
-                "Name,Telegram,Email,Type,Session",
-                "\"Alice Pauline\",\"@alice123\",\"alice@example.com\",\"student\",\"G1\"",
-                "\"Bob Brown\",\"\",\"bob@example.com\",\"student\",\"G2\""), lines);
+                "Name,Phone,Telegram,Email,Type,Session",
+                "\"Alice Pauline\",\"85355255\",\"@alice123\",\"alice@example.com\",\"student\",\"G1\"",
+                "\"Bob Brown\",\"85355255\",\"\",\"bob@example.com\",\"student\",\"G2\""), lines);
         assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, 2, targetFile.toAbsolutePath()),
                 result.getFeedbackToUser());
     }
@@ -145,9 +145,9 @@ public class ExportCommandTest {
         assertEquals(String.format(ExportCommand.MESSAGE_SUCCESS, 2, targetFile.toAbsolutePath()),
                 result.getFeedbackToUser());
         assertEquals(List.of(
-                "Name,Telegram,Email,Type,Session",
-                "\"Alice Pauline\",\"@alice123\",\"alice@example.com\",\"student\",\"G1\"",
-                "\"Bob Brown\",\"\",\"bob@example.com\",\"student\",\"G2\""), lines);
+                "Name,Phone,Telegram,Email,Type,Session",
+                "\"Alice Pauline\",\"85355255\",\"@alice123\",\"alice@example.com\",\"student\",\"G1\"",
+                "\"Bob Brown\",\"85355255\",\"\",\"bob@example.com\",\"student\",\"G2\""), lines);
     }
 
     @Test
