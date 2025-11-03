@@ -1,11 +1,10 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteCommand.Selector;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -35,7 +34,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         parseNames(argMultimap.getAllValues(PREFIX_NAME), selectors);
 
         if (selectors.isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, USAGE));
+            throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         return new DeleteCommand(selectors);
@@ -56,7 +55,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
             if (token.contains("-")) {
                 String[] parts = token.split("-");
                 if (parts.length != 2 || parts[0].isBlank() || parts[1].isBlank()) {
-                    throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, USAGE));
+                    throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
                 }
                 Index start;
                 Index end;
@@ -64,10 +63,10 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                     start = ParserUtil.parseIndex(parts[0]);
                     end = ParserUtil.parseIndex(parts[1]);
                 } catch (ParseException pe) {
-                    throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, USAGE), pe);
+                    throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, pe);
                 }
                 if (start.getOneBased() > end.getOneBased()) {
-                    throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, USAGE));
+                    throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
                 }
                 for (int i = start.getOneBased(); i <= end.getOneBased(); i++) {
                     selectors.add(Selector.fromIndex(Index.fromOneBased(i)));
@@ -79,7 +78,7 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
                 Index index = ParserUtil.parseIndex(token);
                 selectors.add(Selector.fromIndex(index));
             } catch (ParseException pe) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, USAGE), pe);
+                throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, pe);
             }
         }
     }
@@ -88,13 +87,13 @@ public class DeleteCommandParser implements Parser<DeleteCommand> {
         for (String rawName : nameValues) {
             String trimmedName = rawName.trim();
             if (trimmedName.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, USAGE));
+                throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
             try {
                 Name name = ParserUtil.parseName(trimmedName);
                 selectors.add(Selector.fromName(name));
             } catch (ParseException pe) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, USAGE), pe);
+                throw new ParseException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX, pe);
             }
         }
     }

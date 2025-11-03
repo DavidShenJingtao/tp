@@ -68,7 +68,7 @@ public class AddCommandTest {
         Person validStudent = new PersonBuilder()
                 .withName("Alice")
                 .withPhone("98765432")
-                .withEmail("alice@example.com")
+                .withEmail("newalice@example.com")
                 .withType("student")
                 .withSession("L1")
                 .build();

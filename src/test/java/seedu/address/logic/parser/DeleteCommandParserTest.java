@@ -1,6 +1,5 @@
 package seedu.address.logic.parser;
 
-import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -10,6 +9,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.DeleteCommand;
 import seedu.address.logic.commands.DeleteCommand.Selector;
 import seedu.address.model.person.Person;
@@ -69,8 +69,7 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidRanges_throwsParseException() {
-        String expected = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                DeleteCommand.MESSAGE_USAGE.replace("n/", "n:"));
+        String expected = Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
         // inverted
         assertParseFailure(parser, " 5-2", expected);
         // zero start
@@ -118,20 +117,16 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidIndex_throwsParseException() {
-        assertParseFailure(parser, " a", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                DeleteCommand.MESSAGE_USAGE.replace("n/", "n:")));
+        assertParseFailure(parser, " a", Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
     public void parse_emptyName_throwsParseException() {
-        assertParseFailure(parser, " n:   ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        DeleteCommand.MESSAGE_USAGE.replace("n/", "n:")));
+        assertParseFailure(parser, " n:   ", Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
     public void parse_emptyArgs_throwsParseException() {
-        assertParseFailure(parser, "   ", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                DeleteCommand.MESSAGE_USAGE.replace("n/", "n:")));
+        assertParseFailure(parser, "   ", Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 }

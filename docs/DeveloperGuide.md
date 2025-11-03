@@ -78,20 +78,22 @@ To keep inputs clean and predictable, the Model enforces the following field con
 - Phone (Singapore): exactly 8 digits (0–9). Implemented via `\d{8}` in `seedu.address.model.person.Phone`.
 - Name: ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), slashes (/).
   Enforced by regex in `seedu.address.model.person.Name` with a maximum length of 500.
-- Session: one uppercase letter followed by 1–2 digits in 1–99 (no leading zeros). Enforced by `seedu.address.model.person.Session`
-  using the pattern `[A-Z](?:[1-9][0-9]?)`.
 - Email: `local-part@domain` with pragmatic checks:
   - exactly one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
   - local-part: alphanumerics with [._+-] separators; cannot start/end with a separator; no consecutive dots
-  - domain: contains at least one '.', labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - domain: contains at least one '.', labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
   - domain is case-insensitive and normalized to lowercase on storage
+
 - Session: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9),
   and an optional trailing uppercase letter.  
   Implemented via `[A-Z]{1,2}(?:0?[1-9]|[1-9][0-9])(?:[A-Z])?` in `seedu.address.model.person.Session`.  
   The format aligns with standard NUS module session naming conventions (e.g., `T07`, `T07B`, `F01`, `G1`, `WD12B`).  
   Invalid inputs (e.g., `G00`, `BA100`, lowercase variants) trigger
   `MESSAGE_INVALID_SESSION_FORMAT` with corrective examples.
+
+- Type: Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
+
 
 See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
 The `find` command accepts keywords using the same (ASCII‑only) character set as `Name` and rejects digits, Unicode letters, or other symbols.
@@ -534,7 +536,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Glossary
 
 * **Contact**: The user's name, email, type, session, and optionally a Telegram handle.
-* **Contact Type**: The category of a contact, i.e. `student`, `ta`, `instructor`, or `staff`.
+* **Contact Type**: The category of a contact, i.e. `student`, `ta`, `instructor`, or `staff`, which is case-insensitive. 
 * **Mainstream OS**: Windows, Linux, Unix, Mac
 * **Session**: A period of lab or tutorial during which a TA is responsible for delivering the class. Students and TAs must belong to exactly one session; instructors and staff must not have a session.
 * **TA**: Teaching assistant in NUS CS2040 course (maps to the `ta` contact type in TAConnect).
