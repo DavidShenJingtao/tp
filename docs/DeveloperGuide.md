@@ -182,7 +182,30 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 <img src="images/CommitActivityDiagram.png" width="250" />
 
-TBC
+Key flows for selected commands are outlined below.
+
+### `listsession` command
+`ListSessionCommand` builds a `SessionMatchPredicate` from the supplied session code and feeds it to
+`Model#updateFilteredPersonList`. Only contacts whose optional `Session` value equals the requested code remain in the
+filtered list. The UI immediately reflects the narrowed list and the resulting `CommandResult` reports either the number
+of contacts listed or that no contacts are assigned to the session.
+
+### `sessions` command
+`SessionsCommand` queries the `AddressBook` for its set of unique `Session` objects, relying on the session counter that
+is maintained whenever contacts are added or removed. The command does not mutate state; instead it returns a summary
+message containing the total count and the textual representation of the session set for display.
+
+### `export` command
+`ExportCommand` resolves the output path (including directory creation) and serialises the currently filtered contacts to
+CSV using the header `Name,Phone,Telegram,Email,Type,Session`. Values are escaped to preserve commas and quotes. When a
+target file already exists and overwriting is disabled, the command raises a `CommandException` so the UI can show a
+clear failure message. The command is invoked by the **Export CSV** button, and each click creates a timestamped file in
+the `exports/` directory.
+
+### `undo` command
+`UndoCommand` coordinates with the `UndoHistory` utility, which snapshots the address book whenever a mutating command
+completes. If a snapshot is available, it restores the previous state and resets the filtered list to show all contacts;
+otherwise it throws a `CommandException` with the “no command to undo” feedback so the user knows nothing was reverted.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -505,8 +528,91 @@ testers are expected to do more *exploratory* testing.
    1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
+### Adding a person
+
+1. Test case (student with session):<br>
+   `add n/Imran Aziz p/81234567 e/imran@example.com t/student s/F5`<br>
+   Expected: New contact appears at the bottom of the list with the supplied details. Status message confirms the addition.
+1. Test case (duplicate name):<br>
+   Repeat the previous command.<br>
+   Expected: Command fails with a duplicate-person error because the same name already exists.
+1. Test case (missing session for student):<br>
+   `add n/Tessa Lim p/82345678 e/tessa@example.com t/student`<br>
+   Expected: Command fails with a validation message stating that students require a session.
+
+### Finding persons by name
+
+1. Test case (single keyword):<br>
+   `find alex`<br>
+   Expected: Only contacts whose names contain “alex” (case-insensitive) remain visible. Status message shows the number of matches.
+1. Test case (multiple keywords):<br>
+   `find alex bernice`<br>
+   Expected: Only contacts whose names contain **both** “alex” and “bernice” (case-insensitive) remain.
+1. Test case (empty keyword):<br>
+   `find ` (trailing space)<br>
+   Expected: Command fails with `Keyword to find cannot be empty.` and the list remains unchanged.
+
+### Clearing all contacts
+
+1. Test case (clear when list is non-empty):<br>
+   `clear`<br>
+   Expected: All contacts are removed and status message confirms the clear action.
+1. Test case (clear when list is already empty):<br>
+   Run `clear` again.<br>
+   Expected: Command succeeds with the same confirmation message and the list stays empty.
+
 ### Saving data
 
-1. Dealing with missing/corrupted data files
+1. Missing data file
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+   1. Exit TAConnect.
+   1. Navigate to the `data` directory and delete `addressbook.json`.
+   1. Launch TAConnect.<br>
+      Expected: The app recreates `addressbook.json` populated with the sample data set and the UI lists the sample contacts.
+
+1. Corrupted data file
+
+   1. Exit TAConnect.
+   1. Open `data/addressbook.json` in a text editor and replace its contents with invalid text (e.g. `not json`).
+   1. Launch TAConnect.<br>
+      Expected: A warning is logged that the data file could not be loaded; the UI starts with an empty contact list and a fresh `addressbook.json` will be written on exit.
+
+### Listing contacts by session
+
+1. Prerequisites: Ensure the data set contains at least one contact in session `G1` (the bundled sample data does).
+1. Test case: `listsession G1`<br>
+   Expected: Result display shows a message of the form `X persons listed!` (where `X` is the number of matches). The person list panel shows only contacts whose session is `G1`.
+1. Test case: `listsession Z9`<br>
+   Expected: Result display shows `Specified session Z9 does not exist.`. The list remains unchanged (or empty if no contacts were previously shown).
+
+### Listing all sessions
+
+1. Test case: `sessions`<br>
+   Expected: Result display shows `N sessions found in TAConnect. Here is the list: [...]` with every distinct session code.
+1. Optional: Add a contact with a new session (e.g. `add ... s=H5`), run `sessions` again, and confirm the new session code appears in the output.
+
+### Exporting contacts
+
+1. Prerequisites: Ensure the `exports` directory is writable. Delete any existing test files you plan to reuse.
+1. Test case (filtered export):<br>
+   a. Run `find alex` (or any keyword that returns at least one contact).<br>
+   b. Click the **Export CSV** button.<br>
+   Expected: A new file named `exports/contacts-<timestamp>.csv` is created containing only the contacts currently visible in the list panel.
+1. Test case (repeated export):<br>
+   a. With any non-empty list displayed, click **Export CSV** twice, waiting at least one second between clicks.<br>
+   Expected: Each click succeeds and produces a distinct timestamped file in `exports/`. If two exports occur within the same second, the second click fails with `Unable to export contacts: File already exists: ...`.
+1. Test case (empty list):<br>
+   a. Run `find thiskeyworddoesnotexist` so that the filtered list is empty.<br>
+   b. Click **Export CSV**.<br>
+   Expected: The attempt fails with `There are no contacts to export.` and no files are created.
+
+### Undoing changes
+
+1. Test case (undo after add):<br>
+   a. Run `add n/Test User p/81234567 e=testuser@example.com t=student s=G9`.<br>
+   b. Confirm the new contact appears in the list.<br>
+   c. Run `undo`.<br>
+   Expected: Result display shows a success message such as `Undo successful (reverted: add)` and the contact disappears from the list.
+1. Test case (nothing to undo):<br>
+   a. Immediately run `undo` again.<br>
+   Expected: Command fails with `There is no command to undo.` and no data changes.
