@@ -1,25 +1,72 @@
----
-layout: page
-title: User Guide
----
+<a id="1-overview"></a>
+## 1. Overview
 
 TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAConnect can get your tutorial group management tasks done faster than traditional GUI apps.
 
-* Table of Contents
-{:toc}
+<a id="2-table-of-contents"></a>
+## 2. Table of contents
+
+- [1. Overview](#1-overview)
+- [2. Table of contents](#2-table-of-contents)
+- [3. Who this app is for](#3-who-this-app-is-for)
+  - [3.1 How TAConnect Helps](#31-how-taconnect-helps)
+  - [3.2 Assumptions and prior knowledge](#32-assumptions-and-prior-knowledge)
+- [4. Quick Start](#4-quick-start)
+  - [4.1 Install](#41-install)
+  - [4.2 Download and launch](#42-download-and-launch)
+  - [4.3 UI tour](#43-ui-tour)
+  - [4.4 Try the CLI](#44-try-the-cli)
+- [5. Features](#features)
+  - [5.1 Viewing Help: help](#51-viewing-help-help)
+  - [5.2 Adding a person: add](#52-adding-a-person-add)
+    - [Field Constraints](#field-constraints)
+    - [Data Limits](#data-limits)
+    - [Duplicate contacts](#duplicate-contacts)
+  - [5.3 Listing all contacts: list](#53-listing-all-contacts--list)
+  - [5.4 Listing all sessions: sessions](#54-listing-all-sessions--sessions)
+  - [5.5 Listing contacts by session: listsession](#55-listing-contacts-by-session--listsession)
+  - [5.6 Locating Persons by Name: find](#locating-persons-by-name-find)
+  - [5.7 Deleting a person: delete](#57-deleting-a-person--delete)
+  - [5.8 Undo last change: undo](#58-undo-last-change--undo)
+  - [5.9 Exporting the displayed contacts](#exporting-the-displayed-contacts)
+  - [5.10 Clearing All Entries: clear](#510-clearing-all-entries-clear)
+  - [5.11 Exiting the Program: exit](#511-exiting-the-program-exit)
+  - [5.12 Saving the Data](#512-saving-the-data)
+  - [5.13 Editing the Data File](#513-editing-the-data-file)
+  - [5.14 Command history (↑/↓)](#514-command-history)
+- [6. FAQ](#6-faq)
+- [7. Known Issues](#7-known-issues)
+- [8. Command Summary](#8-command-summary)
+- [9. Planned Enhancements](#planned-enhancements)
+  - [9.1 Multi‑session assignment for TAs](#91-multi-session-assignment-for-tas)
+  - [9.2 Role‑based listing (listrole)](#92-role-based-listing-listrole)
+- [10. Glossary](#10-glossary)
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Target Users
+<a id="3-who-this-app-is-for"></a>
+## 3. Who this app is for
 
 TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who prefer fast, keyboard‑driven workflows. It streamlines common TA tasks such as adding and finding contacts, filtering by session, and exporting class lists.
 
-### How TAConnect Helps
+<a id="31-how-taconnect-helps"></a>
+### 3.1 How TAConnect Helps
 - Filter by session quickly (e.g., `listsession F2`) to focus on a single group.
 - Export the currently shown list to CSV for sharing or backups.
 - Command history and concise errors keep you in flow on the keyboard.
 
-## Quick start
+<a id="32-assumptions-and-prior-knowledge"></a>
+### 3.2 Assumptions and prior knowledge
+- You can install and run Java 17 on your machine.
+- You are comfortable launching apps from a terminal and navigating folders (`cd`, running `java -jar ...`).
+- You understand basic CSV concepts (for exported lists) and where files are saved on your system.
+- You manage students by sessions and may need to filter, search, export, and undo changes quickly.
+
+<a id="4-quick-start"></a>
+## 4. Quick Start
+
+<a id="41-install"></a>
+### 4.1 Install
 
 1. This app supports Java `17` only. Ensure you have the precise JDK version installed and active:
    - Verify with: `java -version` (e.g., `openjdk version "17.0.x"`)
@@ -27,14 +74,28 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
    - For Mac users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
    - For Linux users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationLinux.html).
 
+<a id="42-download-and-launch"></a>
+### 4.2 Download and launch
+
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-F15a-1/tp/releases).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your TAConnect contact list.
 
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TAConnect-v1.5.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+   
+<a id="43-ui-tour"></a>
+### 4.3 UI tour
+
    ![Ui](images/Ui.png)
-   Key areas: the command box (type commands), result display (messages), contact list (filtered by commands), and the Export CSV button.
+
+   - Command box: type commands here and press Enter.
+   - Result display: shows feedback, errors, and summaries of actions.
+   - Contact list: updates instantly based on your commands and filters.
+   - Export CSV button: quickly export the currently displayed list.
+
+<a id="44-try-the-cli"></a>
+### 4.4 Try the CLI
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
@@ -53,7 +114,8 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Features
+<a id="features"></a>
+## 5. Features
 
 <div markdown="block" class="alert alert-info">
 
@@ -74,7 +136,9 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 </div>
 
-### Viewing help : `help`
+
+<a id="51-viewing-help-help"></a>
+### 5.1 Viewing Help: `help`
 
 Shows a message explaining how to access the help page.
 
@@ -82,8 +146,11 @@ Shows a message explaining how to access the help page.
 
 Format: `help`
 
+Expected output: The Help window opens and remains visible until closed.
 
-### Adding a person: `add`
+
+<a id="52-adding-a-person-add"></a>
+### 5.2 Adding a person: `add`
 
 Adds a contact to the contact list of TAConnect.
 
@@ -96,6 +163,10 @@ Notes:
 
 For convenience, a TA can also record telegram username, but it is an optional field.
 
+Expected output:
+- The result display confirms the creation (e.g., "New person added: John Doe …").
+- The new contact appears in the currently displayed list (unless a filter hides it).
+
 Examples:
 * Add contact type `student`: `add n:John Doe p:98765432 e:johnd@example.com t:student u:@johndoe s:F2` (session required)
 ![student.png](images/student.png)
@@ -106,10 +177,11 @@ Examples:
 * Add contact type `staff`: `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
 ![staff.png](images/staff.png)
 
+<a id="field-constraints"></a>
 #### Field Constraints
 
 - Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
-- Phone: Singapore numbers only - exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
+- Phone: Singapore numbers only — exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
 - Email: Must be of the form local-part@domain and adhere to:
   - one and only one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
@@ -123,26 +195,30 @@ Examples:
   - Format: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9), and an optional trailing uppercase letter (e.g., `G1`, `F01`, `T07`, `BA03`, `T07B`).
   - Note that `G01` and `G1` are treated as **different sessions**. Users should consistently use one format (with or without leading zeros) to avoid confusion.
   - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
+  - Limitation: Each user can have only one session. Multi‑session assignment is planned; see [Planned Enhancements](#planned-enhancements). 
 - Telegram Username: Optional field, must adhere to:
   - 5 to 32 characters long
   - accepted characters: a-z, A-Z, 0-9 and underscores
   - optionally, include @ as the first character
   - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
 
-#### Data limits
+<a id="data-limits"></a>
+#### Data Limits
 
 - Maximum contacts: 2500
 - Maximum unique sessions: 250
 - When either limit is reached, `add` will fail with a clear error message.
 - Importing a JSON data file that exceeds these limits will be rejected on startup.
 
+<a id="duplicate-contacts"></a>
 #### Duplicate contacts
 
 - TAConnect allows only one contact per exact `NAME`. A duplicate is any new entry whose name matches an existing contact **with the same letter casing**.
 - Differences in email, phone, Telegram username, session, or tags do not matter once the names match exactly; the command will be rejected as a duplicate.
 - Names that differ only by letter casing (e.g., `alice tan` vs `Alice Tan`) are treated as different contacts.
-  
-### Listing all contacts : `list`
+
+<a id="53-listing-all-contacts--list"></a>
+### 5.3 Listing all contacts : `list`
 
 Displays all contacts currently stored in TAConnect.
 
@@ -151,10 +227,28 @@ Format: `list`
 * The list is reset to the full view, clearing any filters applied by previous commands such as `find` or `listsession`.
 * Useful when you want to return to the complete contact list after filtering.
 
+Expected output: The contact list shows every entry and the result display confirms the action.
+
 Examples:
 * `list` — Displays all contacts in TAConnect.
 
-### Listing contacts by session : `listsession`
+<a id="54-listing-all-sessions--sessions"></a>
+### 5.4 Listing all sessions : `sessions`
+
+Shows all unique sessions currently recorded in TAConnect.
+
+Format: `sessions`
+
+* Displays the number of sessions and a list of the session codes in the result display.
+* Useful for getting an overview of all existing tutorial/lab groups.
+
+Examples:
+* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
+
+Expected output: The result display shows the number of sessions and their codes.
+
+<a id="55-listing-contacts-by-session--listsession"></a>
+### 5.5 Listing contacts by session : `listsession`
 
 Shows a list of all persons who belong to the specified session.
 
@@ -170,32 +264,12 @@ Examples:
 * `listsession T07B` — Lists all contacts in session T07B.
 * `listsession G1` — Lists all contacts in session G1.
 
-### Listing all sessions : `sessions`
+Expected output: The list shows only contacts in the specified session and the result display states how many were found.
 
-Shows all unique sessions currently recorded in TAConnect.
+Tip: Combine `listsession` with `export` to save a CSV for a specific tutorial group.
 
-Format: `sessions`
-
-* Displays the number of sessions and a list of the session codes in the result display, sorted by alphanumeric order.
-* Useful for getting an overview of all existing tutorial/lab groups.
-
-Examples:
-* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: F1, F2, G3, ...`.
-
-### Exporting the displayed contacts
-
-Exports the contacts currently shown in the list to a CSV file containing `Name`, `Phone`, `Telegram`, `Email`, `Type`, and `Session`.
-
-* Run `export` or click the `Export CSV` button located beside the command box.
-* TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you trigger the export.
-* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
-* The result display shows the location of the generated file once the export completes, e.g., `Exported 12 contact(s) to /path/to/exports/contacts-20241027-153120.csv`.
-
-Why export:
-- Share a filtered list with instructors or teammates.
-- Upload to spreadsheets/LMS, or keep quick backups.
-
-### Locating persons by name: `find`
+<a id="locating-persons-by-name-find"></a>
+### 5.6 Locating Persons by Name: `find`
 
 Finds persons whose names contain the given substring (case-insensitive).
 
@@ -211,7 +285,12 @@ Examples:
 * `find John` returns `john` and `John Doe`
 * `find alex` returns `Alex Yeoh`
 
-### Deleting a person : `delete`
+Expected output: The list filters to names containing the keyword (case-insensitive) and the result display shows the number of matches.
+
+Tip: To search for a space or hyphenated surname, include the exact substring (e.g., `find Jean-Luc`, `find Alex Yeoh`).
+
+<a id="57-deleting-a-person--delete"></a>
+### 5.7 Deleting a person : `delete`
 Aliases: `del`, `rm`
 
 Deletes the specified person from the contact list.
@@ -234,7 +313,16 @@ Examples:
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * Aliases: `del 2`, `rm n:Alice Tan` behave the same as `delete`.
 
-### Undo last change : `undo`
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+Deleting is irreversible unless you immediately use `undo` in the same session.
+</div>
+
+Expected output: The result display confirms which entries were deleted (by index or name).
+
+Tip: Prefer selecting by `find` then deleting by index to avoid name typos.
+
+<a id="58-undo-last-change--undo"></a>
+### 5.8 Undo last change : `undo`
 
 Undoes the most recent command that modified the contact list (e.g., `add`, `delete`, `clear`). History is kept only for the current session; closing the app clears the undo stack.
 
@@ -244,27 +332,47 @@ Examples:
 * `add n:John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
 * `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
 
-### Clearing all entries : `clear`
+Expected output: The result display confirms the revert and names the command that was undone.
+
+<a id="exporting-the-displayed-contacts"></a>
+### 5.9 Exporting the displayed contacts
+
+Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
+
+* Run `export` or click the `Export CSV` button located beside the command box.
+* TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you trigger the export.
+* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
+* The result display shows the location of the generated file once the export completes, e.g., `Exported 12 contact(s) to /path/to/exports/contacts-20241027-153120.csv`.
+
+Why export:
+- Share a filtered list with instructors or teammates.
+- Upload to spreadsheets/LMS, or keep quick backups.
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+Ensure the application has write access to the `exports/` folder. If the folder is read-only or on a restricted path, the export may fail.
+</div>
+
+<a id="510-clearing-all-entries-clear"></a>
+### 5.10 Clearing All Entries: `clear`
 
 Clears all entries from the contact list of TAConnect.
 
 Format: `clear`
 
-### Exiting the program : `exit`
+<a id="511-exiting-the-program-exit"></a>
+### 5.11 Exiting the Program: `exit`
 
 Exits the program.
 
 Format: `exit`
 
-### Command history (↑/↓)
-
-You can navigate your previously entered commands using the **UP** and **DOWN** arrow keys, similar to a terminal.
-
-### Saving the data
+<a id="512-saving-the-data"></a>
+### 5.12 Saving the Data
 
 TAConnect data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
-### Editing the data file
+<a id="513-editing-the-data-file"></a>
+### 5.13 Editing the Data File
 
 TAConnect data are saved automatically as a JSON file `[JAR file location]/data/taconnect.json`. Advanced users are welcome to update data directly by editing that data file.
 
@@ -273,25 +381,31 @@ If your changes to the data file makes its format invalid, TAConnect will discar
 Furthermore, certain edits can cause the TAConnect to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
-### Archiving data files `[coming in v2.0]`
-   
+<a id="514-command-history"></a>
+### 5.14 Command history (↑/↓)
+
+You can navigate your previously entered commands using the **UP** and **DOWN** arrow keys, similar to a terminal.
+
 --------------------------------------------------------------------------------------------------------------------
 
-## FAQ
+<a id="6-faq"></a>
+## 6. FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous TAConnect home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Known issues
+<a id="7-known-issues"></a>
+## 7. Known Issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Command summary
+<a id="8-command-summary"></a>
+## 8. Command Summary
 
 Action | Format, Examples
 --------|------------------
@@ -312,7 +426,26 @@ Action | Format, Examples
 
 --------------------------------------------------------------------------------------------------------------------
 
-## Glossary
+<a id="planned-enhancements"></a>
+## 9. Planned Enhancements
+
+<a id="91-multi-session-assignment-for-tas"></a>
+### 9.1 Multi‑session assignment for TAs
+- What: Allow a user to be associated with multiple sessions (e.g., `s:F1 s:F2`) or store a list of sessions.
+- Why: Many TAs can teach more than one session. Similarly a user can exist in multiple sessions -(one session for lab group and tutorial groups.
+- Status: Planned for a future release.
+
+<a id="92-role-based-listing-listrole"></a>
+### 9.2 Role‑based listing (`listrole`)
+- What: List people by role (e.g., `student`, `ta`, `instructor`, `staff`).
+- Why: Quickly find and contact specific groups.
+- Status: Planned (see preview under Features).
+- Tip: Combine with `export` once available to share role‑specific lists.
+
+--------------------------------------------------------------------------------------------------------------------
+
+<a id="10-glossary"></a>
+## 10. Glossary
 - TA: Teaching Assistant.
 - Session: Group code for a tutorial/lab (e.g., `F1`, `G2`, `T10`).
 - Telegram username: Optional contact handle (5–32 chars; letters, digits, underscores; may start with `@`).
