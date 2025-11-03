@@ -84,8 +84,9 @@ To keep inputs clean and predictable, the Model enforces the following field con
   - exactly one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
   - local-part: alphanumerics with [._+-] separators; cannot start/end with a separator; no consecutive dots
-  - domain: contains at least one '.', labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (TLD) ≥ 2
+  - domain: contains at least one '.', labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
   - domain is case-insensitive and normalized to lowercase on storage
+- Type and Session: Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
 
 See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
 The `find` command accepts keywords using the same (ASCII‑only) character set as `Name` and rejects digits, Unicode letters, or other symbols.
@@ -489,7 +490,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 ### Glossary
 
 * **Contact**: The user's name, email, type, session, and optionally a Telegram handle.
-* **Contact Type**: The category of a contact, i.e. `student`, `ta`, `instructor`, or `staff`.
+* **Contact Type**: The category of a contact, i.e. `student`, `ta`, `instructor`, or `staff`, which is case-insensitive. 
 * **Mainstream OS**: Windows, Linux, Unix, Mac
 * **Session**: A period of lab or tutorial during which a TA is responsible for delivering the class. Students and TAs must belong to exactly one session; instructors and staff must not have a session.
 * **TA**: Teaching assistant in NUS CS2040 course (maps to the `ta` contact type in TAConnect).

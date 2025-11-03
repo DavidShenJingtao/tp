@@ -82,10 +82,10 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
   - one and only one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
   - local-part uses letters/digits with [._+-] as separators; cannot start/end with a separator; no consecutive dots
-  - domain labels separated by '.', each starts/ends alphanumeric; hyphens allowed inside; final label (Top Level Domain, TLD) ≥ 2 characters
+  - domain labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
   - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
   - domain is case-insensitive; stored in lowercase
-- Type and Session: Type must be one of the four inputs, **case-sensitive**: `student`, `ta`, `instructor`, and `staff`
+- Type and Session: Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
   - `student` and `ta` must have a session, while `instructor` and `staff` should not have any session
 - Session: Must match `[A-Z](?:[1-9][0-9]?)` — one uppercase letter followed by 1–2 digits from 1 to 99 (no leading zeros).
   - Examples: `F1`, `G2`, `T10`. Invalid: `f1` (lowercase), `G01` (leading zero), `AA1` (two letters).

@@ -27,11 +27,11 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes one or more persons identified by displayed index or exact name.\n"
-            + "Parameters: INDEX [MORE_INDEXES] (positive integers) [n/NAME] [n/MORE_NAMES]\n"
+            + "Parameters: INDEX [MORE_INDEXES] (positive integers) [n:NAME] [n:MORE_NAMES]\n"
             + "Examples:\n"
             + COMMAND_WORD + " 1\n"
             + COMMAND_WORD + " 1 3\n"
-            + COMMAND_WORD + " n/Alice Tan";
+            + COMMAND_WORD + " n:Alice Tan";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "Deleted Person: %1$s";
     public static final String MESSAGE_DELETE_MULTIPLE_PERSON_SUCCESS = "Deleted Persons:\n%1$s";
