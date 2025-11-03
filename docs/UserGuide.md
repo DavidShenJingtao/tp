@@ -180,8 +180,8 @@ Examples:
 <a id="field-constraints"></a>
 #### Field Constraints
 
-- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
-- Phone: Singapore numbers only — exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
+- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces ( ), apostrophes ('), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
+- Phone: Singapore numbers only - exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
 - Email: Must be of the form local-part@domain and adhere to:
   - one and only one '@', no spaces
   - total length ≤ 254; local-part ≤ 64; each domain label ≤ 63
@@ -279,7 +279,7 @@ Format: `find KEYWORD`
 * The search is case-insensitive. e.g `hans` will match `Hans`.
 * Partial matches are allowed. e.g. `Han` will match `Hans`.
 * Whitespace inside `KEYWORD` is preserved; `find alex david` searches for the exact substring `"alex david"` (including the space).
-* Allowed characters in `KEYWORD`: ASCII letters only (a–z, A–Z; no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: `find O’Connor`, `find Jean-Luc`, `find Rajesh S/O`.
+* Allowed characters in `KEYWORD`: ASCII letters only (a–z, A–Z; no digits), spaces ( ), apostrophes ('), hyphens (-), periods (.), and slashes (/). Examples: `find O’Connor`, `find Jean-Luc`, `find Rajesh S/O`.
 
 Examples:
 * `find John` returns `john` and `John Doe`
@@ -297,7 +297,7 @@ Deletes the specified person from the contact list.
 
 Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 
-* Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive; A $$\leq$$ B),
+* Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive; A ≤ B),
   or with the exact `NAME` provided.
 * The indexes refer to the numbers shown in the displayed person list.
 * Every index **must be a positive integer** 1, 2, 3, …​
