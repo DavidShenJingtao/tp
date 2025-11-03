@@ -28,7 +28,7 @@ TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage studen
   - [5.6 Locating Persons by Name: find](#locating-persons-by-name-find)
   - [5.7 Deleting a person: delete](#57-deleting-a-person--delete)
   - [5.8 Undo last change: undo](#58-undo-last-change--undo)
-  - [5.9 Exporting the displayed contacts](#exporting-the-displayed-contacts)
+  - [5.9 Exporting the displayed contacts: export](#exporting-the-displayed-contacts)
   - [5.10 Clearing All Entries: clear](#510-clearing-all-entries-clear)
   - [5.11 Exiting the Program: exit](#511-exiting-the-program-exit)
   - [5.12 Saving the Data](#512-saving-the-data)
@@ -333,7 +333,7 @@ Examples:
 Expected output: The result display confirms the revert and names the command that was undone.
 
 <a id="exporting-the-displayed-contacts"></a>
-### 5.9 Exporting the displayed contacts
+### 5.9 Exporting the displayed contacts : `export`
 
 Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
 
