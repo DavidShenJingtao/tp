@@ -14,8 +14,8 @@ public class ListSessionCommand extends Command {
 
     public static final String COMMAND_WORD = "listsession";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons whose session equals to the"
-            + "the specified session and displays them as a list with index numbers.\n"
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons whose session equals the "
+            + "specified session and displays them as a list with index numbers.\n"
             + "Parameters: SESSION\n"
             + "Example: " + COMMAND_WORD + " S1";
 
