@@ -39,7 +39,7 @@ TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage studen
 - [8. Command Summary](#8-command-summary)
 - [9. Planned Enhancements](#planned-enhancements)
   - [9.1 Multi‑session assignment for TAs](#91-multi-session-assignment-for-tas)
-  - [9.2 Role‑based listing (listrole)](#92-role-based-listing-listrole)
+  - [9.2 Role‑based listing: listrole](#92-role-based-listing-listrole)
 - [10. Glossary](#10-glossary)
 
 --------------------------------------------------------------------------------------------------------------------
@@ -434,10 +434,10 @@ Action | Format, Examples
 - Status: Planned for a future release.
 
 <a id="92-role-based-listing-listrole"></a>
-### 9.2 Role‑based listing (`listrole`)
+### 9.2 Role‑based listing: `listrole`
 - What: List people by role (e.g., `student`, `ta`, `instructor`, `staff`).
-- Why: Quickly find and contact specific groups.
-- Status: Planned (see preview under Features).
+- Why: Quickly find and contact specific groups, (e.g. contacting instructor)
+- Status: Planned for a future release.
 - Tip: Combine with `export` once available to share role‑specific lists.
 
 --------------------------------------------------------------------------------------------------------------------
