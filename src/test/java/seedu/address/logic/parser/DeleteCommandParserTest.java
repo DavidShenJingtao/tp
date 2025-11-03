@@ -61,7 +61,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_mixedRangeAndNames_returnsDeleteCommand() {
         Person alice = TypicalPersons.ALICE;
-        assertParseSuccess(parser, " 1-2 n/" + alice.getName(), new DeleteCommand(List.of(
+        assertParseSuccess(parser, " 1-2 n:" + alice.getName(), new DeleteCommand(List.of(
                 Selector.fromIndex(INDEX_FIRST_PERSON),
                 Selector.fromIndex(INDEX_SECOND_PERSON),
                 Selector.fromName(alice.getName()))));
@@ -69,7 +69,8 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidRanges_throwsParseException() {
-        String expected = String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE);
+        String expected = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                DeleteCommand.MESSAGE_USAGE.replace("n/", "n:"));
         // inverted
         assertParseFailure(parser, " 5-2", expected);
         // zero start
@@ -83,7 +84,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_validNameArg_returnsDeleteCommand() {
         Person alice = TypicalPersons.ALICE;
-        String input = " n/" + alice.getName();
+        String input = " n:" + alice.getName();
 
         assertParseSuccess(parser, input, new DeleteCommand(List.of(Selector.fromName(alice.getName()))));
     }
@@ -91,7 +92,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_multiWordNameArg_returnsDeleteCommand() {
         Person custom = new PersonBuilder().withName("Alice Tan").build();
-        String input = " n/" + custom.getName();
+        String input = " n:" + custom.getName();
 
         assertParseSuccess(parser, input, new DeleteCommand(List.of(Selector.fromName(custom.getName()))));
     }
@@ -100,7 +101,7 @@ public class DeleteCommandParserTest {
     public void parse_multipleNameArgs_returnsDeleteCommand() {
         Person alice = TypicalPersons.ALICE;
         Person benson = TypicalPersons.BENSON;
-        String input = " n/" + alice.getName() + " n/" + benson.getName();
+        String input = " n:" + alice.getName() + " n:" + benson.getName();
 
         assertParseSuccess(parser, input, new DeleteCommand(List.of(
                 Selector.fromName(alice.getName()), Selector.fromName(benson.getName()))));
@@ -109,7 +110,7 @@ public class DeleteCommandParserTest {
     @Test
     public void parse_mixedSelectors_returnsDeleteCommand() {
         Person alice = TypicalPersons.ALICE;
-        String input = " 1 n/" + alice.getName();
+        String input = " 1 n:" + alice.getName();
 
         assertParseSuccess(parser, input, new DeleteCommand(List.of(
                 Selector.fromIndex(INDEX_FIRST_PERSON), Selector.fromName(alice.getName()))));
@@ -117,17 +118,20 @@ public class DeleteCommandParserTest {
 
     @Test
     public void parse_invalidIndex_throwsParseException() {
-        assertParseFailure(parser, " a", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " a", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                DeleteCommand.MESSAGE_USAGE.replace("n/", "n:")));
     }
 
     @Test
     public void parse_emptyName_throwsParseException() {
-        assertParseFailure(parser, " n/   ",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " n:   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        DeleteCommand.MESSAGE_USAGE.replace("n/", "n:")));
     }
 
     @Test
     public void parse_emptyArgs_throwsParseException() {
-        assertParseFailure(parser, "   ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "   ", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                DeleteCommand.MESSAGE_USAGE.replace("n/", "n:")));
     }
 }

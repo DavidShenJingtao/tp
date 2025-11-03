@@ -18,13 +18,13 @@ public class CommandHistoryTest {
         h.add("   "); // ignore whitespace-only
         h.add("list");
         h.add("list"); // ignore immediate duplicate
-        h.add("edit 1 n/A"); // add new one
-        h.add("edit 1 n/A"); // ignore immediate duplicate
+        h.add("edit 1 n:A"); // add new one
+        h.add("edit 1 n:A"); // ignore immediate duplicate
 
         HistorySnapshot s = h.snapshot("");
-        // History order: ["list", "edit 1 n/A"]; cursor starts at buffer (after last)
+        // History order: ["list", "edit 1 n:A"]; cursor starts at buffer (after last)
         assertTrue(s.hasPrevious());
-        assertEquals("edit 1 n/A", s.previous());
+        assertEquals("edit 1 n:A", s.previous());
         assertTrue(s.hasPrevious());
         assertEquals("list", s.previous());
     }
