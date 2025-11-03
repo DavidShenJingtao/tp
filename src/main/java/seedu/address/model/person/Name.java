@@ -15,7 +15,7 @@ public class Name {
      * to prevent blank inputs.
      */
     public static final String VALIDATION_REGEX =
-            "[-\\p{L}'\\u2019./][-\\p{L}'\\u2019./ ]*";
+            "[-\\p{L}'\\u2018\\u2019\\u02BC./][-\\p{L}'\\u2018\\u2019\\u02BC./ ]*";
     public static final int MAX_NAME_LENGTH = 500;
 
     public static final String MESSAGE_CONSTRAINTS =
