@@ -10,9 +10,19 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 
 --------------------------------------------------------------------------------------------------------------------
 
+## Target Users
+
+TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who prefer fast, keyboard‑driven workflows. It streamlines common TA tasks such as adding and finding contacts, filtering by session, and exporting class lists.
+
+### How TAConnect Helps
+- Filter by session quickly (e.g., `listsession F2`) to focus on a single group.
+- Export the currently shown list to CSV for sharing or backups.
+- Command history and concise errors keep you in flow on the keyboard.
+
 ## Quick start
 
-1. This app supports Java `17` only. Ensure you have the precise JDK version installed:
+1. This app supports Java `17` only. Ensure you have the precise JDK version installed and active:
+   - Verify with: `java -version` (e.g., `openjdk version "17.0.x"`)
    - For Windows users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationWindows.html).
    - For Mac users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
    - For Linux users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationLinux.html).
@@ -24,6 +34,7 @@ TAConnect is a **desktop app for teaching assistants to manage students, session
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TAConnect-v1.5.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
+   Key areas: the command box (type commands), result display (messages), contact list (filtered by commands), and the Export CSV button.
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
@@ -174,7 +185,11 @@ Exports the contacts currently shown in the list to a CSV file containing `Name`
 * Click the `Export CSV` button located beside the command box.
 * TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you click the button.
 * Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
-* The result display shows the location of the generated file once the export completes.
+* The result display shows the location of the generated file once the export completes, e.g., `Exported 12 contact(s) to /path/to/exports/contacts-20241027-153120.csv`.
+
+Why export:
+- Share a filtered list with instructors or teammates.
+- Upload to spreadsheets/LMS, or keep quick backups.
 
 ### Locating persons by name: `find`
 
@@ -186,7 +201,7 @@ Format: `find KEYWORD`
 * The search is case-insensitive. e.g `hans` will match `Hans`.
 * Partial matches are allowed. e.g. `Han` will match `Hans`.
 * Whitespace inside `KEYWORD` is preserved; `find alex david` searches for the exact substring `"alex david"` (including the space).
-* Allowed characters in `KEYWORD`: letters (no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/).
+* Allowed characters in `KEYWORD`: letters (no digits), spaces, apostrophes (' U+0027, ‘ U+2018, ’ U+2019, ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: `find O’Connor`, `find Jean-Luc`, `find Rajesh S/O`.
 
 Examples:
 * `find John` returns `john` and `John Doe`
@@ -228,6 +243,26 @@ Examples:
 ### Command history (↑/↓)
 
 You can navigate your previously entered commands using the **UP** and **DOWN** arrow keys, similar to a terminal.
+
+## Common Errors and Fixes
+
+- “Keyword to find is invalid! Use only letters, spaces, apostrophes (' ‘ ’ ʼ), hyphens (-), periods (.), or slashes (/).”
+  - Cause: `KEYWORD` contains disallowed characters (e.g., `@`, backtick `\``).
+  - Fix: Use only the same characters allowed in names.
+
+- “Emails must be of the form local-part@domain … domain contains at least one '.' … final label (TLD) ≥ 2 chars”
+  - Cause: Domain missing a dot (e.g., `rob@ro`) or TLD too short (e.g., `exeee.m`).
+  - Fix: Use domains like `example.com`, `u.nus.edu`, or TLDs with ≥ 2 characters, e.g., `exeee.me`.
+
+- “Phone number must be a Singapore number with exactly 8 digits (0-9).”
+  - Cause: Too few/many digits, or non-digit characters/spaces.
+  - Fix: Provide exactly 8 digits with no spaces or symbols.
+
+## Glossary
+- TA: Teaching Assistant.
+- Session: Group code for a tutorial/lab (e.g., `F1`, `G2`, `T10`).
+- Telegram username: Optional contact handle (5–32 chars; letters, digits, underscores; may start with `@`).
+- TLD (Top‑Level Domain): The last label in a domain (e.g., `.com`, `.sg`, `.edu`). Must be ≥ 2 characters in this app.
 
 * **UP:** Shows the previous command in history.
 * **DOWN:** Shows the next command in history; if you reach the end, your current unfinished input (buffer) is restored.
