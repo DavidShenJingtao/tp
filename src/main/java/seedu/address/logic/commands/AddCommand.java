@@ -45,7 +45,8 @@ public class AddCommand extends Command {
             + PREFIX_SESSION + "G1";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
-    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the contact list";
+    public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the contact list, "
+            + "or the added email cannot belong to multiple people";
 
     public static final short MAX_PERSON_COUNT = 2500;
     public static final short MAX_SESSION_COUNT = 250;
