@@ -87,7 +87,7 @@ To keep inputs clean and predictable, the Model enforces the following field con
 - Session: 1–2 uppercase letters, followed by a number from 1–99 (leading zero allowed for 1–9),
   and an optional trailing uppercase letter.  
   Implemented via `[A-Z]{1,2}(?:0?[1-9]|[1-9][0-9])(?:[A-Z])?` in `seedu.address.model.person.Session`.  
-  The format aligns with standard NUS module session naming conventions (e.g., `T07`, `T07B`, `F01`, `G1`).  
+  The format aligns with standard NUS module session naming conventions (e.g., `T07`, `T07B`, `F01`, `G1`, `WD12B`).  
   Invalid inputs (e.g., `G00`, `BA100`, lowercase variants) trigger
   `MESSAGE_INVALID_SESSION_FORMAT` with corrective examples.
 
