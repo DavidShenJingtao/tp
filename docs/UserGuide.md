@@ -297,7 +297,7 @@ Deletes the specified person from the contact list.
 
 Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 
-* Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive; A <= B),
+* Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive; A $$\leq$$ B),
   or with the exact `NAME` provided.
 * The indexes refer to the numbers shown in the displayed person list.
 * Every index **must be a positive integer** 1, 2, 3, …​
