@@ -1,7 +1,3 @@
----
-layout: page
-title: Developer Guide
----
 ## Table of Contents
 - [Acknowledgements](#acknowledgements)
 - [Setting up, getting started](#setting-up-getting-started)
@@ -196,6 +192,10 @@ The `Model` component,
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` object.
 * restricts each `Person` to at most one `Session`; students and TAs must have one, while instructors and staff must have none.
 * treats two `Person` entries as duplicates if, and only if, their `Name` values are identical with the same letter casing. (eg. 'John Doe' and 'john doe' are not treated as duplicates) Any differences in phone, email, Telegram handle, session, or tags are ignored for duplicate detection.
+* maintains a single `PersonAndSessionCounter` owned by `AddressBook` to track:
+  * total counts of persons; and
+  * the set of unique `Session` codes and their counts (number of person in a `Session`)
+  The counter is exposed via `ReadOnlyAddressBook#getCounter()` as a `ReadOnlyPersonAndSessionCounter` so that other layers (e.g., `sessions` command) can query without mutating. It is updated automatically on add/delete/clear and when data are loaded from storage.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It maintains a shared `Session` list in the `AddressBook` model class, which `Person` references. This allows the `AddressBook` model to reuse a single `Session` object per unique session code, instead of each `Person` needing their own duplicated `Session` objects.<br>
