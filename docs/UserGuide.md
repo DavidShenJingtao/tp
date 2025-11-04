@@ -1,3 +1,8 @@
+---
+layout: page
+title: User Guide
+---
+
 <a id="1-overview"></a>
 ## 1. Overview
 
@@ -33,16 +38,14 @@ TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage studen
   - [5.11 Exiting the Program: exit](#511-exiting-the-program-exit)
   - [5.12 Saving the Data](#512-saving-the-data)
   - [5.13 Editing the Data File](#513-editing-the-data-file)
-  
 - [6. Using TAConnect efficiently](#6-using-taconnect-efficiently)
-  - [6.1 Navigate Command History (↑/↓)](#61-navigate-command-history)
 - [7. FAQ](#7-faq)
 - [8. Known Issues](#8-known-issues)
 - [9. Command Summary](#9-command-summary)
 - [10. Planned Enhancements](#planned-enhancements)
-  - [9.1 Multi‑session assignment for TAs](#91-multi-session-assignment-for-tas)
-  - [9.2 Role‑based listing: listrole](#92-role-based-listing-listrole)
-  - [9.3 Edit the contact: edit](#93-edit-the-contact-edit)
+  - [10.1 Multi‑session assignment for TAs](#91-multi-session-assignment-for-tas)
+  - [10.2 Role‑based listing: listrole](#92-role-based-listing-listrole)
+  - [10.3 Edit the contact: edit](#93-edit-the-contact-edit)
 - [11. Glossary](#11-glossary)
 
 --------------------------------------------------------------------------------------------------------------------
@@ -89,6 +92,7 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TAConnect-v1.6.jar` command to run the application.<br>
    A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
    
+<div style="page-break-after: always;"></div>
 <a id="43-ui-tour"></a>
 ### 4.3 UI tour
 
@@ -250,7 +254,7 @@ Format: `sessions`
 * Useful for getting an overview of all existing tutorial/lab groups.
 
 Examples:
-* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
+* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: F1, F2, G3, ...`.
 ![sessions.png](images/sessions.png)
 
 What you’ll see: The result display shows the number of sessions and their codes.
@@ -292,6 +296,9 @@ Format: `find KEYWORD`
 
 Examples:
 * `find John` returns `john` and `John Doe`.
+![find-john.png](images/find-john.png)
+* `find alex` returns `Alex Yeoh`.
+![find-alex.png](images/find-alex.png)
 * `find Jean-Luc` returns contacts with hyphenated surnames like `Jean-Luc Picard`.
 
 What you’ll see: The list filters to names containing the keyword (case-insensitive) and the result display shows the number of matches.
@@ -315,6 +322,7 @@ Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 Examples (organized):
 - By index:
   - `list` then `delete 2` — deletes the 2nd contact in the current list.
+  ![delete-2.png](images/delete-2.png)
   - `list` then `delete 1 3` — deletes the 1st and 3rd contacts.
 - By range:
   - `delete 2-5` — deletes contacts 2 through 5 (inclusive).
@@ -396,9 +404,6 @@ Furthermore, certain edits can cause the TAConnect to behave in unexpected ways 
 
 <a id="6-using-taconnect-efficiently"></a>
 ## 6. Using TAConnect efficiently
-
-<a id="61-navigate-command-history"></a>
-### 6.1 Navigate Command History (↑/↓)
 
 TAConnect remembers all previously entered commands within the current session and lets you navigate via **Up (↑)** and **Down (↓)**, similar to a terminal. Use it to quickly reuse or adjust recent commands without retyping.
 
@@ -496,19 +501,19 @@ Action | Format, Examples
 ## 10. Planned Enhancements
 
 <a id="91-multi-session-assignment-for-tas"></a>
-### 9.1 Multi‑session assignment for TAs
+### 10.1 Multi‑session assignment for TAs
 - What: Allow a user to be associated with multiple sessions (e.g., `s:F1 s:F2`) or store a list of sessions.
 - Why: Many TAs can teach more than one session. Similarly a user can exist in multiple sessions: one session for lab group and one session for tutorial group.
 - Status: Planned for a future release.
 
 <a id="92-role-based-listing-listrole"></a>
-### 9.2 Role‑based listing: `listrole`
+### 10.2 Role‑based listing: `listrole`
 - What: List people by role (e.g., `student`, `ta`, `instructor`, `staff`).
 - Why: Quickly find and contact specific groups, (e.g. contacting instructor)
 - Status: Planned for a future release.
 
 <a id="93-edit-the-contact-edit"></a>
-### 9.3 Edit the contact: `edit`
+### 10.3 Edit the contact: `edit`
 - What: Edit the field of one contact according to the index.
 - Why: If the user enters wrong information of a contact, he/she can edit the incorrect field, instead of deleting the wrong contact and then adding it again.
 - Status: Planned for a future release.
