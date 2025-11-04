@@ -33,7 +33,7 @@ TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage studen
   - [5.11 Exiting the Program: exit](#511-exiting-the-program-exit)
   - [5.12 Saving the Data](#512-saving-the-data)
   - [5.13 Editing the Data File](#513-editing-the-data-file)
-  - [5.14 Command history (↑/↓)](#514-command-history)
+  - [5.14 Navigate Command History (↑/↓)](#514-navigate-command-history)
 - [6. FAQ](#6-faq)
 - [7. Known Issues](#7-known-issues)
 - [8. Command Summary](#8-command-summary)
@@ -375,20 +375,64 @@ TAConnect data are saved automatically as a JSON file `[JAR file location]/data/
 **Caution:** If your changes to the data file makes its format invalid, TAConnect will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause the TAConnect to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 
-<a id="514-command-history"></a>
-### 5.14 Command history (↑/↓)
+<a id="514-navigate-command-history"></a>
+### 5.14 Navigate Command History (↑/↓)
 
-You can navigate your previously entered commands using the **UP** and **DOWN** arrow keys, similar to a terminal.
+TAConnect remembers all previously entered commands within the current session.  
 
-* **UP:** Shows the previous command in history.
-* **DOWN:** Shows the next command in history; if you reach the end, your current unfinished input (buffer) is restored.
-* **Duplicates & empty lines:** Empty inputs are not saved. Consecutive identical commands are stored only once.
-* **Edits while browsing history:** If you edit the text at any time, those edits are preserved when you return to the end (buffer).
+You can move through them using the **Up (↑)** and **Down (↓)** arrow keys, similar to a terminal.
+#### Key summary
 
-Examples:
-1. Type `list` → press Enter. Press ↑ → `list` appears.
-2. Type `find alex` → press Enter. Press ↑ twice → `find alex`, then `list`.
-3. Press ↑ to view `list`, type `l` to modify it, then press ↓ until the end → your unfinished text appears again (e.g., `l`).
+| Key | Action |
+|------|--------|
+| **↑ Up Arrow** | Recall previous command |
+| **↓ Down Arrow** | Move to next newer command or back to draft |
+
+#### Navigation
+
+* **↑ (Up):** Moves to the previous command (older).
+* **↓ (Down):** Moves toward newer commands, and finally returns to the **latest position**, which restores your unfinished input (draft).
+
+At any time:
+- The top of history (oldest command) stops navigation.
+- The **latest position** represents an empty command box (your working input area).
+
+#### Draft restoration
+
+- When you start navigating history, TAConnect saves your current text as a **draft**.
+- Navigating back **Down** to the latest position restores this draft exactly as before.
+- Edits made while viewing a recalled command do **not** overwrite the draft.
+- Once you return to the latest position, you can continue editing normally.
+
+#### Recording rules
+
+- Every non-blank command you execute (press **Enter**) is added to history, even if it fails to run (e.g., invalid syntax).
+- Empty or whitespace-only inputs are not recorded.
+- History is stored **in memory only** and clears when the app restarts.
+
+#### Example
+
+1. Type `list` → press **Enter**.
+2. Type `find alex` → press **Enter**.
+3. Type `li` (editing draft).
+4. Press **↑** once → shows `find alex`.
+5. Press **↑** again → shows `list`.
+6. Press **↓** twice → your edited `li` reappears.
+7. Type `st` so `li` becomes `list` (editing draft).
+8. Press **↑**, then **↓** → your edited `list` reappears.
+
+#### Using recalled commands
+
+You can directly run a recalled command or modify it before executing:
+
+1. Press **↑** to recall a previous command (e.g., `find alex`).
+2. Edit it (e.g., change to `find david`).
+3. Press **Enter** to execute the edited command.
+
+TAConnect treats the edited command as a new entry in history.  
+This feature helps TAs quickly repeat or adjust similar commands (e.g., running `find` for multiple names or repeating `listsession` for different groups) without retyping from scratch.
+
+**Tip:** Use ↑/↓ to quickly reuse or correct past commands instead of retyping them.
 
 --------------------------------------------------------------------------------------------------------------------
 
