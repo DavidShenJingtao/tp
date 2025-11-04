@@ -202,12 +202,11 @@ The `Model` component,
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` object.
 * restricts each `Person` to at most one `Session`; students and TAs must have one, while instructors and staff must have none.
-* treats two `Person` entries as duplicates if, and only if, their `Email` values are identical, case-insensitive. 
-(eg. 'John Doe' with email 'johndoe@example.com' and 'Betsy Crowe' with email 'JohnDoe@Example.com' are treated as duplicates) Any differences in name, phone, type, Telegram handle, session are ignored for duplicate detection.
+* treats two `Person` entries as duplicates if, and only if, their `Email` values match ignoring case. Any differences in name, phone, Telegram handle, session, or other fields are ignored for duplicate detection.
 * maintains a single `PersonAndSessionCounter` owned by `AddressBook` to track:
-  * total counts of persons
+  * total counts of persons; and
   * the set of unique `Session` codes and their counts (number of person in a `Session`)
-  * the counter is exposed via `ReadOnlyAddressBook#getCounter()` as a `ReadOnlyPersonAndSessionCounter` so that other layers (e.g., `sessions` command) can query without mutating. It is updated automatically on add/delete/clear and when data are loaded from storage.
+  The counter is exposed via `ReadOnlyAddressBook#getCounter()` as a `ReadOnlyPersonAndSessionCounter` so that other layers (e.g., `sessions` command) can query without mutating. It is updated automatically on add/delete/clear and when data are loaded from storage.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It maintains a shared `Session` list in the `AddressBook` model class, which `Person` references. This allows the `AddressBook` model to reuse a single `Session` object per unique session code, instead of each `Person` needing their own duplicated `Session` objects.<br>
@@ -410,7 +409,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case resumes from step 1.
 
-**Use case: UC4 - List all contacts in the course**
+**Use case: UC4 – List all unique sessions in the course**
+
+**MSS**
+
+1. TA requests an overview of every session recorded in TAConnect.
+2. TAConnect gathers the set of unique session identifiers from the model.
+3. TAConnect reports the number of sessions and the list of their codes.
+
+    Use case ends.
+   
+**Use case: UC5 - List all contacts in the course**
 
 **MSS**
 
@@ -425,11 +434,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-**Use case: UC5 - List all student contacts in a specific session**
+**Use case: UC6 - List all contacts in a specific session**
 
 **MSS**
 
-1. TA requests to view all student contacts belonging to a chosen session.
+1. TA requests to view all contacts belonging to a chosen session.
 2. TAConnect checks that the supplied session identifier is correctly formatted.
 3. TAConnect filters the contact list to show the contacts assigned to that session.
 4. TAConnect displays the filtered list of contacts.
@@ -453,17 +462,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 4a. Storage operation fails due to a data retrieval or I/O error.
   * 4a1. TAConnect displays an error message indicating that data could not be accessed.
-
-    Use case ends.
-
-
-**Use case: UC6 – List all unique sessions in the course**
-
-**MSS**
-
-1. TA requests an overview of every session recorded in TAConnect.
-2. TAConnect gathers the set of unique session identifiers from the model.
-3. TAConnect reports the number of sessions and the list of their codes.
 
     Use case ends.
 

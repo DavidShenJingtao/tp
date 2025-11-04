@@ -162,7 +162,7 @@ Format: `add n:NAME p:PHONE_NUMBER e:EMAIL t:TYPE [u:TELEGRAM_USERNAME] [s:SESSI
 Notes:
 * `s:SESSION` must be provided when the Type is `student` or `ta`.
 * `s:SESSION` must be omitted when the Type is `instructor` or `staff`.
-* Trying to add a contact whose email exactly matches an existing one (case-insensitive) will be rejected as a duplicate, even if the other fields like name differ.
+* Trying to add a contact whose email matches an existing one (comparison is case-insensitive) will be rejected as a duplicate, even if the other fields like name differ.
 
 For convenience, a TA can also record telegram username, but it is an optional field.
 
@@ -183,7 +183,7 @@ Examples:
 <a id="field-constraints"></a>
 #### Field Constraints
 
-- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces ( ), apostrophes ('), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
+- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces ( ), apostrophes (straight `'` U+0027, left/right ‘ ’ U+2018/U+2019, modifier letter apostrophe ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
 - Phone: Singapore numbers only - exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
 - Email: Must be of the form local-part@domain and adhere to:
   - one and only one '@', no spaces
@@ -217,9 +217,9 @@ Examples:
 <a id="duplicate-contacts"></a>
 #### Duplicate contacts
 
-- TAConnect allows only one contact per exact `EMAIL`. A duplicate is any new entry whose email matches an existing contact, **case-insensitive**.
-- Differences in name, phone, type, Telegram username, session do not matter once the emails match exactly; the command will be rejected as a duplicate.
-- Emails that differ only by letter casing (e.g., `alice tan` vs `Alice Tan`) are treated as same contacts.
+- TAConnect allows only one contact per exact `EMAIL`. A duplicate is any new entry whose email matches an existing contact, compared **case-insensitively**.
+- Differences in name, phone, type, Telegram username, session do not matter once the emails match; the command will be rejected as a duplicate.
+- Emails that differ only by letter casing (e.g., `alice@example.com` vs `ALICE@example.com`) are treated as the same contact.
 
 <a id="53-listing-all-contacts--list"></a>
 ### 5.3 Listing all contacts : `list`
@@ -235,6 +235,7 @@ Expected output: The contact list shows every entry and the result display confi
 
 Examples:
 * `list` — Displays all contacts in TAConnect.
+![list.png](images/list.png)
 
 <a id="54-listing-all-sessions--sessions"></a>
 ### 5.4 Listing all sessions : `sessions`
@@ -248,6 +249,7 @@ Format: `sessions`
 
 Examples:
 * `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
+![sessions.png](images/sessions.png)
 
 Expected output: The result display shows the number of sessions and their codes.
 
@@ -266,7 +268,8 @@ Format: `listsession SESSION`
 Examples:
 * `listsession F01` — Lists all contacts in session F01.
 * `listsession T07B` — Lists all contacts in session T07B.
-* `listsession G1` — Lists all contacts in session G1.
+* `listsession A1` — Lists all contacts in session A1.
+![list-session.png](images/list-session.png)
 
 Expected output: The list shows only contacts in the specified session and the result display states how many were found.
 
@@ -287,7 +290,9 @@ Format: `find KEYWORD`
 
 Examples:
 * `find John` returns `john` and `John Doe`
+![find-john.png](images/find-john.png)
 * `find alex` returns `Alex Yeoh`
+![find-alex.png](images/find-alex.png)
 
 Expected output: The list filters to names containing the keyword (case-insensitive) and the result display shows the number of matches.
 
@@ -309,6 +314,7 @@ Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the contact list.
+![delete-2.png](images/delete-2.png)
 * `list` followed by `delete 1 3` deletes both the 1st and 3rd persons in the currently displayed list.
 * `delete 2-5` deletes the 2nd to 5th persons shown in the current list (inclusive).
 * `delete 1 3-4` deletes the 1st, 3rd, and 4th persons.
@@ -332,6 +338,7 @@ Format: `undo`
 
 Examples:
 * `add n:John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
+![undo.png](images/undo.png)
 * `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
 
 Expected output: The result display confirms the revert and names the command that was undone.
@@ -339,12 +346,13 @@ Expected output: The result display confirms the revert and names the command th
 <a id="exporting-the-displayed-contacts"></a>
 ### 5.9 Exporting the displayed contacts : `export`
 
-Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
+Exports the contacts currently shown in the list to a CSV file containing `Name`, `Phone`, `Telegram`, `Email`, `Type`, and `Session`.
 
 * Run `export` or click the `Export CSV` button located beside the command box.
 * TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you trigger the export.
 * Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
 * The result display shows the location of the generated file once the export completes, e.g., `Exported 12 contact(s) to /path/to/exports/contacts-20241027-153120.csv`.
+![export.png](images/export.png)
 
 Why export:
 - Share a filtered list with instructors or teammates.
@@ -356,6 +364,7 @@ Why export:
 ### 5.10 Clearing All Entries: `clear`
 
 Clears all entries from the contact list of TAConnect.
+![clear.png](images/clear.png)
 
 Format: `clear`
 
