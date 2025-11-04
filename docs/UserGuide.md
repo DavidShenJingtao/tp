@@ -1,3 +1,8 @@
+---
+layout: page
+title: User Guide
+---
+
 <a id="1-overview"></a>
 ## 1. Overview
 
