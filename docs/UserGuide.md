@@ -84,6 +84,7 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TAConnect-v1.5.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    
+<div style="page-break-after: always;"></div>
 <a id="43-ui-tour"></a>
 ### 4.3 UI tour
 
