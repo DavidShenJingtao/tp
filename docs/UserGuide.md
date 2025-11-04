@@ -50,20 +50,17 @@ TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage studen
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
 <a id="3-who-this-app-is-for"></a>
 ## 3. Who this app is for
 
 TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who prefer fast, keyboard‑driven workflows. It streamlines common TA tasks such as adding and finding contacts, filtering by session, and exporting class lists.
 
-<div style="page-break-after: always;"></div>
 <a id="31-how-taconnect-helps"></a>
 ### 3.1 How TAConnect Helps
 - Filter by session quickly (e.g., `listsession F2`) to focus on a single group.
 - Export the currently shown list to CSV for sharing or backups.
 - Command history and concise errors keep you in flow on the keyboard.
 
-<div style="page-break-after: always;"></div>
 <a id="32-assumptions-and-prior-knowledge"></a>
 ### 3.2 Assumptions and prior knowledge
 - You can install and run Java 17 on your machine.
@@ -73,11 +70,9 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 - Each contact is uniquely identified by his/her email, and one email cannot belong to multiple contacts.
 - Each contact can only have one phone number in the contact list.
 
-<div style="page-break-after: always;"></div>
 <a id="4-quick-start"></a>
 ## 4. Quick Start
 
-<div style="page-break-after: always;"></div>
 <a id="41-install"></a>
 ### 4.1 Install
 
@@ -87,7 +82,6 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
    - For Mac users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
    - For Linux users, you can refer to the guide [here](https://se-education.org/guides/tutorials/javaInstallationLinux.html).
 
-<div style="page-break-after: always;"></div>
 <a id="42-download-and-launch"></a>
 ### 4.2 Download and launch
 
@@ -109,7 +103,6 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
    - Contact list: updates instantly based on your commands and filters.
    - Export CSV button: quickly export the currently displayed list.
 
-<div style="page-break-after: always;"></div>
 <a id="44-try-the-cli"></a>
 ### 4.4 Try the CLI
 
@@ -130,7 +123,6 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
 <a id="features"></a>
 ## 5. Features
 
@@ -154,7 +146,6 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 </div>
 
 
-<div style="page-break-after: always;"></div>
 <a id="51-viewing-help-help"></a>
 ### 5.1 Viewing Help: `help`
 
@@ -167,7 +158,6 @@ Format: `help`
 What you’ll see: The Help window opens and remains visible until closed.
 
 
-<div style="page-break-after: always;"></div>
 <a id="52-adding-a-person-add"></a>
 ### 5.2 Adding a contact: `add`
 
@@ -196,7 +186,6 @@ Examples:
 * Add contact type `staff`: `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
 ![staff.png](images/staff.png)
 
-<div style="page-break-after: always;"></div>
 <a id="field-constraints"></a>
 #### Field Constraints
 
@@ -223,7 +212,6 @@ Examples:
   - optionally, include @ as the first character (if you omit it, TAConnect prefixes one automatically)
   - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
 
-<div style="page-break-after: always;"></div>
 <a id="data-limits"></a>
 #### Data Limits
 
@@ -232,7 +220,6 @@ Examples:
 - When either limit is reached, `add` will fail with a clear error message.
 - Importing a JSON data file that exceeds these limits will be rejected on startup.
 
-<div style="page-break-after: always;"></div>
 <a id="duplicate-contacts"></a>
 #### Duplicate contacts
 
@@ -240,7 +227,6 @@ Examples:
 - Differences in name, phone, type, Telegram username, session do not matter once the emails match; the command will be rejected as a duplicate.
 - Emails that differ only by letter casing (e.g., `alice@example.com` vs `ALICE@example.com`) are treated as the same contact.
 
-<div style="page-break-after: always;"></div>
 <a id="53-listing-all-contacts--list"></a>
 ### 5.3 Listing all contacts : `list`
 
@@ -257,7 +243,6 @@ Examples:
 * `list` — Displays all contacts in TAConnect.
 ![list.png](images/list.png)
 
-<div style="page-break-after: always;"></div>
 <a id="54-listing-all-sessions--sessions"></a>
 ### 5.4 Listing all sessions : `sessions`
 
@@ -274,7 +259,6 @@ Examples:
 
 What you’ll see: The result display shows the number of sessions and their codes.
 
-<div style="page-break-after: always;"></div>
 <a id="55-listing-contacts-by-session--listsession"></a>
 ### 5.5 Listing contacts by session : `listsession`
 
@@ -297,7 +281,6 @@ What you’ll see: The list shows only contacts in the specified session and the
 
 Tip: Combine `listsession` with `export` to save a CSV for a specific tutorial group.
 
-<div style="page-break-after: always;"></div>
 <a id="locating-persons-by-name-find"></a>
 ### 5.6 Finding contacts by name: `find`
 
@@ -322,7 +305,6 @@ What you’ll see: The list filters to names containing the keyword (case-insens
 
 Tip: To search for a space or hyphenated surname, include the exact substring (e.g., `find Jean-Luc`, `find Alex Yeoh`). Consider exporting your filtered results with `export`.
 
-<div style="page-break-after: always;"></div>
 <a id="57-deleting-a-person--delete"></a>
 ### 5.7 Deleting a contact : `delete`
 Aliases: `del`, `rm`
@@ -360,7 +342,6 @@ What you’ll see: The result display confirms which entries were deleted (by in
 
 Tip: Prefer selecting by `find` then deleting by index to avoid name typos.
 
-<div style="page-break-after: always;"></div>
 <a id="58-undo-last-change--undo"></a>
 ### 5.8 Undo last change : `undo`
 
@@ -375,7 +356,6 @@ Examples:
 
 What you’ll see: The result display confirms the revert and names the command that was undone.
 
-<div style="page-break-after: always;"></div>
 <a id="exporting-the-displayed-contacts"></a>
 ### 5.9 Exporting the displayed contacts : `export`
 
@@ -394,7 +374,6 @@ Notes:
 - If there are no contacts listed, TAConnect shows a clear error message (no file is created).
 - Ensure the app has write access to the `exports/` folder; if it’s read-only or restricted, export will fail with a permission message.
 
-<div style="page-break-after: always;"></div>
 <a id="510-clearing-all-entries-clear"></a>
 ### 5.10 Clearing All Entries: `clear`
 
@@ -403,7 +382,6 @@ Clears all entries from the contact list of TAConnect.
 
 Format: `clear`
 
-<div style="page-break-after: always;"></div>
 <a id="511-exiting-the-program-exit"></a>
 ### 5.11 Exiting the Program: `exit`
 
@@ -411,13 +389,11 @@ Exits the program.
 
 Format: `exit`
 
-<div style="page-break-after: always;"></div>
 <a id="512-saving-the-data"></a>
 ### 5.12 Saving the Data
 
 TAConnect data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
-<div style="page-break-after: always;"></div>
 <a id="513-editing-the-data-file"></a>
 ### 5.13 Editing the Data File
 
@@ -426,11 +402,9 @@ TAConnect data are saved automatically as a JSON file `[JAR file location]/data/
 **Caution:** If your changes to the data file makes its format invalid, TAConnect will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause the TAConnect to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 
-<div style="page-break-after: always;"></div>
 <a id="6-using-taconnect-efficiently"></a>
 ## 6. Using TAConnect efficiently
 
-<div style="page-break-after: always;"></div>
 <a id="61-navigate-command-history"></a>
 ### 6.1 Navigate Command History (↑/↓)
 
@@ -488,7 +462,6 @@ TAConnect treats the edited command as a new entry in history and keeps your dra
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
 <a id="7-faq"></a>
 ## 7. FAQ
 
@@ -497,7 +470,6 @@ TAConnect treats the edited command as a new entry in history and keeps your dra
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
 <a id="8-known-issues"></a>
 ## 8. Known Issues
 
@@ -506,7 +478,6 @@ TAConnect treats the edited command as a new entry in history and keeps your dra
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
 <a id="9-command-summary"></a>
 ## 9. Command Summary
 
@@ -529,25 +500,21 @@ Action | Format, Examples
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
 <a id="planned-enhancements"></a>
 ## 10. Planned Enhancements
 
-<div style="page-break-after: always;"></div>
 <a id="91-multi-session-assignment-for-tas"></a>
 ### 10.1 Multi‑session assignment for TAs
 - What: Allow a user to be associated with multiple sessions (e.g., `s:F1 s:F2`) or store a list of sessions.
 - Why: Many TAs can teach more than one session. Similarly a user can exist in multiple sessions: one session for lab group and one session for tutorial group.
 - Status: Planned for a future release.
 
-<div style="page-break-after: always;"></div>
 <a id="92-role-based-listing-listrole"></a>
 ### 10.2 Role‑based listing: `listrole`
 - What: List people by role (e.g., `student`, `ta`, `instructor`, `staff`).
 - Why: Quickly find and contact specific groups, (e.g. contacting instructor)
 - Status: Planned for a future release.
 
-<div style="page-break-after: always;"></div>
 <a id="93-edit-the-contact-edit"></a>
 ### 10.3 Edit the contact: `edit`
 - What: Edit the field of one contact according to the index.
@@ -556,7 +523,6 @@ Action | Format, Examples
 
 --------------------------------------------------------------------------------------------------------------------
 
-<div style="page-break-after: always;"></div>
 <a id="11-glossary"></a>
 ## 11. Glossary
 - TA: Teaching Assistant.
