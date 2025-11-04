@@ -159,6 +159,8 @@ The `UI` component,
 
 - *Related use cases: UC7, UC8, UC9.*
 
+<div style="page-break-after: always;"></div>
+
 ### Logic component
 
 **API** : [`Logic.java`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/logic/Logic.java)
@@ -189,6 +191,8 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+
+<div style="page-break-after: always;"></div>
 
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/model/Model.java)
