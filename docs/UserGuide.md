@@ -257,7 +257,7 @@ Format: `listsession SESSION`
 * Displays only the contacts whose session field matches the given `SESSION` value.
 * The session format follows the rules described in [Field Constraints](#field-constraints).
 * Contacts without a session (e.g., instructors or staff) will not appear in the result.
-* Useful for CS2040 TAs who manage multiple tutorial or lab groups.
+* Useful for CS2040 TAs to filter to their assigned session.
 
 Examples:
 * `listsession F01` — Lists all contacts in session F01.
