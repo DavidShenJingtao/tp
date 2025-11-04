@@ -231,6 +231,7 @@ Expected output: The contact list shows every entry and the result display confi
 
 Examples:
 * `list` — Displays all contacts in TAConnect.
+![list.png](images/list.png)
 
 <a id="54-listing-all-sessions--sessions"></a>
 ### 5.4 Listing all sessions : `sessions`
@@ -244,6 +245,7 @@ Format: `sessions`
 
 Examples:
 * `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
+![sessions.png](images/sessions.png)
 
 Expected output: The result display shows the number of sessions and their codes.
 
@@ -262,7 +264,8 @@ Format: `listsession SESSION`
 Examples:
 * `listsession F01` — Lists all contacts in session F01.
 * `listsession T07B` — Lists all contacts in session T07B.
-* `listsession G1` — Lists all contacts in session G1.
+* `listsession A1` — Lists all contacts in session A1.
+![list-session.png](images/list-session.png)
 
 Expected output: The list shows only contacts in the specified session and the result display states how many were found.
 
@@ -283,7 +286,9 @@ Format: `find KEYWORD`
 
 Examples:
 * `find John` returns `john` and `John Doe`
+![find-john.png](images/find-john.png)
 * `find alex` returns `Alex Yeoh`
+![find-alex.png](images/find-alex.png)
 
 Expected output: The list filters to names containing the keyword (case-insensitive) and the result display shows the number of matches.
 
@@ -305,6 +310,7 @@ Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 
 Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the contact list.
+![delete-2.png](images/delete-2.png)
 * `list` followed by `delete 1 3` deletes both the 1st and 3rd persons in the currently displayed list.
 * `delete 2-5` deletes the 2nd to 5th persons shown in the current list (inclusive).
 * `delete 1 3-4` deletes the 1st, 3rd, and 4th persons.
@@ -328,6 +334,7 @@ Format: `undo`
 
 Examples:
 * `add n:John Doe ...` followed by `undo` removes the newly added contact and shows `Undo successful (reverted: add)`.
+![undo.png](images/undo.png)
 * `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
 
 Expected output: The result display confirms the revert and names the command that was undone.
@@ -341,6 +348,7 @@ Exports the contacts currently shown in the list to a CSV file containing `Name`
 * TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you trigger the export.
 * Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
 * The result display shows the location of the generated file once the export completes, e.g., `Exported 12 contact(s) to /path/to/exports/contacts-20241027-153120.csv`.
+![export.png](images/export.png)
 
 Why export:
 - Share a filtered list with instructors or teammates.
@@ -352,6 +360,7 @@ Why export:
 ### 5.10 Clearing All Entries: `clear`
 
 Clears all entries from the contact list of TAConnect.
+![clear.png](images/clear.png)
 
 Format: `clear`
 
