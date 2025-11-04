@@ -412,10 +412,17 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 1. TA requests an overview of every session recorded in TAConnect.
 2. TAConnect gathers the set of unique session identifiers from the model.
-3. TAConnect reports the number of sessions and the list of their codes.
+3. TAConnect reports the number of sessions found and the list of their codes, sorted in alphanumeric order
 
     Use case ends.
-   
+
+**Extensions**
+
+3a. No sessions are found
+  * 3a1. TAConnect shows a message indicating no sessions were found
+
+    Use case ends.
+
 **Use case: UC5 - List all contacts in the course**
 
 **MSS**
@@ -428,7 +435,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **Extensions**
 
 2a. The list is empty.
-
+  * 2a1. TAConnect shows an empty contact list.
+    
   Use case ends.
 
 **Use case: UC6 - List all contacts in a specific session**
@@ -454,11 +462,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 3a. No matching contacts exist for the specified session.
   * 3a1. TAConnect shows a message indicating no contacts were found for that session.
-
-    Use case ends.
-
-4a. Storage operation fails due to a data retrieval or I/O error.
-  * 4a1. TAConnect displays an error message indicating that data could not be accessed.
 
     Use case ends.
 
