@@ -94,6 +94,12 @@ To keep inputs clean and predictable, the Model enforces the following field con
 
 - Type: Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
 
+- Telegram Username: Optional field, must adhere to:
+  - 5 to 32 characters long
+  - accepted characters: a-z, A-Z, 0-9 and underscores
+  - optionally, include @ as the first character (if you omit it, TAConnect prefixes one automatically)
+  - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
+
 
 See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
 The `find` command accepts keywords using the same (ASCII‑only) character set as `Name` and rejects digits, Unicode letters, or other symbols.
@@ -531,7 +537,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Planned enhancements
 
-- Allow TAs to be assigned to multiple sessions simultaneously while keeping students restricted to one session. (Not implemented yet; requires data model and command updates.)
+**Multi‑session assignment for TAs**
+- What: Allow a user to be associated with multiple sessions (e.g., `s:F1 s:F2`) or store a list of sessions.
+- Why: Many TAs can teach more than one session. Similarly a user can exist in multiple sessions: one session for lab group and one session for tutorial group.
+- Status: Planned for a future release.
+
+**Role‑based listing: `listrole`**
+- What: List people by role (e.g., `student`, `ta`, `instructor`, `staff`).
+- Why: Quickly find and contact specific groups, (e.g. contacting instructor)
+- Status: Planned for a future release.
 
 ### Glossary
 
