@@ -81,8 +81,8 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 
 1. Copy the file to the folder you want to use as the _home folder_ for your TAConnect contact list.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TAConnect-v1.5.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TAConnect-v1.6.jar` command to run the application.<br>
+   A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
    
 <a id="43-ui-tour"></a>
 ### 4.3 UI tour
@@ -199,7 +199,7 @@ Examples:
 - Telegram Username: Optional field, must adhere to:
   - 5 to 32 characters long
   - accepted characters: a-z, A-Z, 0-9 and underscores
-  - optionally, include @ as the first character
+  - optionally, include @ as the first character (if you omit it, TAConnect prefixes one automatically)
   - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
 
 <a id="data-limits"></a>
@@ -313,7 +313,7 @@ Examples:
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * Aliases: `del 2`, `rm n:Alice Tan` behave the same as `delete`.
 
-**Caution:** Deleting is irreversible unless you immediately use `undo` in the same session.
+**Caution:** Deleting is irreversible unless you use `undo` in the same session.
 
 Expected output: The result display confirms which entries were deleted (by index or name).
 
