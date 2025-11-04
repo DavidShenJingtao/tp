@@ -67,7 +67,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveFileName = 'TAConnect-v1.4-all.jar'
+    archiveFileName = '[CS2103T-F15a-1][TAConnect].jar'
 }
 
 run {
