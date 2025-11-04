@@ -34,8 +34,8 @@ public class AddCommand extends Command {
             + PREFIX_PHONE + "PHONE "
             + PREFIX_EMAIL + "EMAIL "
             + PREFIX_TYPE + "TYPE "
-            + PREFIX_TELEGRAM + "TELEGRAM "
-            + PREFIX_SESSION + "SESSION "
+            + "[" + PREFIX_TELEGRAM + "TELEGRAM_USERNAME] "
+            + "[" + PREFIX_SESSION + "SESSION] "
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_PHONE + "98765432 "
@@ -46,7 +46,7 @@ public class AddCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the contact list, "
-            + "or the added email cannot belong to multiple people";
+            + "because the contact list cannot have multiple people having the same email";
 
     public static final short MAX_PERSON_COUNT = 2500;
     public static final short MAX_SESSION_COUNT = 250;

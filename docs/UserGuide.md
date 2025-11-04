@@ -40,6 +40,7 @@ TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage studen
 - [9. Planned Enhancements](#planned-enhancements)
   - [9.1 Multi‑session assignment for TAs](#91-multi-session-assignment-for-tas)
   - [9.2 Role‑based listing: listrole](#92-role-based-listing-listrole)
+  - [9.3 Edit the contact: edit](#93-edit-the-contact-edit)
 - [10. Glossary](#10-glossary)
 
 --------------------------------------------------------------------------------------------------------------------
@@ -61,6 +62,8 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 - You are comfortable launching apps from a terminal and navigating folders (`cd`, running `java -jar ...`).
 - You understand basic CSV concepts (for exported lists) and where files are saved on your system.
 - You manage students by sessions and may need to filter, search, export, and undo changes quickly.
+- Each person is uniquely identified by his/her email, and one email cannot belong to multiple people.
+- Each person can only have one phone number in the contact list.
 
 <a id="4-quick-start"></a>
 ## 4. Quick Start
@@ -159,7 +162,7 @@ Format: `add n:NAME p:PHONE_NUMBER e:EMAIL t:TYPE [u:TELEGRAM_USERNAME] [s:SESSI
 Notes:
 * `s:SESSION` must be provided when the Type is `student` or `ta`.
 * `s:SESSION` must be omitted when the Type is `instructor` or `staff`.
-* Trying to add a contact whose name exactly matches an existing one (same letter casing) will be rejected as a duplicate, even if the other fields differ.
+* Trying to add a contact whose email exactly matches an existing one (case-insensitive) will be rejected as a duplicate, even if the other fields like name differ.
 
 For convenience, a TA can also record telegram username, but it is an optional field.
 
@@ -189,6 +192,7 @@ Examples:
   - domain labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
   - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
   - domain is case-insensitive; stored in lowercase
+  - an email uniquely identifies a person, so the contact list cannot have multiple contacts having the same email
 - Type: 
   - Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
 - Session:
@@ -213,9 +217,9 @@ Examples:
 <a id="duplicate-contacts"></a>
 #### Duplicate contacts
 
-- TAConnect allows only one contact per exact `NAME`. A duplicate is any new entry whose name matches an existing contact **with the same letter casing**.
-- Differences in email, phone, Telegram username, session, or tags do not matter once the names match exactly; the command will be rejected as a duplicate.
-- Names that differ only by letter casing (e.g., `alice tan` vs `Alice Tan`) are treated as different contacts.
+- TAConnect allows only one contact per exact `EMAIL`. A duplicate is any new entry whose email matches an existing contact, **case-insensitive**.
+- Differences in name, phone, type, Telegram username, session do not matter once the emails match exactly; the command will be rejected as a duplicate.
+- Emails that differ only by letter casing (e.g., `alice tan` vs `Alice Tan`) are treated as same contacts.
 
 <a id="53-listing-all-contacts--list"></a>
 ### 5.3 Listing all contacts : `list`
@@ -443,6 +447,12 @@ Action | Format, Examples
 ### 9.2 Role‑based listing: `listrole`
 - What: List people by role (e.g., `student`, `ta`, `instructor`, `staff`).
 - Why: Quickly find and contact specific groups, (e.g. contacting instructor)
+- Status: Planned for a future release.
+
+<a id="93-edit-the-contact-edit"></a>
+### 9.3 Edit the contact: `edit`
+- What: Edit the field of one contact according to the index.
+- Why: If the user enters wrong information of a contact, he/she can edit the incorrect field, instead of deleting the wrong contact and then adding it again.
 - Status: Planned for a future release.
 
 --------------------------------------------------------------------------------------------------------------------
