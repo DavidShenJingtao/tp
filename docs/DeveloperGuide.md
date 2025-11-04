@@ -202,7 +202,7 @@ The `Model` component,
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` object.
 * restricts each `Person` to at most one `Session`; students and TAs must have one, while instructors and staff must have none.
-* treats two `Person` entries as duplicates if, and only if, their `Name` values are identical with the same letter casing. (eg. 'John Doe' and 'john doe' are not treated as duplicates) Any differences in phone, email, Telegram handle, session, or tags are ignored for duplicate detection.
+* treats two `Person` entries as duplicates if, and only if, their `Email` values match ignoring case. Any differences in name, phone, Telegram handle, session, or other fields are ignored for duplicate detection.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It maintains a shared `Session` list in the `AddressBook` model class, which `Person` references. This allows the `AddressBook` model to reuse a single `Session` object per unique session code, instead of each `Person` needing their own duplicated `Session` objects.<br>
@@ -420,11 +420,11 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
   Use case ends.
 
-**Use case: UC5 - List all student contacts in a specific session**
+**Use case: UC5 - List all contacts in a specific session**
 
 **MSS**
 
-1. TA requests to view all student contacts belonging to a chosen session.
+1. TA requests to view all contacts belonging to a chosen session.
 2. TAConnect checks that the supplied session identifier is correctly formatted.
 3. TAConnect filters the contact list to show the contacts assigned to that session.
 4. TAConnect displays the filtered list of contacts.
