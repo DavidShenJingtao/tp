@@ -255,7 +255,8 @@ creating a timestamped file in the `exports/` directory.
 `UndoCommand` coordinates with the `UndoHistory` utility (in `seedu.address.logic.undo`), which snapshots the address
 book whenever a mutating command completes. If a snapshot is available, it restores the previous state and resets the
 filtered list to show all contacts; otherwise it throws a `CommandException` with the “no command to undo” feedback so
-the user knows nothing was reverted.
+the user knows nothing was reverted. The undo history is capped at 50 entries; when the limit is exceeded, the oldest
+snapshot is discarded.
 
 --------------------------------------------------------------------------------------------------------------------
 
