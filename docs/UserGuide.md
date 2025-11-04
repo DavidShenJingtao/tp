@@ -18,30 +18,32 @@ TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage studen
   - [4.4 Try the CLI](#44-try-the-cli)
 - [5. Features](#features)
   - [5.1 Viewing Help: help](#51-viewing-help-help)
-  - [5.2 Adding a person: add](#52-adding-a-person-add)
+  - [5.2 Adding a contact: add](#52-adding-a-person-add)
     - [Field Constraints](#field-constraints)
     - [Data Limits](#data-limits)
     - [Duplicate contacts](#duplicate-contacts)
   - [5.3 Listing all contacts: list](#53-listing-all-contacts--list)
   - [5.4 Listing all sessions: sessions](#54-listing-all-sessions--sessions)
   - [5.5 Listing contacts by session: listsession](#55-listing-contacts-by-session--listsession)
-  - [5.6 Locating Persons by Name: find](#locating-persons-by-name-find)
-  - [5.7 Deleting a person: delete](#57-deleting-a-person--delete)
+  - [5.6 Finding contacts by name: find](#locating-persons-by-name-find)
+  - [5.7 Deleting a contact: delete](#57-deleting-a-person--delete)
   - [5.8 Undo last change: undo](#58-undo-last-change--undo)
   - [5.9 Exporting the displayed contacts: export](#exporting-the-displayed-contacts)
   - [5.10 Clearing All Entries: clear](#510-clearing-all-entries-clear)
   - [5.11 Exiting the Program: exit](#511-exiting-the-program-exit)
   - [5.12 Saving the Data](#512-saving-the-data)
   - [5.13 Editing the Data File](#513-editing-the-data-file)
-  - [5.14 Navigate Command History (↑/↓)](#514-navigate-command-history)
-- [6. FAQ](#6-faq)
-- [7. Known Issues](#7-known-issues)
-- [8. Command Summary](#8-command-summary)
-- [9. Planned Enhancements](#planned-enhancements)
+  
+- [6. Using TAConnect efficiently](#6-using-taconnect-efficiently)
+  - [6.1 Navigate Command History (↑/↓)](#61-navigate-command-history)
+- [7. FAQ](#7-faq)
+- [8. Known Issues](#8-known-issues)
+- [9. Command Summary](#9-command-summary)
+- [10. Planned Enhancements](#planned-enhancements)
   - [9.1 Multi‑session assignment for TAs](#91-multi-session-assignment-for-tas)
   - [9.2 Role‑based listing: listrole](#92-role-based-listing-listrole)
   - [9.3 Edit the contact: edit](#93-edit-the-contact-edit)
-- [10. Glossary](#10-glossary)
+- [11. Glossary](#11-glossary)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -62,8 +64,8 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 - You are comfortable launching apps from a terminal and navigating folders (`cd`, running `java -jar ...`).
 - You understand basic CSV concepts (for exported lists) and where files are saved on your system.
 - You manage students by sessions and may need to filter, search, export, and undo changes quickly.
-- Each person is uniquely identified by his/her email, and one email cannot belong to multiple people.
-- Each person can only have one phone number in the contact list.
+- Each contact is uniquely identified by his/her email, and one email cannot belong to multiple contacts.
+- Each contact can only have one phone number in the contact list.
 
 <a id="4-quick-start"></a>
 ## 4. Quick Start
@@ -149,11 +151,11 @@ Shows a message explaining how to access the help page.
 
 Format: `help`
 
-Expected output: The Help window opens and remains visible until closed.
+What you’ll see: The Help window opens and remains visible until closed.
 
 
 <a id="52-adding-a-person-add"></a>
-### 5.2 Adding a person: `add`
+### 5.2 Adding a contact: `add`
 
 Adds a contact to the contact list of TAConnect.
 
@@ -192,7 +194,7 @@ Examples:
   - domain labels separated by '.', each starts/ends alphanumeric; hyphens are allowed inside non-final labels (e.g., `exa-mple.com`), but the final label (Top Level Domain, TLD) must be alphanumeric only (so `co-m` is invalid); final label ≥ 2 characters
   - the domain must include at least one '.' (e.g., example.com); single-label domains like "ro" or "localhost" are not accepted
   - domain is case-insensitive; stored in lowercase
-  - an email uniquely identifies a person, so the contact list cannot have multiple contacts having the same email
+  - an email uniquely identifies a contact, so the contact list cannot have multiple contacts having the same email
 - Type: 
   - Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
 - Session:
@@ -231,7 +233,7 @@ Format: `list`
 * The list is reset to the full view, clearing any filters applied by previous commands such as `find` or `listsession`.
 * Useful when you want to return to the complete contact list after filtering.
 
-Expected output: The contact list shows every entry and the result display confirms the action.
+What you’ll see: The contact list shows every entry and the result display confirms the action.
 
 Examples:
 * `list` — Displays all contacts in TAConnect.
@@ -251,12 +253,12 @@ Examples:
 * `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
 ![sessions.png](images/sessions.png)
 
-Expected output: The result display shows the number of sessions and their codes.
+What you’ll see: The result display shows the number of sessions and their codes.
 
 <a id="55-listing-contacts-by-session--listsession"></a>
 ### 5.5 Listing contacts by session : `listsession`
 
-Shows a list of all persons who belong to the specified session.
+Shows a list of all contacts who belong to the specified session.
 
 Format: `listsession SESSION`
 
@@ -271,14 +273,14 @@ Examples:
 * `listsession A1` — Lists all contacts in session A1.
 ![list-session.png](images/list-session.png)
 
-Expected output: The list shows only contacts in the specified session and the result display states how many were found.
+What you’ll see: The list shows only contacts in the specified session and the result display states how many were found.
 
 Tip: Combine `listsession` with `export` to save a CSV for a specific tutorial group.
 
 <a id="locating-persons-by-name-find"></a>
-### 5.6 Locating Persons by Name: `find`
+### 5.6 Finding contacts by name: `find`
 
-Finds persons whose names contain the given substring (case-insensitive).
+Finds contacts whose names contain the given substring (case-insensitive).
 
 Format: `find KEYWORD`
 
@@ -289,43 +291,46 @@ Format: `find KEYWORD`
 * Allowed characters in `KEYWORD`: ASCII letters only (a–z, A–Z; no digits), spaces ( ), apostrophes ('), hyphens (-), periods (.), and slashes (/). Examples: `find O’Connor`, `find Jean-Luc`, `find Rajesh S/O`.
 
 Examples:
-* `find John` returns `john` and `John Doe`
-![find-john.png](images/find-john.png)
-* `find alex` returns `Alex Yeoh`
-![find-alex.png](images/find-alex.png)
+* `find John` returns `john` and `John Doe`.
+* `find Jean-Luc` returns contacts with hyphenated surnames like `Jean-Luc Picard`.
 
-Expected output: The list filters to names containing the keyword (case-insensitive) and the result display shows the number of matches.
+What you’ll see: The list filters to names containing the keyword (case-insensitive) and the result display shows the number of matches.
 
-Tip: To search for a space or hyphenated surname, include the exact substring (e.g., `find Jean-Luc`, `find Alex Yeoh`).
+Tip: To search for a space or hyphenated surname, include the exact substring (e.g., `find Jean-Luc`, `find Alex Yeoh`). Consider exporting your filtered results with `export`.
 
 <a id="57-deleting-a-person--delete"></a>
-### 5.7 Deleting a person : `delete`
+### 5.7 Deleting a contact : `delete`
 Aliases: `del`, `rm`
 
-Deletes the specified person from the contact list.
+Deletes the specified contact(s) from the contact list.
 
 Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 
-* Deletes each person at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive; A ≤ B),
+* Deletes each contact at the specified `INDEX` values, any indices in a `RANGE` of the form `A-B` (inclusive; A ≤ B),
   or with the exact `NAME` provided.
-* The indexes refer to the numbers shown in the displayed person list.
+* The indexes refer to the numbers shown in the displayed contact list.
 * Every index **must be a positive integer** 1, 2, 3, …​
 * Names are case-sensitive and must match the contact name exactly, including spaces.
 
-Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the contact list.
-![delete-2.png](images/delete-2.png)
-* `list` followed by `delete 1 3` deletes both the 1st and 3rd persons in the currently displayed list.
-* `delete 2-5` deletes the 2nd to 5th persons shown in the current list (inclusive).
-* `delete 1 3-4` deletes the 1st, 3rd, and 4th persons.
-* `delete n:Alice Tan` deletes the contact whose name is exactly `Alice Tan`.
-* `list` followed by `delete 1 n:Alice Tan` deletes the 1st person in the list and the contact named `Alice Tan`.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
-* Aliases: `del 2`, `rm n:Alice Tan` behave the same as `delete`.
+Examples (organized):
+- By index:
+  - `list` then `delete 2` — deletes the 2nd contact in the current list.
+  - `list` then `delete 1 3` — deletes the 1st and 3rd contacts.
+- By range:
+  - `delete 2-5` — deletes contacts 2 through 5 (inclusive).
+  - `delete 1 3-4` — deletes contacts 1, 3, and 4.
+- By exact name:
+  - `delete n:Alice Tan` — deletes the contact whose name is exactly `Alice Tan`.
+- Mixed selection:
+  - `list` then `delete 1 n:Alice Tan` — deletes the 1st listed contact and the contact named `Alice Tan`.
+- From a filtered list:
+  - `find Betsy` then `delete 1` — deletes the 1st contact in the filtered results.
+- Aliases:
+  - `del 2`, `rm n:Alice Tan` behave the same as `delete`.
 
 **Caution:** Deleting is irreversible unless you use `undo` in the same session.
 
-Expected output: The result display confirms which entries were deleted (by index or name).
+What you’ll see: The result display confirms which entries were deleted (by index or name).
 
 Tip: Prefer selecting by `find` then deleting by index to avoid name typos.
 
@@ -341,24 +346,25 @@ Examples:
 ![undo.png](images/undo.png)
 * `delete 1 3-4` followed by `undo` restores the contacts removed by that delete and reports the exact command alias that was reverted (e.g., `delete`, `del`).
 
-Expected output: The result display confirms the revert and names the command that was undone.
+What you’ll see: The result display confirms the revert and names the command that was undone.
 
 <a id="exporting-the-displayed-contacts"></a>
 ### 5.9 Exporting the displayed contacts : `export`
 
-Exports the contacts currently shown in the list to a CSV file containing `Name`, `Phone`, `Telegram`, `Email`, `Type`, and `Session`.
+Export after you’ve filtered the list (e.g., with `find` or `listsession`) to share a roster with instructors, upload to a spreadsheet/LMS, or keep quick backups. The exported CSV contains `Name`, `Phone`, `Telegram`, `Email`, `Type`, and `Session`.
 
-* Run `export` or click the `Export CSV` button located beside the command box.
-* TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you trigger the export.
-* Only the contacts currently listed are exported. Combine with commands such as `find` to export a filtered subset before clicking the button.
-* The result display shows the location of the generated file once the export completes, e.g., `Exported 12 contact(s) to /path/to/exports/contacts-20241027-153120.csv`.
+How to use:
+- Run `export` or click the `Export CSV` button beside the command box.
+- TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv` using the current timestamp.
+- Only the contacts currently shown are exported; filter first to fine-tune the output.
+
+What you’ll see:
+- A result message indicating how many contacts were exported and the saved file path.
 ![export.png](images/export.png)
 
-Why export:
-- Share a filtered list with instructors or teammates.
-- Upload to spreadsheets/LMS, or keep quick backups.
-
-**Caution:** Ensure the application has write access to the `exports/` folder. If the folder is read-only or on a restricted path, the export may fail.
+Notes:
+- If there are no contacts listed, TAConnect shows a clear error message (no file is created).
+- Ensure the app has write access to the `exports/` folder; if it’s read-only or restricted, export will fail with a permission message.
 
 <a id="510-clearing-all-entries-clear"></a>
 ### 5.10 Clearing All Entries: `clear`
@@ -388,20 +394,22 @@ TAConnect data are saved automatically as a JSON file `[JAR file location]/data/
 **Caution:** If your changes to the data file makes its format invalid, TAConnect will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause the TAConnect to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 
-<a id="514-navigate-command-history"></a>
-### 5.14 Navigate Command History (↑/↓)
+<a id="6-using-taconnect-efficiently"></a>
+## 6. Using TAConnect efficiently
 
-TAConnect remembers all previously entered commands within the current session.  
+<a id="61-navigate-command-history"></a>
+### 6.1 Navigate Command History (↑/↓)
 
-You can move through them using the **Up (↑)** and **Down (↓)** arrow keys, similar to a terminal.
-#### Key summary
+TAConnect remembers all previously entered commands within the current session and lets you navigate via **Up (↑)** and **Down (↓)**, similar to a terminal. Use it to quickly reuse or adjust recent commands without retyping.
+
+Key summary
 
 | Key | Action |
 |------|--------|
 | **↑ Up Arrow** | Recall previous command |
 | **↓ Down Arrow** | Move to next newer command or back to draft |
 
-#### Navigation
+Navigation
 
 * **↑ (Up):** Moves to the previous command (older).
 * **↓ (Down):** Moves toward newer commands, and finally returns to the **latest position**, which restores your unfinished input (draft).
@@ -410,20 +418,20 @@ At any time:
 - The top of history (oldest command) stops navigation.
 - The **latest position** represents an empty command box (your working input area).
 
-#### Draft restoration
+Draft restoration
 
 - When you start navigating history, TAConnect saves your current text as a **draft**.
 - Navigating back **Down** to the latest position restores this draft exactly as before.
 - Edits made while viewing a recalled command do **not** overwrite the draft.
 - Once you return to the latest position, you can continue editing normally.
 
-#### Recording rules
+Recording rules
 
 - Every non-blank command you execute (press **Enter**) is added to history, even if it fails to run (e.g., invalid syntax).
 - Empty or whitespace-only inputs are not recorded.
 - History is stored **in memory only** and clears when the app restarts.
 
-#### Example
+Example
 
 1. Type `list` → press **Enter**.
 2. Type `find alex` → press **Enter**.
@@ -434,7 +442,7 @@ At any time:
 7. Type `st` so `li` becomes `list` (editing draft).
 8. Press **↑**, then **↓** → your edited `list` reappears.
 
-#### Using recalled commands
+Using recalled commands
 
 You can directly run a recalled command or modify it before executing:
 
@@ -442,31 +450,28 @@ You can directly run a recalled command or modify it before executing:
 2. Edit it (e.g., change to `find david`).
 3. Press **Enter** to execute the edited command.
 
-TAConnect treats the edited command as a new entry in history.  
-This feature helps TAs quickly repeat or adjust similar commands (e.g., running `find` for multiple names or repeating `listsession` for different groups) without retyping from scratch.
-
-**Tip:** Use ↑/↓ to quickly reuse or correct past commands instead of retyping them.
+TAConnect treats the edited command as a new entry in history and keeps your draft intact when you return to the latest position.
 
 --------------------------------------------------------------------------------------------------------------------
 
-<a id="6-faq"></a>
-## 6. FAQ
+<a id="7-faq"></a>
+## 7. FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous TAConnect home folder.
 
 --------------------------------------------------------------------------------------------------------------------
 
-<a id="7-known-issues"></a>
-## 7. Known Issues
+<a id="8-known-issues"></a>
+## 8. Known Issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
-<a id="8-command-summary"></a>
-## 8. Command Summary
+<a id="9-command-summary"></a>
+## 9. Command Summary
 
 Action | Format, Examples
 --------|------------------
@@ -488,7 +493,7 @@ Action | Format, Examples
 --------------------------------------------------------------------------------------------------------------------
 
 <a id="planned-enhancements"></a>
-## 9. Planned Enhancements
+## 10. Planned Enhancements
 
 <a id="91-multi-session-assignment-for-tas"></a>
 ### 9.1 Multi‑session assignment for TAs
@@ -510,8 +515,8 @@ Action | Format, Examples
 
 --------------------------------------------------------------------------------------------------------------------
 
-<a id="10-glossary"></a>
-## 10. Glossary
+<a id="11-glossary"></a>
+## 11. Glossary
 - TA: Teaching Assistant.
 - Session: Group code for a tutorial/lab (e.g., `F1`, `G2`, `T10`).
 - Telegram username: Optional contact handle (5–32 chars; letters, digits, underscores; may start with `@`).
