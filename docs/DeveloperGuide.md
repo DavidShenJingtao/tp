@@ -213,13 +213,6 @@ The `Model` component,
   * the counter is exposed via `ReadOnlyAddressBook#getCounter()` as a `ReadOnlyPersonAndSessionCounter` so that other layers (e.g., `sessions` command) can query without mutating. It is updated automatically on add/delete/clear and when data are loaded from storage.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It maintains a shared `Session` list in the `AddressBook` model class, which `Person` references. This allows the `AddressBook` model to reuse a single `Session` object per unique session code, instead of each `Person` needing their own duplicated `Session` objects.<br>
-
-<img src="images/BetterModelClassDiagram.png" width="650" />
-
-</div>
-
-
 ### Storage component
 
 **API** : [`Storage.java`](https://github.com/AY2526S1-CS2103T-F15a-1/tp/tree/master/src/main/java/seedu/address/storage/Storage.java)
