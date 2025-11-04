@@ -93,6 +93,7 @@ To keep inputs clean and predictable, the Model enforces the following field con
     - Note that `G01` and `G1` are treated as different sessions; users should consistently use one format (with or without leading zeros) to avoid confusion.
 
 - Type: Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
+    - Type `student` and `ta` must have a session, and type `instructor` and `staff` should not have any session.
 
 - Telegram Username: Optional field, must adhere to:
   - 5 to 32 characters long
