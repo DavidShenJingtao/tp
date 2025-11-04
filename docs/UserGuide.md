@@ -1,7 +1,7 @@
 <a id="1-overview"></a>
 ## 1. Overview
 
-TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAConnect can get your tutorial group management tasks done faster than traditional GUI apps.
+TAConnect is a **desktop app for NUS CS2040 teaching assistants to manage students, sessions, and communication**, optimized for use via a Command Line Interface (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, TAConnect can get your tutorial/lab group management tasks done faster than traditional GUI apps.
 
 <a id="2-table-of-contents"></a>
 ## 2. Table of contents
@@ -92,7 +92,7 @@ TAConnect is for NUS CS2040 Teaching Assistants managing tutorial/lab groups who
 
 1. Copy the file to the folder you want to use as the _home folder_ for your TAConnect contact list.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar TAConnect-v1.6.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar CS2103T-F15a-1.TAConnect.jar` command to run the application.<br>
    A GUI similar to the one below should appear in a few seconds. Note how the app contains some sample data.<br>
    
 <div style="page-break-after: always;"></div>
@@ -170,7 +170,7 @@ What you’ll see: The Help window opens and remains visible until closed.
 
 Adds a contact to the contact list of TAConnect.
 
-Format: `add n:NAME p:PHONE_NUMBER e:EMAIL t:TYPE [u:TELEGRAM_USERNAME] [s:SESSION]`
+Format: `add n:NAME p:PHONE e:EMAIL t:TYPE [u:TELEGRAM_USERNAME] [s:SESSION]`
 
 Notes:
 * `s:SESSION` must be provided when the Type is `student` or `ta`.
@@ -509,10 +509,10 @@ TAConnect treats the edited command as a new entry in history and keeps your dra
 
 Action | Format, Examples
 --------|------------------
-**Add student** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:student [u:TELEGRAM_USERNAME] s:SESSION` <br> e.g., `add n:John Doe p:98765432 e:johnd@example.com t:student u:@johndoe s:F2`
-**Add ta** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:ta [u:TELEGRAM_USERNAME] s:SESSION` <br> e.g., `add n:David Shen p:23456789 e:davidshen@example.com t:ta s:L3`
-**Add instructor** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:instructor [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Betsy Crowe p:34560781 e:betsycrowe@example.com t:instructor`
-**Add staff** | `add n:NAME p:PHONE_NUMBER e:EMAIL t:staff [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
+**Add student** | `add n:NAME p:PHONE e:EMAIL t:student [u:TELEGRAM_USERNAME] s:SESSION` <br> e.g., `add n:John Doe p:98765432 e:johnd@example.com t:student u:@johndoe s:F2`
+**Add ta** | `add n:NAME p:PHONE e:EMAIL t:ta [u:TELEGRAM_USERNAME] s:SESSION` <br> e.g., `add n:David Shen p:23456789 e:davidshen@example.com t:ta s:L3`
+**Add instructor** | `add n:NAME p:PHONE e:EMAIL t:instructor [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Betsy Crowe p:34560781 e:betsycrowe@example.com t:instructor`
+**Add staff** | `add n:NAME p:PHONE e:EMAIL t:staff [u:TELEGRAM_USERNAME]` <br> e.g., `add n:Sophie Yuan p:17480572 e:sophie@example.come t:staff u:@yyssophie`
 **Clear** | `clear`
 **Delete** | `delete\|del\|rm INDEX [MORE_INDEXES\|RANGE] [n:NAME] [n:MORE_NAMES]`<br> e.g., `delete 3`, `del 1 4`, `rm 2-4`, `delete n:Alice Tan`
 **Find** | `find KEYWORD`<br> e.g., `find James Jake`
