@@ -98,23 +98,13 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_export() throws Exception {
         assertTrue(parser.parseCommand(ExportCommand.COMMAND_WORD) instanceof ExportCommand);
-    }
-
-    @Test
-    public void parseCommand_exportWithArguments_throwsParseException() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, ExportCommand.MESSAGE_USAGE);
-        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("export something"));
+        assertTrue(parser.parseCommand(ExportCommand.COMMAND_WORD + " extra args") instanceof ExportCommand);
     }
 
     @Test
     public void parseCommand_undo_success() throws Exception {
         assertTrue(parser.parseCommand("undo") instanceof UndoCommand);
-    }
-
-    @Test
-    public void parseCommand_undoWithArguments_throwsParseException() {
-        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, UndoCommand.MESSAGE_USAGE);
-        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("undo something"));
+        assertTrue(parser.parseCommand("undo extra") instanceof UndoCommand);
     }
 
     @Test

@@ -84,10 +84,6 @@ public class AddressBookParser {
             break;
 
         case ExportCommand.COMMAND_WORD:
-            if (!arguments.trim().isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        ExportCommand.MESSAGE_USAGE));
-            }
             command = new ExportCommand();
             break;
 
@@ -100,10 +96,6 @@ public class AddressBookParser {
             break;
 
         case UndoCommand.COMMAND_WORD:
-            if (!arguments.trim().isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        UndoCommand.MESSAGE_USAGE));
-            }
             command = new UndoCommand();
             break;
 
