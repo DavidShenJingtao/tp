@@ -292,6 +292,9 @@ Format: `find KEYWORD`
 
 Examples:
 * `find John` returns `john` and `John Doe`.
+![find-john.png](images/find-john.png)
+* `find alex` returns `Alex Yeoh`.
+![find-alex.png](images/find-alex.png)
 * `find Jean-Luc` returns contacts with hyphenated surnames like `Jean-Luc Picard`.
 
 What you’ll see: The list filters to names containing the keyword (case-insensitive) and the result display shows the number of matches.
@@ -315,6 +318,7 @@ Format: `delete INDEX [MORE_INDEXES|RANGE] [n:NAME] [n:MORE_NAMES]`
 Examples (organized):
 - By index:
   - `list` then `delete 2` — deletes the 2nd contact in the current list.
+  ![delete-2.png](images/delete-2.png)
   - `list` then `delete 1 3` — deletes the 1st and 3rd contacts.
 - By range:
   - `delete 2-5` — deletes contacts 2 through 5 (inclusive).
