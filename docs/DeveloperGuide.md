@@ -95,6 +95,12 @@ To keep inputs clean and predictable, the Model enforces the following field con
 - Type: Type must be one of the four inputs, **case-insensitive**: `student`, `ta`, `instructor`, and `staff`. eg. `StUdEnT` is allowed.
     - Type `student` and `ta` must have a session, and type `instructor` and `staff` should not have any session.
 
+- Telegram Username: Optional field, must adhere to:
+  - 5 to 32 characters long
+  - accepted characters: a-z, A-Z, 0-9 and underscores
+  - optionally, include @ as the first character (if you omit it, TAConnect prefixes one automatically)
+  - for more details, see the following: https://core.telegram.org/method/account.updateUsername#parameters
+
 
 See `seedu.address.model.person.Email` and `Phone` for the regex and checks. Parser utilities delegate to these validators.
 The `find` command accepts keywords using the same (ASCII‑only) character set as `Name` and rejects digits, Unicode letters, or other symbols.
@@ -256,7 +262,8 @@ creating a timestamped file in the `exports/` directory.
 `UndoCommand` coordinates with the `UndoHistory` utility (in `seedu.address.logic.undo`), which snapshots the address
 book whenever a mutating command completes. If a snapshot is available, it restores the previous state and resets the
 filtered list to show all contacts; otherwise it throws a `CommandException` with the “no command to undo” feedback so
-the user knows nothing was reverted.
+the user knows nothing was reverted. The undo history is capped at 50 entries; when the limit is exceeded, the oldest
+snapshot is discarded.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -532,7 +539,15 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Planned enhancements
 
-- Allow TAs to be assigned to multiple sessions simultaneously while keeping students restricted to one session. (Not implemented yet; requires data model and command updates.)
+**Multi‑session assignment for TAs**
+- What: Allow a user to be associated with multiple sessions (e.g., `s:F1 s:F2`) or store a list of sessions.
+- Why: Many TAs can teach more than one session. Similarly a user can exist in multiple sessions: one session for lab group and one session for tutorial group.
+- Status: Planned for a future release.
+
+**Role‑based listing: `listrole`**
+- What: List people by role (e.g., `student`, `ta`, `instructor`, `staff`).
+- Why: Quickly find and contact specific groups, (e.g. contacting instructor)
+- Status: Planned for a future release.
 
 ### Glossary
 
