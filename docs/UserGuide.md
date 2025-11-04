@@ -253,7 +253,7 @@ Format: `sessions`
 * Useful for getting an overview of all existing tutorial/lab groups.
 
 Examples:
-* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: [F1, F2, G3, ...]`.
+* `sessions` — Lists all sessions, e.g., `12 sessions found in TAConnect. Here is the list: F1, F2, G3, ...`.
 ![sessions.png](images/sessions.png)
 
 What you’ll see: The result display shows the number of sessions and their codes.
