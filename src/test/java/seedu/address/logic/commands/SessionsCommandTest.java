@@ -48,7 +48,7 @@ public class SessionsCommandTest {
     }
 
     @Test
-    public void execute_no_sessions_found_success() {
+    public void execute_noSessionsFound_success() {
         AddressBook addressBook = new AddressBook();
         ModelStub modelStub = new ModelStubWithSuppliedAddressBook(addressBook);
         CommandResult expectedCommandResult = new CommandResult(SessionsCommand.MESSAGE_NO_SESSIONS_FOUND);
