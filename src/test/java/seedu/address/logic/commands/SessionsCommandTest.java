@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -38,8 +39,11 @@ public class SessionsCommandTest {
         }
         ModelStub modelStub = new ModelStubWithSuppliedAddressBook(addressBook);
         Set<Session> expectedSessions = addressBook.getCounter().listAllSessions();
-        CommandResult expectedCommandResult = new CommandResult(
-                String.format(SessionsCommand.MESSAGE_LIST_ALL_SESSIONS, expectedSessions.size(), expectedSessions));
+        CommandResult expectedCommandResult = new CommandResult(String.format(
+            SessionsCommand.MESSAGE_LIST_ALL_SESSIONS, expectedSessions.size(),
+            expectedSessions.stream().map(Session::toString)
+                    .sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining(", "))
+        ));
         assertCommandSuccess(new SessionsCommand(), modelStub, expectedCommandResult, modelStub);
     }
 
