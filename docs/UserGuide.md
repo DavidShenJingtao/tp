@@ -326,7 +326,7 @@ Tip: Prefer selecting by `find` then deleting by index to avoid name typos.
 <a id="58-undo-last-change--undo"></a>
 ### 5.8 Undo last change : `undo`
 
-Undoes the most recent command that modified the contact list (e.g., `add`, `delete`, `clear`). History is kept only for the current session; closing the app clears the undo stack.
+Undoes the most recent command that modified the contact list (e.g., `add`, `delete`, `clear`). History is kept only for the current session; closing the app clears the undo stack. The undo history stores up to 50 changes.
 
 Format: `undo`
 
