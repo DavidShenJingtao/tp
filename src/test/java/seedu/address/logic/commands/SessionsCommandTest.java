@@ -47,6 +47,14 @@ public class SessionsCommandTest {
         assertCommandSuccess(new SessionsCommand(), modelStub, expectedCommandResult, modelStub);
     }
 
+    @Test
+    public void execute_no_sessions_found_success() {
+        AddressBook addressBook = new AddressBook();
+        ModelStub modelStub = new ModelStubWithSuppliedAddressBook(addressBook);
+        CommandResult expectedCommandResult = new CommandResult(SessionsCommand.MESSAGE_NO_SESSIONS_FOUND);
+        assertCommandSuccess(new SessionsCommand(), modelStub, expectedCommandResult, modelStub);
+    }
+
     /**
      * A default model stub that have all of the methods failing.
      */
