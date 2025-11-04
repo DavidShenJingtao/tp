@@ -303,7 +303,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *` | CS2040 TA                                   | delete _contacts_ by _index_ or _name_ | remove _contacts_ from the contact list |
 | `* * *` | CS2040 TA                                   | search contact list by _name_ | locate details of _contacts_ by name without having to go through the entire list |
 | `* *` | CS2040 TA                                   | list all _sessions_ | get an overview of existing tutorial and lab groups |
-| `* *` | CS2040 TA                                   | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
+| `* * *` | CS2040 TA                                   | list all _contacts_ from the course | view all _contacts_ and their _contact details_ and _session_ in the contact list |
 | `* * *` | CS2040 TA                                   | list all _contacts_ by _session_ | view all _contacts_ and their _contact details_ in particular session in the contact list |
 | `* *` | CS2040 TA | navigate through previously entered commands | quickly reuse or edit past commands without retyping them |
 
@@ -354,8 +354,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 **MSS**
 1.  TA enters `list` to view the current contacts and their indexes.
 2.  TAConnect shows the list of contacts with index numbers.
-3.  TA enters `delete INDEX` to remove the intended contact.
-4.  TAConnect validates that the `INDEX` refers to a contact in the displayed list.
+3.  TA enters `delete INDEX` or `delete n:NAME` to remove the intended contact.
+4.  TAConnect validates that the `INDEX` or `NAME` refers to a contact in the displayed list.
 5.  TAConnect removes the contact from the contact list, saves the updated data, and confirms the deletion.
 
     Use case ends.
@@ -368,7 +368,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     Use case resumes from step 3.
 
-4a. The specified `INDEX` does not correspond to any contact currently displayed.
+4a. The specified `INDEX` or `NAME` does not correspond to any contact currently displayed.
   * 4a1. TAConnect informs the TA that the index is invalid.
 
     Use case resumes from step 3.
@@ -675,7 +675,7 @@ testers are expected to do more *exploratory* testing.
 ### Listing all sessions
 
 1. Test case: `sessions`<br>
-   Expected: Result display shows `N sessions found in TAConnect. Here is the list: [...]` with every distinct session code.
+   Expected: Result display shows `N sessions found in TAConnect. Here is the list: ...` with every distinct session code.
 1. Optional: Add a contact with a new session (e.g. `add ... s:H5`), run `sessions` again, and confirm the new session code appears in the output.
 
 ### Exporting contacts
