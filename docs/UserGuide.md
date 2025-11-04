@@ -162,7 +162,7 @@ Format: `add n:NAME p:PHONE_NUMBER e:EMAIL t:TYPE [u:TELEGRAM_USERNAME] [s:SESSI
 Notes:
 * `s:SESSION` must be provided when the Type is `student` or `ta`.
 * `s:SESSION` must be omitted when the Type is `instructor` or `staff`.
-* Trying to add a contact whose email exactly matches an existing one (case-insensitive) will be rejected as a duplicate, even if the other fields like name differ.
+* Trying to add a contact whose email matches an existing one (comparison is case-insensitive) will be rejected as a duplicate, even if the other fields like name differ.
 
 For convenience, a TA can also record telegram username, but it is an optional field.
 
@@ -183,7 +183,7 @@ Examples:
 <a id="field-constraints"></a>
 #### Field Constraints
 
-- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces ( ), apostrophes ('), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
+- Name: Maximum of up to 500 characters. Allows ASCII letters only (a–z, A–Z; no digits), spaces ( ), apostrophes (straight `'` U+0027, left/right ‘ ’ U+2018/U+2019, modifier letter apostrophe ʼ U+02BC), hyphens (-), periods (.), and slashes (/). Examples: O'Connor, D’Angelo, Jean-Luc, J. P. Morgan, Rajesh S/O Raman.
 - Phone: Singapore numbers only - exactly 8 digits (0–9). No spaces, symbols, or country codes in this field.
 - Email: Must be of the form local-part@domain and adhere to:
   - one and only one '@', no spaces
@@ -217,9 +217,9 @@ Examples:
 <a id="duplicate-contacts"></a>
 #### Duplicate contacts
 
-- TAConnect allows only one contact per exact `EMAIL`. A duplicate is any new entry whose email matches an existing contact, **case-insensitive**.
-- Differences in name, phone, type, Telegram username, session do not matter once the emails match exactly; the command will be rejected as a duplicate.
-- Emails that differ only by letter casing (e.g., `alice tan` vs `Alice Tan`) are treated as same contacts.
+- TAConnect allows only one contact per exact `EMAIL`. A duplicate is any new entry whose email matches an existing contact, compared **case-insensitively**.
+- Differences in name, phone, type, Telegram username, session do not matter once the emails match; the command will be rejected as a duplicate.
+- Emails that differ only by letter casing (e.g., `alice@example.com` vs `ALICE@example.com`) are treated as the same contact.
 
 <a id="53-listing-all-contacts--list"></a>
 ### 5.3 Listing all contacts : `list`
@@ -339,7 +339,7 @@ Expected output: The result display confirms the revert and names the command th
 <a id="exporting-the-displayed-contacts"></a>
 ### 5.9 Exporting the displayed contacts : `export`
 
-Exports the contacts currently shown in the list to a CSV file containing `Name`, `Telegram`, `Email`, `Type`, and `Session`.
+Exports the contacts currently shown in the list to a CSV file containing `Name`, `Phone`, `Telegram`, `Email`, `Type`, and `Session`.
 
 * Run `export` or click the `Export CSV` button located beside the command box.
 * TAConnect saves the file as `exports/contacts-YYYYMMDD-HHmmss.csv`, using the timestamp of when you trigger the export.
