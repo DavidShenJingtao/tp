@@ -670,8 +670,8 @@ testers are expected to do more *exploratory* testing.
 1. Test case: `listsession G1`<br>
    Expected: Result display shows a message of the form `X persons listed!` (where `X` is the number of matches). The person list panel shows only contacts whose session is `G1`.
 1. Test case: `listsession Z9`<br>
-   Expected: Result display shows `Specified session Z9 does not exist.`. The list remains unchanged (or empty if no contacts were previously shown).
-
+   Expected: Result display shows `Specified session Z9 does not exist.`. An empty contact list is shown.
+   
 ### Listing all sessions
 
 1. Test case: `sessions`<br>
