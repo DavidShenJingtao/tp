@@ -127,10 +127,10 @@ The `UI` component,
 - The command history is a linear list of previously **entered** commands.
 - The history cursor ranges over all previously entered commands plus one special **latest position** that represents the current empty input.
 - **Latest position (draft):**
-    - When the tutor navigates away from latest, TAConnect saves the current input text as a **draft**.
+    - When the TA navigates away from latest, TAConnect saves the current input text as a **draft**.
     - Navigating **Down** back to latest **restores the draft** exactly as it was before history navigation began.
     - Edits made while viewing a recalled command **do not** overwrite the draft.
-    - After returning to latest, any new edits update the input normally; if the tutor navigates again, the updated text becomes the new draft.
+    - After returning to latest, any new edits update the input normally; if the TA navigates again, the updated text becomes the new draft.
 
 - **Navigation:**
     - **Up** moves from latest → most recent command → … → oldest command (stops at oldest).
@@ -143,7 +143,7 @@ The `UI` component,
 
 - **History recording rules**
 
-    - When the tutor presses **Enter**, if the input contains any non-whitespace characters, the **exact text** is appended to history **before** parsing/execution.
+    - When the TA presses **Enter**, if the input contains any non-whitespace characters, the **exact text** is appended to history **before** parsing/execution.
     - Therefore, **both successful and failed** commands are recorded.
     - Inputs that are empty or whitespace-only are **not** recorded.
 
@@ -154,7 +154,7 @@ The `UI` component,
 
 - **Edge cases**
 
-    - If the tutor modifies the recalled command text **without executing**, those edits are **discarded** upon any navigation; the draft remains as originally captured at latest.
+    - If the TA modifies the recalled command text **without executing**, those edits are **discarded** upon any navigation; the draft remains as originally captured at latest.
     - Any **non-blank** command is recorded in history (even if parsing/execution fails). Whitespace-only inputs are not recorded.
 
 - *Related use cases: UC7, UC8, UC9.*
@@ -198,7 +198,7 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the contact list data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` object.
 * restricts each `Person` to at most one `Session`; students and TAs must have one, while instructors and staff must have none.
@@ -219,7 +219,7 @@ The `Model` component,
 <img src="images/StorageClassDiagram.png" width="550" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+* can save both contact list data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
@@ -259,8 +259,8 @@ clear failure message. The command can be run via the `export` keyword or the **
 creating a timestamped file in the `exports/` directory.
 
 ### `undo` command
-`UndoCommand` coordinates with the `UndoHistory` utility (in `seedu.address.logic.undo`), which snapshots the address
-book whenever a mutating command completes. If a snapshot is available, it restores the previous state and resets the
+`UndoCommand` coordinates with the `UndoHistory` utility (in `seedu.address.logic.undo`), which snapshots the contact 
+list whenever a mutating command completes. If a snapshot is available, it restores the previous state and resets the
 filtered list to show all contacts; otherwise it throws a `CommandException` with the “no command to undo” feedback so
 the user knows nothing was reverted. The undo history is capped at 50 entries; when the limit is exceeded, the oldest
 snapshot is discarded.
@@ -559,7 +559,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 * **Typical usage**: Running TAConnect on a standard teaching laptop (≥8 GB RAM, SSD) with up to 2500 contacts and 250 sessions, issuing sequential commands without concurrent automation.
 * **I/O error**: An input/output failure when reading from or writing to storage (e.g., a file cannot be accessed).
 * **Filtered list**: The subset of contacts exposed via `Model#getFilteredPersonList()` after applying search or session filters; drives what the UI shows.
-* **Undo history**: The stack of previous address book snapshots maintained by `UndoHistory` so the `undo` command can restore earlier states.
+* **Undo history**: The stack of previous contact list snapshots maintained by `UndoHistory` so the `undo` command can restore earlier states.
 * **UI (User interface)**: The visual and interactive components of TAConnect through which users issue commands and receive responses.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -608,9 +608,9 @@ testers are expected to do more *exploratory* testing.
 1. Test case (student with session):<br>
    `add n:Imran Aziz p:81234567 e:imran@example.com t:student s:F5`<br>
    Expected: New contact appears at the bottom of the list with the supplied details. Status message confirms the addition.
-1. Test case (duplicate name):<br>
+1. Test case (duplicate contacts):<br>
    Repeat the previous command.<br>
-   Expected: Command fails with a duplicate-person error because the same name already exists.
+   Expected: Command fails with a duplicate-person error because the same email already exists.
 1. Test case (missing session for student):<br>
    `add n:Tessa Lim p:82345678 e:tessa@example.com t:student`<br>
    Expected: Command fails with a validation message stating that students require a session.

@@ -5,9 +5,7 @@ skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
 AddressBook *-right-> "1" UniquePersonList
-AddressBook *-right-> "1" UniqueSessionList
-UniqueSessionList -[hidden]down- UniquePersonList
-UniqueSessionList -right-> "*" Session
+AddressBook *-right-> "1" PersonAndSessionCounter
 UniquePersonList -right-> Person
 
 Person *--> "1" Name
@@ -16,4 +14,7 @@ Person *--> "1" Email
 Person *--> "1" Type
 Person *--> "0..1" TelegramUsername
 Person --> "0..1" Session
+PersonAndSessionCounter .up.|> ReadOnlyPersonAndSessionCounter
+Class "<<interface>>\nReadOnlyPersonAndSessionCounter" as ReadOnlyPersonAndSessionCounter
+Class PersonAndSessionCounter
 @enduml
